@@ -11,6 +11,7 @@ const App = () => {
     </>
   );
 };
+// testing lol
 const styles = StyleSheet.create({
   container: {
     flex: 1,
