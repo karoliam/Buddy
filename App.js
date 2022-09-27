@@ -22,4 +22,4 @@ const styles = StyleSheet.create({
 });
 
 export default App;
-//asdljfasölfjkasdd
+//home comp
