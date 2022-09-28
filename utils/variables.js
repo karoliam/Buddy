@@ -1,5 +1,5 @@
 const apiUrl = 'https://media.mw.metropolia.fi/wbma/';
-const mediaUrl = apiUrl + 'uploads/';
 const appId = 'buddy#';
+const mediaUrl = apiUrl + 'uploads/';
 
 export {apiUrl, appId, mediaUrl};
