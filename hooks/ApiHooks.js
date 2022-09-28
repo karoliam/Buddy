@@ -1,7 +1,5 @@
-import {useEffect, useState} from 'react';
 import {doFetch} from '../utils/http';
 import {apiUrl} from '../utils/variables';
-
 
 const useUser = () => {
   const postUser = async (userData) => {
@@ -21,7 +19,5 @@ const useUser = () => {
 
   return {postUser};
 };
-
-
 
 export {useUser};

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 
 const MainContext = React.createContext({});
@@ -9,7 +9,16 @@ const MainProvider = (props) => {
   const [user, setUser] = useState({});
   const [fullName, setFullName] = useState('');
   return (
-    <MainContext.Provider value={{isLoggedIn, setIsLoggedIn, user, setUser,fullName, setFullName}}>
+    <MainContext.Provider
+      value={{
+        isLoggedIn,
+        setIsLoggedIn,
+        user,
+        setUser,
+        fullName,
+        setFullName,
+      }}
+    >
       {props.children}
     </MainContext.Provider>
   );

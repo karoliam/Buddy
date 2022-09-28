@@ -1,13 +1,16 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {StatusBar} from 'expo-status-bar';
 import RegisterChecker from './views/RegisterChecker';
+import {MainProvider} from './contexts/MainContext';
 
 const App = () => {
   return (
     <>
-      <View style={styles.container}>
-        <RegisterChecker/>
-      </View>
+      <MainProvider>
+        <View style={styles.container}>
+          <RegisterChecker />
+        </View>
+      </MainProvider>
       <StatusBar style="auto" />
     </>
   );
@@ -23,4 +26,3 @@ const styles = StyleSheet.create({
 });
 
 export default App;
-
