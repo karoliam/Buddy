@@ -5,8 +5,6 @@ const doFetch = async (url, options = {}) => {
     if (response.ok) {
       return data;
     } else {
-      // http status code 4xx or 5xx
-      // message comes from server
       throw new Error(data.message);
     }
   } catch (error) {

@@ -1,7 +1,8 @@
 import {StyleSheet, Text} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
+// KAIKKI TÄÄLLÄ ON VAIN PLACEHOLDERIA JOKA KORVATAAN OIKEALLA KOODILLA JOSSAIN VAIHEESSA
 
-const App = () => {
+const Home = () => {
   return (
     <>
       <SafeAreaView style={styles.container}>
@@ -19,4 +20,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+export default Home;
