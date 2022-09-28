@@ -1,5 +1,6 @@
 import {StatusBar} from 'expo-status-bar';
 import RegisterUserDataForm from './components/RegisterUserDataForm';
+import {MainProvider} from './context/MainContext';
 
 const App = () => {
   return (
