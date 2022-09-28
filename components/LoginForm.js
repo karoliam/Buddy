@@ -2,7 +2,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useContext} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {
-  StyleSheet,
   Button,
   Text,
   TextInput,
@@ -28,16 +27,21 @@ const LoginForm = () => {
       password: '',
     },
   });
-
   const logIn = async (loginCredentials) => {
     try {
       const userData = await postLogin(loginCredentials);
       await AsyncStorage.setItem('userToken', userData.token);
       setUser(userData.user);
-      setIsLoggedIn(true);
+      console.log('here is userdata', userData);
+      // splitting the application tag from the username
+      const usernameSplit = userData.user.username.split('#');
+      console.log('usernamesplit', usernameSplit);
+      const usernameAppTag = usernameSplit[0];
+      if (usernameAppTag === 'buddy') {
+        setIsLoggedIn(true);
+      }
     } catch (error) {
       console.log('Login - logIn', error);
-      Alert.alert('Try again', 'Wrong e-mail or password', [], undefined);
     }
   };
 
@@ -90,7 +94,16 @@ const LoginForm = () => {
         />
         <Button
           title="Sign in!"
-          onPress={handleSubmit((data) => logIn(data))}
+          onPress={handleSubmit((data) => {
+            logIn(data);
+            console.log(data);
+            const addedBuddy = {
+              password: data.password,
+              username: 'buddy#' + data.username,
+            };
+            logIn(addedBuddy);
+            console.log(addedBuddy);
+          })}
         />
       </TouchableOpacity>
     </KeyboardAvoidingView>
