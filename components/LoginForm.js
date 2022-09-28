@@ -99,21 +99,19 @@ const LoginForm = () => {
           )}
           name="password"
         />
-        <TouchableOpacity style={styles.buttonSignIn}>
-          <Button
-            style={styles.signInText}
-            title="Sign in!"
-            onPress={handleSubmit((data) => {
-              logIn(data);
-              console.log(data);
-              const addedBuddy = {
-                password: data.password,
-                username: 'buddy#' + data.username,
-              };
-              logIn(addedBuddy);
-              console.log(addedBuddy);
-            })}
-          />
+        <TouchableOpacity
+          style={styles.buttonSignIn}
+          onPress={handleSubmit((data) => {
+            logIn(data);
+            console.log(data);
+            const addedBuddy = {
+              password: data.password,
+              username: 'buddy#' + data.username,
+            };
+            logIn(addedBuddy);
+            console.log(addedBuddy);
+          })}>
+          <Text style={styles.signInText}>Sign in!</Text>
         </TouchableOpacity>
       </TouchableOpacity>
     </KeyboardAvoidingView>
@@ -187,10 +185,10 @@ const styles = StyleSheet.create({
     fontFamily: "roboto-regular",
     color: "rgba(255,255,255,1)",
     height: 25,
-    width: 58,
+    width: 70,
     fontSize: 20,
     marginTop: 14,
-    marginLeft: 115
+    marginLeft: 103
   },
 });
 export {LoginForm};
