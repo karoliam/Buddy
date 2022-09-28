@@ -33,6 +33,7 @@ module.exports = {
     'no-console': 0,
     'require-jsdoc': 0,
     'prettier/prettier': 'error',
+    "endOfLine": "auto",
   },
   settings: {
     react: {

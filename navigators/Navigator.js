@@ -1,6 +1,4 @@
-<<<<<<< HEAD
-// TODO tee (eiku kahvi :D) navigator
-=======
+// TODO tee (eiku kahvi :D) navigator 
 import React, {useContext} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -45,4 +43,3 @@ const Navigator = () => {
 };
 
 export default Navigator;
->>>>>>> origin/navigation
