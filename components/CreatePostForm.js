@@ -27,9 +27,9 @@ const CreatePostForm = ({navigation}) => {
   const {update, setUpdate} = useContext(MainContext);
   const {postTag} = useTag();
   const data = [
-    {key: '1', value: 'Espoo'},
-    {key: '2', value: 'Helsinki'},
-    {key: '3', value: 'Vantaa'},
+    {key: '0', value: 'Espoo'},
+    {key: '1', value: 'Helsinki'},
+    {key: '2', value: 'Vantaa'},
   ];
 
   const pickImage = async () => {
@@ -118,6 +118,12 @@ const CreatePostForm = ({navigation}) => {
     setValue('when', '');
     setValue('writePost', '');
   };
+
+  const handleSelect = (e) => {
+    console.log(data[e].value);
+    setSelected(data[e].value);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <Text>Create post</Text>
@@ -128,20 +134,15 @@ const CreatePostForm = ({navigation}) => {
       <Button title="Choose a picture" onPress={pickImage}></Button>
       <Controller
         control={control}
-        rules={{
-          minLength: 3,
-          required: true,
-        }}
         render={({field: {onChange, onBlur, value}}) => (
           <SelectList
-            setSelected={setSelected}
+            setSelected={handleSelect}
             data={data}
             onBlur={onBlur}
             onChangeText={onChange}
             value={value}
             search={false}
             placeholder="Location"
-            required
           />
         )}
         name="location"
