@@ -28,6 +28,15 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow Buddy to access your photos so you can share them in the app."
+        }
+      ]
+    ]
+
   }
 }
