@@ -1,5 +1,22 @@
 import {doFetch} from '../utils/http';
 import {apiUrl} from '../utils/variables';
+const useMedia = () => {
+  const postMedia = async (formdata, token) => {
+    const options = {
+      method: 'POST',
+      headers: {'x-access-token': token},
+      body: formdata,
+    };
+    try {
+      const response = await doFetch(apiUrl + '/media', options);
+      console.log(response);
+      return response;
+    } catch (error) {
+      console.log('usemedia-postmedia' + error);
+    }
+  };
+  return {postMedia};
+};
 
 const useUser = () => {
   const postUser = async (userData) => {
@@ -20,4 +37,4 @@ const useUser = () => {
   return {postUser};
 };
 
-export {useUser};
+export {useUser, useMedia};

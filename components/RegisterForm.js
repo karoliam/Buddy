@@ -14,11 +14,11 @@ import {useForm, Controller} from 'react-hook-form';
 
 import {Card} from '@rneui/themed';
 import {Input} from '@rneui/base';
-import {MainContext} from '../contexts/MainContext';
 import {useUser} from '../hooks/ApiHooks';
 import {appId} from '../utils/variables';
+import {MainContext} from '../context/MainContext';
 
-const RegisterForm = () => {
+const RegisterForm = ({navigation}) => {
   const {setFullName} = useContext(MainContext);
   const {postUser} = useUser();
   const {
@@ -31,6 +31,7 @@ const RegisterForm = () => {
     mode: 'onBlur',
   });
   const onSubmit = async (data) => {
+    setFullName(data.full_name);
     const registerCredentials = {
       username: appId + data.email,
       password: data.password,

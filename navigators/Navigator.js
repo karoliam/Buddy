@@ -1,4 +1,4 @@
-// TODO tee (eiku kahvi :D) navigator 
+// TODO tee (eiku kahvi :D) navigator
 import React, {useContext} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -7,6 +7,8 @@ import Home from '../views/Home';
 import Profile from '../views/Profile';
 import Login from '../views/Login';
 import CreatePost from '../views/CreatePost';
+import RegisterUserDataForm from '../components/RegisterUserDataForm';
+import RegisterForm from '../components/RegisterForm';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -23,13 +25,17 @@ const TabScreen = () => {
 
 const StackScreen = () => {
   return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="Tabs"
-        component={TabScreen}
-        options={{headerShown: false}}
-      />
+    <Stack.Navigator
+      initialRouteName="RegisterForm"
+      screenOptions={{headerShown: false}}
+    >
+      <Stack.Screen name="Tabs" component={TabScreen} />
       <Stack.Screen name="Login" component={Login} />
+      <Stack.Screen
+        name="RegisterUserDataForm"
+        component={RegisterUserDataForm}
+      />
+      <Stack.Screen name="RegisterForm" component={RegisterForm} />
     </Stack.Navigator>
   );
 };
