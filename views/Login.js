@@ -2,8 +2,13 @@ import React, {useContext, useEffect} from 'react';
 import {
   Dimensions,
   Image,
+  KeyboardAvoidingView,
   ImageBackground,
-  StyleSheet, Text, TouchableOpacity,
+  Keyboard,
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import PropTypes from 'prop-types';
@@ -42,30 +47,39 @@ const Login = () => {
         style={styles.backGroundImage}
         imageStyle={styles.backGroundImage_imageStyle}
       >
-        <View style={styles.logoBackgroundStack}>
-          <View style={styles.logoBackground}></View>
-          <Image
-            source={require("../assets/buddyLogoNoBack.png")}
-            resizeMode="contain"
-            style={styles.imageLogoBuddy}
-          ></Image>
-        </View>
-        <View style={styles.loginFormContainer}>
-          <LoginForm></LoginForm>
-        </View>
-        <View style={styles.lineOrContainer}>
-          <View style={styles.lineOrLeft}></View>
-          <Text style={styles.lineOrText}>OR</Text>
-          <View style={styles.lineOrRight}></View>
-        </View>
-        <TouchableOpacity style={styles.buttonSignUp}>
-          <View style={styles.signUpTextContainer}>
-            <Text style={styles.dontHaveText}>
-              Don&#39;t have an account?
-            </Text>
-            <Text style={styles.signUpText}>Sign Up</Text>
-          </View>
-        </TouchableOpacity>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        >
+          <TouchableOpacity
+            onPress={Keyboard.dismiss}
+            activeOpacity={1}
+          >
+            <View style={styles.logoBackgroundStack}>
+              <View style={styles.logoBackground}></View>
+              <Image
+                source={require("../assets/buddyLogoNoBack.png")}
+                resizeMode="contain"
+                style={styles.imageLogoBuddy}
+              ></Image>
+            </View>
+            <View style={styles.loginFormContainer}>
+              <LoginForm></LoginForm>
+            </View>
+            <View style={styles.lineOrContainer}>
+              <View style={styles.lineOrLeft}></View>
+              <Text style={styles.lineOrText}>OR</Text>
+              <View style={styles.lineOrRight}></View>
+            </View>
+            <TouchableOpacity style={styles.buttonSignUp}>
+              <View style={styles.signUpTextContainer}>
+                <Text style={styles.dontHaveText}>
+                  Don&#39;t have an account?
+                </Text>
+                <Text style={styles.signUpText}>Sign Up</Text>
+              </View>
+            </TouchableOpacity>
+          </TouchableOpacity>
+        </KeyboardAvoidingView>
       </ImageBackground>
     </View>
   );

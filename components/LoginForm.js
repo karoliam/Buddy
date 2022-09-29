@@ -5,9 +5,6 @@ import {
   Text,
   TextInput,
   Alert,
-  KeyboardAvoidingView,
-  Platform,
-  Keyboard,
   TouchableOpacity,
   StyleSheet,
   Dimensions,
@@ -54,72 +51,64 @@ const LoginForm = () => {
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-    >
-      <TouchableOpacity
-        onPress={Keyboard.dismiss}
-        style={{flex: 1}}
-        activeOpacity={1}
-      >
-        <Controller
-          control={control}
-          rules={{
-            minLength: 3,
-            required: true,
-          }}
-          render={({field: {onChange, onBlur, value}}) => (
-            <View style={styles.fieldBoxUsername}>
-              <TextInput
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                autoCapitalize="none"
-                placeholder="username"
-                required
-                style={styles.usernameInput}
-              />
-            </View>
-          )}
-          name="username"
-        />
-        {errors.username?.type === 'required' && <Text>This is required.</Text>}
-        {errors.username?.type === 'minLength' && <Text>Min 3 chars!</Text>}
+    <View>
+      <Controller
+        control={control}
+        rules={{
+          minLength: 3,
+          required: true,
+        }}
+        render={({field: {onChange, onBlur, value}}) => (
+          <View style={styles.fieldBoxUsername}>
+            <TextInput
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+              autoCapitalize="none"
+              placeholder="username"
+              required
+              style={styles.usernameInput}
+            />
+          </View>
+        )}
+        name="username"
+      />
+      {errors.username?.type === 'required' && <Text>This is required.</Text>}
+      {errors.username?.type === 'minLength' && <Text>Min 3 chars!</Text>}
 
-        <Controller
-          control={control}
-          rules={{
-            maxLength: 100,
-          }}
-          render={({field: {onChange, onBlur, value}}) => (
-            <View style={styles.fieldBoxPassword}>
-              <TextInput
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                secureTextEntry={true}
-                placeholder="password"
-                style={styles.passwordInput}
-              />
-            </View>
-          )}
-          name="password"
-        />
-        <TouchableOpacity
-          style={styles.buttonSignIn}
-          onPress={handleSubmit((data) => {
-            const addedBuddy = {
-              password: data.password,
-              username: 'buddy#' + data.username,
-            };
-            logIn(addedBuddy);
-            console.log(addedBuddy);
-          })}
-        >
-          <Text style={styles.signInText}>Sign in!</Text>
-        </TouchableOpacity>
+      <Controller
+        control={control}
+        rules={{
+          maxLength: 100,
+        }}
+        render={({field: {onChange, onBlur, value}}) => (
+          <View style={styles.fieldBoxPassword}>
+            <TextInput
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+              secureTextEntry={true}
+              placeholder="password"
+              style={styles.passwordInput}
+            />
+          </View>
+        )}
+        name="password"
+      />
+      <TouchableOpacity
+        style={styles.buttonSignIn}
+        onPress={handleSubmit((data) => {
+          const addedBuddy = {
+            password: data.password,
+            username: 'buddy#' + data.username,
+          };
+          logIn(addedBuddy);
+          console.log(addedBuddy);
+        })}
+      >
+        <Text style={styles.signInText}>Sign in!</Text>
       </TouchableOpacity>
-    </KeyboardAvoidingView>
+    </View>
   );
 };
 const styles = StyleSheet.create({
