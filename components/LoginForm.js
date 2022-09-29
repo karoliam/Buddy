@@ -15,7 +15,7 @@ import {MainContext} from '../context/MainContext';
 import {useLogin} from '../hooks/ApiHooks';
 
 const LoginForm = () => {
-  const {isLoggedIn, setIsLoggedIn, setUser} = useContext(MainContext);
+  const {setIsLoggedIn, setUser} = useContext(MainContext);
   const {postLogin} = useLogin();
   const {
     control,
