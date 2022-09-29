@@ -15,16 +15,22 @@ import {useMedia, useTag} from '../hooks/ApiHooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {applicationTag} from '../utils/variables';
 import PropTypes from 'prop-types';
-// import {useNavigation} from '@react-navigation/native';
+import SelectList from 'react-native-dropdown-select-list';
 
 const CreatePostForm = ({navigation}) => {
   // const navigation = useNavigation();
   const [mediafile, setMediafile] = useState(null);
   const [mediaType, setMediaType] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [selected, setSelected] = useState('');
   const {postMedia} = useMedia();
   const {update, setUpdate} = useContext(MainContext);
   const {postTag} = useTag();
+  const data = [
+    {key: '1', value: 'Espoo'},
+    {key: '2', value: 'Helsinki'},
+    {key: '3', value: 'Vantaa'},
+  ];
 
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -127,10 +133,13 @@ const CreatePostForm = ({navigation}) => {
           required: true,
         }}
         render={({field: {onChange, onBlur, value}}) => (
-          <TextInput
+          <SelectList
+            setSelected={setSelected}
+            data={data}
             onBlur={onBlur}
             onChangeText={onChange}
             value={value}
+            search={false}
             placeholder="Location"
             required
           />
