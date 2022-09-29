@@ -8,6 +8,9 @@
       <option name="FORCE_QUOTE_STYlE" value="true" />
       <option name="ENFORCE_TRAILING_COMMA" value="WhenMultiline" />
     </JSCodeStyleSettings>
+    <editorconfig>
+      <option name="ENABLED" value="false" />
+    </editorconfig>
     <codeStyleSettings language="JavaScript">
       <option name="RIGHT_MARGIN" value="80" />
       <option name="BLOCK_COMMENT_ADD_SPACE" value="true" />

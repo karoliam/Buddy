@@ -2,6 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useContext} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {
+  Button,
   Text,
   TextInput,
   Alert,
@@ -105,6 +106,7 @@ const LoginForm = () => {
         <TouchableOpacity
           style={styles.buttonSignIn}
           onPress={handleSubmit((data) => {
+            console.log(data);
             const addedBuddy = {
               password: data.password,
               username: 'buddy#' + data.username,
