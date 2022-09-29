@@ -4,8 +4,6 @@ import {
   StyleSheet,
   SafeAreaView,
   Text,
-  KeyboardAvoidingView,
-  Platform,
   Image,
   TextInput,
   Button,
@@ -17,8 +15,10 @@ import {useMedia, useTag} from '../hooks/ApiHooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {applicationTag} from '../utils/variables';
 import PropTypes from 'prop-types';
+// import {useNavigation} from '@react-navigation/native';
 
 const CreatePostForm = ({navigation}) => {
+  // const navigation = useNavigation();
   const [mediafile, setMediafile] = useState(null);
   const [mediaType, setMediaType] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -112,73 +112,68 @@ const CreatePostForm = ({navigation}) => {
     setValue('when', '');
     setValue('writePost', '');
   };
-
   return (
     <SafeAreaView style={styles.container}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      >
-        <Text>Create post</Text>
-        <Image
-          source={{uri: mediafile || 'https://placekitten.com/300'}}
-          style={{width: 200, height: 200}}
-        ></Image>
-        <Button title="Choose a picture" onPress={pickImage}></Button>
-        <Controller
-          control={control}
-          rules={{
-            minLength: 3,
-            required: true,
-          }}
-          render={({field: {onChange, onBlur, value}}) => (
-            <TextInput
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-              placeholder="Location"
-              required
-            />
-          )}
-          name="location"
-        />
-        <Controller
-          control={control}
-          rules={{
-            minLength: 3,
-            required: true,
-          }}
-          render={({field: {onChange, onBlur, value}}) => (
-            <TextInput
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-              placeholder="When"
-              required
-            />
-          )}
-          name="when"
-        />
+      <Text>Create post</Text>
+      <Image
+        source={{uri: mediafile || 'https://placekitten.com/300'}}
+        style={{width: 200, height: 200}}
+      ></Image>
+      <Button title="Choose a picture" onPress={pickImage}></Button>
+      <Controller
+        control={control}
+        rules={{
+          minLength: 3,
+          required: true,
+        }}
+        render={({field: {onChange, onBlur, value}}) => (
+          <TextInput
+            onBlur={onBlur}
+            onChangeText={onChange}
+            value={value}
+            placeholder="Location"
+            required
+          />
+        )}
+        name="location"
+      />
+      <Controller
+        control={control}
+        rules={{
+          minLength: 3,
+          required: true,
+        }}
+        render={({field: {onChange, onBlur, value}}) => (
+          <TextInput
+            onBlur={onBlur}
+            onChangeText={onChange}
+            value={value}
+            placeholder="When"
+            required
+          />
+        )}
+        name="when"
+      />
 
-        {errors.username?.type === 'required' && <Text>This is required.</Text>}
-        {errors.username?.type === 'minLength' && <Text>Min 3 chars!</Text>}
-        <Controller
-          control={control}
-          render={({field: {onChange, onBlur, value}}) => (
-            <TextInput
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-              placeholder="Write your post..."
-            />
-          )}
-          name="writePost"
-        />
-        <Button
-          title="Send"
-          loading={isLoading}
-          onPress={handleSubmit(onSubmit)}
-        ></Button>
-      </KeyboardAvoidingView>
+      {errors.location?.type === 'required' && <Text>This is required.</Text>}
+      {errors.location?.type === 'minLength' && <Text>Min 3 chars!</Text>}
+      <Controller
+        control={control}
+        render={({field: {onChange, onBlur, value}}) => (
+          <TextInput
+            onBlur={onBlur}
+            onChangeText={onChange}
+            value={value}
+            placeholder="Write your post..."
+          />
+        )}
+        name="writePost"
+      />
+      <Button
+        title="Send"
+        loading={isLoading}
+        onPress={handleSubmit(onSubmit)}
+      ></Button>
     </SafeAreaView>
   );
 };
