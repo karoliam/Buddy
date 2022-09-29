@@ -4,13 +4,14 @@ import RegisterForm from './components/RegisterForm';
 import RegisterUserDataForm from './components/RegisterUserDataForm';
 import {MainProvider} from './context/MainContext';
 import Navigator from './navigators/Navigator';
+import RegisterChecker from './views/RegisterChecker';
 
 const App = () => {
   return (
     <>
       <MainProvider>
         <View>
-          <RegisterUserDataForm />
+          <RegisterForm />
         </View>
       </MainProvider>
     </>

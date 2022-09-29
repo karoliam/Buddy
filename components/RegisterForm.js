@@ -14,13 +14,15 @@ import {useForm, Controller} from 'react-hook-form';
 
 import {Card} from '@rneui/themed';
 import {Input} from '@rneui/base';
-import {useUser} from '../hooks/ApiHooks';
+import {useLogin, useUser} from '../hooks/ApiHooks';
 import {appId} from '../utils/variables';
 import {MainContext} from '../context/MainContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const RegisterForm = ({navigation}) => {
   const {setFullName} = useContext(MainContext);
   const {postUser} = useUser();
+  const {postLogin} = useLogin();
   const {
     control,
     handleSubmit,
@@ -30,6 +32,7 @@ const RegisterForm = ({navigation}) => {
     defaultValues: {email: '', password: '', full_name: ''},
     mode: 'onBlur',
   });
+
   const onSubmit = async (data) => {
     setFullName(data.full_name);
     const registerCredentials = {
@@ -37,10 +40,16 @@ const RegisterForm = ({navigation}) => {
       password: data.password,
       email: data.email,
     };
+    const loginCredentials = {
+      username: appId + data.email,
+      password: data.password,
+    };
     try {
+      console.log(registerCredentials);
       setFullName(data.full_name);
       const userData = await postUser(registerCredentials);
       console.log(userData.message);
+      console.log('reg');
     } catch (error) {
       console.log('RegisterForm onSubmit ' + error);
     }

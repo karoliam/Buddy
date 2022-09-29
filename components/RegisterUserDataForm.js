@@ -1,12 +1,5 @@
 import React, {useContext, useState} from 'react';
-import {
-  View,
-  Text,
-  Button,
-  ScrollView,
-  TouchableOpacity,
-  AsyncStorage,
-} from 'react-native';
+import {View, Text, Button, ScrollView, TouchableOpacity} from 'react-native';
 
 import {Card, Image} from '@rneui/base';
 import {Controller, useForm} from 'react-hook-form';
@@ -14,6 +7,7 @@ import {Input} from '@rneui/themed';
 import * as ImagePicker from 'expo-image-picker';
 import {useMedia} from '../hooks/ApiHooks';
 import {MainContext} from '../context/MainContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const RegisterUserDataForm = () => {
   const {fullName, image, setImage} = useContext(MainContext);

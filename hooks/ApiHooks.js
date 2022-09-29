@@ -17,7 +17,25 @@ const useMedia = () => {
   };
   return {postMedia};
 };
+const useLogin = () => {
+  const postLogin = async (userCredentials) => {
+    // user credentials format: {username: 'someUsername', password: 'somePassword'}
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(userCredentials),
+    };
+    try {
+      return await doFetch(apiUrl + 'login', options);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
 
+  return {postLogin};
+};
 const useUser = () => {
   const postUser = async (userData) => {
     const options = {
@@ -37,4 +55,4 @@ const useUser = () => {
   return {postUser};
 };
 
-export {useUser, useMedia};
+export {useUser, useMedia, useLogin};
