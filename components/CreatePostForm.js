@@ -18,7 +18,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {applicationTag} from '../utils/variables';
 import PropTypes from 'prop-types';
 
-const CreatePostForm = ({navigation}is) => {
+const CreatePostForm = ({navigation}) => {
   const [mediafile, setMediafile] = useState(null);
   const [mediaType, setMediaType] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
