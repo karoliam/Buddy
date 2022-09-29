@@ -2,7 +2,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useContext} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {
-  Button,
   Text,
   TextInput,
   Alert,
@@ -35,7 +34,7 @@ const LoginForm = () => {
       setUser(userData.user);
       console.log('here is userdata', userData);
       // splitting the application tag from the username
-      const usernameSplit = userData.user.username.split('#');
+      const usernameSplit = await userData.user.username.split('#');
       console.log('usernamesplit', usernameSplit);
       const usernameAppTag = usernameSplit[0];
       if (usernameAppTag === 'buddy') {
@@ -43,6 +42,7 @@ const LoginForm = () => {
       }
     } catch (error) {
       console.log('Login - logIn', error);
+      Alert.alert('Try again', 'E-mail or password wrong', [], undefined);
     }
   };
 
@@ -102,8 +102,6 @@ const LoginForm = () => {
         <TouchableOpacity
           style={styles.buttonSignIn}
           onPress={handleSubmit((data) => {
-            logIn(data);
-            console.log(data);
             const addedBuddy = {
               password: data.password,
               username: 'buddy#' + data.username,
@@ -188,7 +186,7 @@ const styles = StyleSheet.create({
     width: 70,
     fontSize: 20,
     marginTop: 14,
-    marginLeft: 103
+    marginLeft: 115
   },
 });
 export {LoginForm};
