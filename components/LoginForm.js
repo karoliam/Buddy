@@ -45,7 +45,11 @@ const LoginForm = () => {
       }
     } catch (error) {
       console.log('Login - logIn', error);
-      Alert.alert('Try again', 'E-mail or password wrong', [], undefined);
+      Alert.alert(
+        'Try again',
+        'E-mail or password wrong',
+        [{ text: "OK", onPress: () => console.log("OK Pressed") }],
+        undefined);
     }
   };
 
@@ -58,7 +62,6 @@ const LoginForm = () => {
         style={{flex: 1}}
         activeOpacity={1}
       >
-        <Text style={styles.loginFormText}>Login Form</Text>
         <Controller
           control={control}
           rules={{
@@ -120,17 +123,6 @@ const LoginForm = () => {
   );
 };
 const styles = StyleSheet.create({
-  loginFormText: {
-    top: 0,
-    left: 46,
-    position: 'absolute',
-    fontFamily: 'roboto-regular',
-    color: 'rgba(255,255,255,1)',
-    height: 32,
-    width: 284,
-    fontSize: 16,
-    textAlign: 'center',
-  },
   fieldBoxUsername: {
     width: 285,
     height: 61,
