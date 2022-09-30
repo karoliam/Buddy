@@ -1,10 +1,8 @@
 /* eslint-disable spaced-comment */
-/**
- * get register data from register forms
-    ->username is also email
-    ->to username add app tag
-
- * get full name and save in context for later json in media post
+/** Elikkäs mitä tämä hölmä paikka tekee
+ * luo käyttäjän annetuilla arvoilla, username on sähköposti jonka eteen tulee appId joka on buddy ja se erotetaan sähköpostista # merkillä
+ * kirjautuu bäkkäriin tiedoilla ja saa usertokenin sekä id:n (id ei ole tallentumassa atm mihinkään) sieltä
+ * full name tallennetaan contextiin jota käytetään RegisterUserDataForm sisällä
 
  */
 
@@ -45,109 +43,120 @@ const RegisterForm = ({navigation}) => {
       password: data.password,
     };
     try {
-      console.log(registerCredentials);
       setFullName(data.full_name);
       const userData = await postUser(registerCredentials);
-      console.log(userData.message);
-      console.log('reg');
+      if (userData) {
+        const userLoginData = await postLogin(loginCredentials);
+        await AsyncStorage.setItem('userToken', userLoginData.token);
+        //await AsyncStorage.setItem('userId', userLoginData.user_id);
+        if ((await AsyncStorage.getItem('userToken')) != null) {
+          navigation.navigate('RegisterUserDataForm');
+        }
+      }
     } catch (error) {
       console.log('RegisterForm onSubmit ' + error);
     }
   };
 
   return (
-    <View style={{width: 300, marginTop: 60}}>
-      <Card.Title style={{fontSize: 20}}>Register</Card.Title>
-      <Card.Divider />
+    <View>
+      <View style={{width: 300, marginTop: 60}}>
+        <Card.Title style={{fontSize: 20}}>Register</Card.Title>
+        <Card.Divider />
 
-      <Controller
-        control={control}
-        rules={{}}
-        render={({field: {onChange, onBlur, value}}) => (
-          <Input
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
-            placeholder="Full name"
-            autoCapitalize="none"
-            errorMessage={
-              errors.full_name && <Text>{errors.full_name.message}</Text>
-            }
-          />
-        )}
-        name="full_name"
-      />
-      <Controller
-        control={control}
-        rules={{
-          required: {value: true, message: 'This is required.'},
-          pattern: {
-            value: /^[a-z0-9.]{1,128}@[a-z0-9.]{5,128}/i,
-            message: 'Must be valid email.',
-          },
-        }}
-        render={({field: {onChange, onBlur, value}}) => (
-          <Input
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
-            placeholder="Email"
-            autoCapitalize="none"
-            errorMessage={errors.email && <Text>{errors.email.message}</Text>}
-          />
-        )}
-        name="email"
-      />
+        <Controller
+          control={control}
+          rules={{}}
+          render={({field: {onChange, onBlur, value}}) => (
+            <Input
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+              placeholder="Full name"
+              autoCapitalize="none"
+              errorMessage={
+                errors.full_name && <Text>{errors.full_name.message}</Text>
+              }
+            />
+          )}
+          name="full_name"
+        />
+        <Controller
+          control={control}
+          rules={{
+            required: {value: true, message: 'This is required.'},
+            pattern: {
+              value: /^[a-z0-9.]{1,128}@[a-z0-9.]{5,128}/i,
+              message: 'Must be valid email.',
+            },
+          }}
+          render={({field: {onChange, onBlur, value}}) => (
+            <Input
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+              placeholder="Email"
+              autoCapitalize="none"
+              errorMessage={errors.email && <Text>{errors.email.message}</Text>}
+            />
+          )}
+          name="email"
+        />
 
-      <Controller
-        control={control}
-        rules={{
-          required: {value: true, message: 'Required'},
-          minLength: {value: 5, message: 'Min length 5 chars.'},
-        }}
-        render={({field: {onChange, onBlur, value}}) => (
-          <Input
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
-            secureTextEntry={true}
-            placeholder="Password"
-            errorMessage={
-              errors.password && <Text>{errors.password.message}</Text>
-            }
-          />
-        )}
-        name="password"
-      />
+        <Controller
+          control={control}
+          rules={{
+            required: {value: true, message: 'Required'},
+            minLength: {value: 5, message: 'Min length 5 chars.'},
+          }}
+          render={({field: {onChange, onBlur, value}}) => (
+            <Input
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+              secureTextEntry={true}
+              placeholder="Password"
+              errorMessage={
+                errors.password && <Text>{errors.password.message}</Text>
+              }
+            />
+          )}
+          name="password"
+        />
 
-      <Controller
-        control={control}
-        rules={{
-          validate: (value) => {
-            if (value === getValues('password')) {
-              return true;
-            } else {
-              return 'Does not match to password.';
-            }
-          },
-        }}
-        render={({field: {onChange, onBlur, value}}) => (
-          <Input
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
-            secureTextEntry={true}
-            placeholder="Confirm password"
-            errorMessage={
-              errors.confirmPassword && (
-                <Text>{errors.confirmPassword.message}</Text>
-              )
-            }
-          />
-        )}
-        name="confirmPassword"
+        <Controller
+          control={control}
+          rules={{
+            validate: (value) => {
+              if (value === getValues('password')) {
+                return true;
+              } else {
+                return 'Does not match to password.';
+              }
+            },
+          }}
+          render={({field: {onChange, onBlur, value}}) => (
+            <Input
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+              secureTextEntry={true}
+              placeholder="Confirm password"
+              errorMessage={
+                errors.confirmPassword && (
+                  <Text>{errors.confirmPassword.message}</Text>
+                )
+              }
+            />
+          )}
+          name="confirmPassword"
+        />
+        <Button title="Submit" onPress={handleSubmit(onSubmit)} />
+      </View>
+      <Button
+        title="To login page"
+        onPress={() => navigation.navigate('Login')}
       />
-      <Button title="Submit" onPress={handleSubmit(onSubmit)} />
     </View>
   );
 };

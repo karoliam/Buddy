@@ -10,9 +10,7 @@ const App = () => {
   return (
     <>
       <MainProvider>
-        <View>
-          <RegisterForm />
-        </View>
+        <Navigator></Navigator>
       </MainProvider>
     </>
   );

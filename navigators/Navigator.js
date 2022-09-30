@@ -25,17 +25,14 @@ const TabScreen = () => {
 
 const StackScreen = () => {
   return (
-    <Stack.Navigator
-      initialRouteName="RegisterForm"
-      screenOptions={{headerShown: false}}
-    >
+    <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Screen name="RegisterForm" component={RegisterForm} />
       <Stack.Screen name="Tabs" component={TabScreen} />
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen
         name="RegisterUserDataForm"
         component={RegisterUserDataForm}
       />
-      <Stack.Screen name="RegisterForm" component={RegisterForm} />
     </Stack.Navigator>
   );
 };

@@ -8,7 +8,7 @@ const useMedia = () => {
       body: formdata,
     };
     try {
-      const response = await doFetch(apiUrl + '/media', options);
+      const response = await doFetch(apiUrl + 'media', options);
       console.log(response);
       return response;
     } catch (error) {
