@@ -57,6 +57,7 @@ const CreatePostForm = ({navigation}) => {
       location: '',
       when: '',
       writePost: '',
+      title: 'feedPost',
     },
   });
 
@@ -71,6 +72,7 @@ const CreatePostForm = ({navigation}) => {
 
     const formJSON = JSON.stringify(formObject);
     formData.append('description', formJSON);
+    formData.append('title', 'feedPost');
     console.log('here is data', data);
 
     const filename = mediafile.split('/').pop();
