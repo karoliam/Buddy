@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   Dimensions,
   Image,
@@ -16,11 +16,19 @@ import {MainContext} from '../context/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useUser} from '../hooks/ApiHooks';
 import {LoginForm} from '../components/LoginForm';
-let {height, width} = Dimensions.get('window')
+import RegisterForm from '../components/RegisterForm';
+let {width} = Dimensions.get('window')
 
 const Login = () => {
   const {setIsLoggedIn, setUser} = useContext(MainContext);
   const {getUserByToken} = useUser();
+  const [showRegForm, setShowRegForm] = useState(false);
+  const [showLoginText, setShowLoginText] = useState(false);
+  const [showLoginText2, setShowLoginText2] = useState(false);
+  const loginText11 = 'Don\'t have an account?';
+  const loginText12 = 'Do You have an account?';
+  const loginText21 = 'Sign Up';
+  const loginText22 = 'Login';
 
   const checkToken = async () => {
     const userToken = await AsyncStorage.getItem('userToken');
@@ -34,7 +42,6 @@ const Login = () => {
       console.error('login - checkToken', error);
     }
   };
-
   useEffect(() => {
     checkToken();
   }, []);
@@ -63,19 +70,26 @@ const Login = () => {
               ></Image>
             </View>
             <View style={styles.loginFormContainer}>
-              <LoginForm></LoginForm>
+              {showRegForm ? <RegisterForm /> : <LoginForm />}
             </View>
             <View style={styles.lineOrContainer}>
               <View style={styles.lineOrLeft}></View>
               <Text style={styles.lineOrText}>OR</Text>
               <View style={styles.lineOrRight}></View>
             </View>
-            <TouchableOpacity style={styles.buttonSignUp}>
+            <TouchableOpacity
+              style={styles.buttonSignUp}
+              onPress={() => {
+                setShowRegForm(!showRegForm);
+                setShowLoginText(!showLoginText);
+                setShowLoginText2(!showLoginText2);
+              }}
+            >
               <View style={styles.signUpTextContainer}>
                 <Text style={styles.dontHaveText}>
-                  Don&#39;t have an account?
+                  {showLoginText ? loginText12 : loginText11}
                 </Text>
-                <Text style={styles.signUpText}>Sign Up</Text>
+                <Text style={styles.signUpText}>{showLoginText ? loginText22 : loginText21}</Text>
               </View>
             </TouchableOpacity>
           </TouchableOpacity>
@@ -116,7 +130,6 @@ const styles = StyleSheet.create({
     marginLeft: (width/2) - 152
   },
   loginFormContainer: {
-    width: 380,
     height: 300,
   },
   lineOrLeft: {

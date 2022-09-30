@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import {MainContext} from '../context/MainContext';
 import {useLogin} from '../hooks/ApiHooks';
-let {height, width} = Dimensions.get('window');
+let {width} = Dimensions.get('window');
 
 const LoginForm = () => {
   const {isLoggedIn, setIsLoggedIn, setUser} = useContext(MainContext);
