@@ -22,7 +22,7 @@ const CreatePostForm = ({navigation}) => {
   const [mediafile, setMediafile] = useState(null);
   const [mediaType, setMediaType] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [selected, setSelected] = useState('');
+  const [city, setCity] = useState('');
   const {postMedia} = useMedia();
   const {update, setUpdate} = useContext(MainContext);
   const {postTag} = useTag();
@@ -62,14 +62,17 @@ const CreatePostForm = ({navigation}) => {
 
   const onSubmit = async (data) => {
     const formData = new FormData();
+
     const formObject = {
-      location: 'location',
-      when: 'when',
-      writePost: 'writePost',
+      location: city,
+      when: data.when,
+      writePost: data.writePost,
     };
+
     const formJSON = JSON.stringify(formObject);
     formData.append('description', formJSON);
     console.log('here is data', data);
+
     const filename = mediafile.split('/').pop();
     let extension = filename.split('.').pop();
     extension = extension === 'jpg' ? 'jpeg' : extension;
@@ -121,7 +124,7 @@ const CreatePostForm = ({navigation}) => {
 
   const handleSelect = (e) => {
     console.log(data[e].value);
-    setSelected(data[e].value);
+    setCity(data[e].value);
   };
 
   return (

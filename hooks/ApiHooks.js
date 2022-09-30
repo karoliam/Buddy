@@ -8,6 +8,7 @@ const useMedia = (update) => {
     try {
       const json = await useTag().getFilesByTag(applicationTag);
       console.log(json);
+      json.reverse();
       const allMediaData = json.map(async (mediaItem) => {
         return await doFetch(apiUrl + 'media/' + mediaItem.file_id);
       });
@@ -19,7 +20,9 @@ const useMedia = (update) => {
   useEffect(() => {
     loadMedia();
   }, [update]);
+
   const postMedia = async (token, data) => {
+    console.log('token tossa', token);
     const options = {
       method: 'POST',
       headers: {

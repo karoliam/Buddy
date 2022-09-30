@@ -1,23 +1,27 @@
-import {StyleSheet, Text} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
-// KAIKKI TÄÄLLÄ ON VAIN PLACEHOLDERIA JOKA KORVATAAN OIKEALLA KOODILLA JOSSAIN VAIHEESSA
+import {Platform, SafeAreaView, StyleSheet} from 'react-native';
+import PropTypes from 'prop-types';
 
-const Home = () => {
+import List from '../components/List';
+
+const Home = (props) => {
+  const {navigation} = props;
   return (
-    <>
-      <SafeAreaView style={styles.container}>
-        <Text>Home view</Text>
-      </SafeAreaView>
-    </>
+    <SafeAreaView style={styles.droidSafeArea}>
+      <List navigation={navigation}></List>
+    </SafeAreaView>
   );
 };
+
 const styles = StyleSheet.create({
-  container: {
+  droidSafeArea: {
     flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    paddingTop: Platform.OS === 'android' ? 30 : 0,
   },
 });
+
+Home.propTypes = {
+  navigation: PropTypes.object,
+};
 
 export default Home;
