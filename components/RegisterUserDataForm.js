@@ -79,6 +79,12 @@ const RegisterUserDataForm = ({navigation}) => {
 
     try {
       const token = await AsyncStorage.getItem('userToken');
+      console.log(
+        profileDataDescription.full_name,
+        profileDataDescription.age,
+        profileDataDescription.bio,
+        profileDataDescription.location
+      );
       const pPic = await postMedia(profilePic, token);
       const pData = await postMedia(profileData, token);
       if (pPic && pData) {
