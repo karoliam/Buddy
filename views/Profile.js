@@ -5,7 +5,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Image} from '@rneui/themed';
 
 const Profile = () => {
-  const {setIsLoggedIn} = useContext(MainContext);
+  const {user, setIsLoggedIn} = useContext(MainContext);
+  console.log(user);
   const logout = async () => {
     setIsLoggedIn(false);
     await AsyncStorage.clear();
