@@ -1,6 +1,6 @@
 /**
  * Täällä otetaan profiilikuva, title on profile_pic jolla se etitään myöhemmin
- * myös postataan user data postaus jonka title on profile_data ja description sisältää jsonin (age, location, bio)
+ * myös postataan user data postaus jonka title on profile_data ja description sisältää jsonin (fullName, age, location, bio)
  */
 
 import React, {useContext, useState} from 'react';
@@ -70,6 +70,7 @@ const RegisterUserDataForm = ({navigation}) => {
       type: 'image/jpeg',
     });
     const profileDataDescription = {
+      full_name: fullName,
       age: data.age,
       location: data.location,
       bio: data.bio,
@@ -78,7 +79,6 @@ const RegisterUserDataForm = ({navigation}) => {
 
     try {
       const token = await AsyncStorage.getItem('userToken');
-
       const pPic = await postMedia(profilePic, token);
       const pData = await postMedia(profileData, token);
       if (pPic && pData) {
