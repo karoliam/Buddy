@@ -15,6 +15,7 @@ const Login = () => {
     try {
       if (userToken != null) {
         const userData = await getUserByToken(userToken);
+        console.log(userToken);
         setIsLoggedIn(true);
         setUser(userData);
       }

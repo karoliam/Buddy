@@ -17,11 +17,11 @@ import {userMedia} from '../hooks/ApiHooks';
 import {mediaUrl} from '../utils/variables';
 
 const Profile = () => {
-  const {user, setIsLoggedIn, avatar, setAvatar} = useContext(MainContext);
+  const {user, setIsLoggedIn, avatar, setAvatar, profileData, setProfileData} =
+    useContext(MainContext);
   const {userProfilePostData} = userMedia();
   const [profileBackground, setProfileBackgorund] = useState('');
   const [profileDescriptionData, setProfileDescriptionData] = useState({});
-  const [profileData, setProfileData] = useState({});
 
   const getProfileData = async (profileID) => {
     try {
@@ -33,9 +33,11 @@ const Profile = () => {
   };
   useEffect(() => {
     getProfileData(user.user_id);
-    handleProfileData();
   }, []);
-  const handleProfileData = () => {
+  useEffect(() => {
+    handleProfileData();
+  }, [profileData]);
+  const handleProfileData = async () => {
     getProfileBackground();
     getProfileDescription();
     getProfilePic();
@@ -57,6 +59,8 @@ const Profile = () => {
     const profilePicture = profilePostDataArray.pop();
     if (profilePicture) {
       setAvatar(mediaUrl + profilePicture.filename);
+    } else {
+      console.log('lol');
     }
   };
 
@@ -65,7 +69,6 @@ const Profile = () => {
       (file) => file.title === 'profile_data'
     );
     const profileDesc = profilePostDataArray.pop();
-    console.log(profileDesc.description);
     if (profileDesc) {
       setProfileDescriptionData(JSON.parse(profileDesc.description));
     }

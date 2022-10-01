@@ -8,10 +8,20 @@ const MainProvider = ({children}) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState({});
   const [avatar, setAvatar] = useState('');
+  const [profileData, setProfileData] = useState({});
 
   return (
     <MainContext.Provider
-      value={{isLoggedIn, setIsLoggedIn, user, setUser, avatar, setAvatar}}
+      value={{
+        isLoggedIn,
+        setIsLoggedIn,
+        user,
+        setUser,
+        avatar,
+        setAvatar,
+        profileData,
+        setProfileData,
+      }}
     >
       {children}
     </MainContext.Provider>

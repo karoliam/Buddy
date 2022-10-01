@@ -14,9 +14,9 @@ const Stack = createNativeStackNavigator();
 const TabScreen = () => {
   return (
     <Tab.Navigator>
-      <Tab.Screen name="Profile" component={Profile} />
       <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="Create post" component={CreatePost} />
+      <Tab.Screen name="Profile" component={Profile} />
     </Tab.Navigator>
   );
 };
