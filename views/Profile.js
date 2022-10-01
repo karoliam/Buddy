@@ -1,4 +1,14 @@
-import React, {useContext, useState} from 'react';
+/**
+ * täällä tapahtuu monenlaisia
+ * haen profiilin kaikki media yhtenä pötkönä
+ * erittelen median titlen mukaisesti kolmeen kategoriaan (näille vois tyylii tehä jonkun yhteisen muuttujan)
+ * -> profile_pic on porfiilikuva
+ * -> profile_background on profiilin taustakuva
+ * -> profile_data on profiilin bio, ikä, nimi sekä sijainti
+ *  HUOM enkelikissa on placeholderi
+ */
+
+import React, {useContext, useEffect, useState} from 'react';
 import {StyleSheet, SafeAreaView, Text, Button} from 'react-native';
 import {MainContext} from '../context/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -10,55 +20,58 @@ const Profile = () => {
   const {user, setIsLoggedIn, avatar, setAvatar} = useContext(MainContext);
   const {userProfilePostData} = userMedia();
   const [profileBackground, setProfileBackgorund] = useState('');
-  const [profileDescriptionData, setProfileDescriptionData] = useState('');
+  const [profileDescriptionData, setProfileDescriptionData] = useState({});
+  const [profileData, setProfileData] = useState({});
 
-  const getProfilePicture = async (profileID) => {
-    try {
-      const profileData = await userProfilePostData(profileID);
-      const profilePostDataArray = profileData.filter(
-        (file) => file.title === 'profile_pic'
-      );
-      const profilePicture = profilePostDataArray.pop();
-      if (profilePicture) {
-        setAvatar(mediaUrl + profilePicture.filename);
-      }
-    } catch (error) {
-      console.log('Profile.js getProfilePicture' + error);
-    }
-  };
-  const getProfileBackground = async (profileID) => {
-    try {
-      const profileData = await userProfilePostData(profileID);
-      const profilePostDataArray = profileData.filter(
-        (file) => file.title === 'profile_background'
-      );
-      const profileBg = profilePostDataArray.pop();
-      if (profileBg) {
-        setProfileBackgorund(mediaUrl + profileBg.filename);
-      }
-    } catch (error) {
-      console.log('Profile.js getProfileBackground ' + error);
-    }
-  };
   const getProfileData = async (profileID) => {
     try {
-      const profileData = await userProfilePostData(profileID);
-      const profilePostDataArray = profileData.filter(
-        (file) => file.title === 'profile_data'
-      );
-      const profileDesc = profilePostDataArray.pop();
-      if (profileDesc) {
-        setProfileDescriptionData(profileDesc.description);
-        console.log(JSON.stringify(profileDesc.description));
-      }
+      const profileDescrData = await userProfilePostData(profileID);
+      setProfileData(await Promise.all(profileDescrData));
     } catch (error) {
       console.log('Profile.js getProfileData ' + error);
     }
   };
+  useEffect(() => {
+    getProfileData(user.user_id);
+    handleProfileData();
+  }, []);
+  const handleProfileData = () => {
+    getProfileBackground();
+    getProfileDescription();
+    getProfilePic();
+  };
+  const getProfileBackground = () => {
+    const profilePostDataArray = profileData.filter(
+      (file) => file.title === 'profile_background'
+    );
+    const profileBg = profilePostDataArray.pop();
+    if (profileBg) {
+      setProfileBackgorund(mediaUrl + profileBg.filename);
+    }
+  };
 
-  getProfileData(user.user_id);
-  getProfilePicture(user.user_id);
-  getProfileBackground(user.user_id);
+  const getProfilePic = () => {
+    const profilePostDataArray = profileData.filter(
+      (file) => file.title === 'profile_pic'
+    );
+    const profilePicture = profilePostDataArray.pop();
+    if (profilePicture) {
+      setAvatar(mediaUrl + profilePicture.filename);
+    }
+  };
+
+  const getProfileDescription = () => {
+    const profilePostDataArray = profileData.filter(
+      (file) => file.title === 'profile_data'
+    );
+    const profileDesc = profilePostDataArray.pop();
+    console.log(profileDesc.description);
+    if (profileDesc) {
+      setProfileDescriptionData(JSON.parse(profileDesc.description));
+    }
+  };
+
+  //getProfileData(user.user_id);
   const logout = async () => {
     setIsLoggedIn(false);
     await AsyncStorage.clear();
@@ -93,10 +106,26 @@ const Profile = () => {
           borderRadius: 400 / 2,
         }}
       />
-      <Text>name</Text>
-      <Text>bio</Text>
-      <Text>location</Text>
-      <Text>age</Text>
+      {profileDescriptionData.full_name ? (
+        <Text>{profileDescriptionData.full_name}</Text>
+      ) : (
+        <Text>no</Text>
+      )}
+      {profileDescriptionData.age ? (
+        <Text>{profileDescriptionData.age}</Text>
+      ) : (
+        <Text>no</Text>
+      )}
+      {profileDescriptionData.location ? (
+        <Text>{profileDescriptionData.location}</Text>
+      ) : (
+        <Text>no</Text>
+      )}
+      {profileDescriptionData.bio ? (
+        <Text>{profileDescriptionData.bio}</Text>
+      ) : (
+        <Text>no</Text>
+      )}
       <Button title={'Logout'} onPress={logout} />
     </SafeAreaView>
   );
