@@ -1,6 +1,22 @@
 import {doFetch} from '../utils/http';
 import {apiUrl} from '../utils/variables';
 
+const userMedia = () => {
+  const userProfilePostData = async (profileID, tag) => {
+    const options = {
+      method: 'GET',
+    };
+    try {
+      const response = await fetch(apiUrl + 'media/user/' + profileID, options);
+      const userData = await response.json();
+      return userData;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+  return {userProfilePostData};
+};
+
 const useLogin = () => {
   const postLogin = async (userCredentials) => {
     const options = {
@@ -40,4 +56,4 @@ const useUser = () => {
 
   return {getUserByToken};
 };
-export {useLogin, useUser};
+export {useLogin, useUser, userMedia};
