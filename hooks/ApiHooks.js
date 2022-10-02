@@ -22,9 +22,7 @@ const useMedia = (update) => {
   const postMedia = async (token, data) => {
     const options = {
       method: 'POST',
-      headers: {
-        'x-access-token': token
-      },
+      headers: {'x-access-token': token},
       body: data,
     };
     try {

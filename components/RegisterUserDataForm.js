@@ -3,7 +3,7 @@
  * myös postataan user data postaus jonka title on profile_data ja description sisältää jsonin (fullName, age, location, bio)
  */
 // TODO find a neat SVG icon for the add user Profile picture button (the red square)
-
+// TODO go button is broken
 import React, {useContext, useState} from 'react';
 import {
   View,
@@ -96,8 +96,8 @@ const RegisterUserDataForm = ({navigation}) => {
         profileDataDescription.bio,
         profileDataDescription.location
       );
-      const pPic = await postMedia(profilePic, token);
-      const pData = await postMedia(profileData, token);
+      const pPic = await postMedia(token, profilePic);
+      const pData = await postMedia(token, profileData);
       if (pPic && pData) {
         setIsLoggedIn(true);
         // navigation.navigate('Tabs');  // TODO navi to loginstate
