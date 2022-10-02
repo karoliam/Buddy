@@ -1,4 +1,3 @@
-
 import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 
@@ -11,6 +10,7 @@ const MainProvider = (props) => {
   const [update, setUpdate] = useState(true);
   const [fullName, setFullName] = useState('');
   const [image, setImage] = useState(null);
+  const [showRegisterUserDataForm, setShowRegisterUserDataForm] = useState(false);
   return (
     <MainContext.Provider
       value={{
@@ -23,7 +23,10 @@ const MainProvider = (props) => {
         fullName,
         setFullName,
         image,
-        setImage,}}
+        setImage,
+        showRegisterUserDataForm,
+        setShowRegisterUserDataForm
+      }}
     >
       {props.children}
     </MainContext.Provider>

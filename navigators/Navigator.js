@@ -24,7 +24,7 @@ const TabScreen = () => {
 const StackScreen = () => {
   const {isLoggedIn} = useContext(MainContext);
   return (
-    <Stack.Navigator>
+    <Stack.Navigator  screenOptions={{headerShown: false}}>
       {isLoggedIn ? (
         <>
           <Stack.Screen
@@ -34,9 +34,7 @@ const StackScreen = () => {
           />
         </>
       ) : (
-        <>
         <Stack.Screen name="Login" component={Login} />
-        </>
       )}
     </Stack.Navigator>
   );

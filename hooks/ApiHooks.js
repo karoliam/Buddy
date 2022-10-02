@@ -23,14 +23,14 @@ const useMedia = (update) => {
     const options = {
       method: 'POST',
       headers: {
-        'x-access-token': token,
+        'x-access-token': token
       },
       body: data,
     };
     try {
       return await doFetch(apiUrl + 'media', options);
     } catch (error) {
-      console.log(error);
+      console.log('usemedia-postmedia' + error);
       throw new Error(error.message);
     }
   };
@@ -114,4 +114,5 @@ const useUser = () => {
 
   return {getUserByToken, postUser};
 };
+
 export {useLogin, useUser, useMedia, useTag};

@@ -5,8 +5,13 @@
  ->to username add app tag
  * get full name and save in context for later json in media post
  */
+/** Elikkäs mitä tämä hölmä paikka tekee
+ * luo käyttäjän annetuilla arvoilla, username on sähköposti jonka eteen tulee appId joka on buddy ja se erotetaan sähköpostista # merkillä
+ * kirjautuu bäkkäriin tiedoilla ja saa usertokenin sekä id:n (id ei ole tallentumassa atm mihinkään) sieltä
+ * full name tallennetaan contextiin jota käytetään RegisterUserDataForm sisällä
+ */
 
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import {
   Text,
   View,
@@ -19,9 +24,12 @@ import {useLogin, useUser} from '../hooks/ApiHooks';
 import {appId} from '../utils/variables';
 import {MainContext} from '../context/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import PropTypes from 'prop-types';
 
 const RegisterForm = ({navigation}) => {
+  const {showRegisterUserDataForm, setShowRegisterUserDataForm} = useContext(MainContext);
   const {setFullName} = useContext(MainContext);
+  const {update, setUpdate} = useContext(MainContext);
   const {postUser} = useUser();
   const {postLogin} = useLogin();
   const {
@@ -45,12 +53,20 @@ const RegisterForm = ({navigation}) => {
       username: appId + data.email,
       password: data.password,
     };
+
     try {
       console.log(registerCredentials);
       setFullName(data.full_name);
       const userData = await postUser(registerCredentials);
-      console.log(userData.message);
-      console.log('reg');
+      if (userData) {
+        const userLoginData = await postLogin(loginCredentials);
+        await AsyncStorage.setItem('userToken', userLoginData.token);
+        //await AsyncStorage.setItem('userId', userLoginData.user_id);
+        if ((await AsyncStorage.getItem('userToken')) != null) {
+          // navigation.navigate('RegisterChecker', {name: 'RegisterChecker'}); // TODO fix navigation to userDataForm
+          setShowRegisterUserDataForm(!showRegisterUserDataForm);
+        }
+      }
     } catch (error) {
       console.log('RegisterForm onSubmit ' + error);
     }
@@ -165,6 +181,7 @@ const RegisterForm = ({navigation}) => {
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   registerFormContainer: {
     top: 0,
@@ -289,5 +306,9 @@ const styles = StyleSheet.create({
     marginTop: 1
   },
 });
+
+RegisterForm.propTypes = {
+  navigation: PropTypes.object,
+};
 
 export default RegisterForm;

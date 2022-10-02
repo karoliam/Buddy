@@ -12,6 +12,8 @@ import {
 } from 'react-native';
 import {MainContext} from '../context/MainContext';
 import {useLogin} from '../hooks/ApiHooks';
+import PropTypes from 'prop-types';
+import RegisterForm from './RegisterForm';
 let {width} = Dimensions.get('window');
 
 const LoginForm = () => {
@@ -174,4 +176,9 @@ const styles = StyleSheet.create({
     marginLeft: 103,
   },
 });
+
+LoginForm.propTypes = {
+  navigation: PropTypes.object,
+};
+
 export {LoginForm};

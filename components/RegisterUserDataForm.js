@@ -1,16 +1,22 @@
+/**
+ * Täällä otetaan profiilikuva, title on profile_pic jolla se etitään myöhemmin
+ * myös postataan user data postaus jonka title on profile_data ja description sisältää jsonin (fullName, age, location, bio)
+ */
+
 import React, {useContext, useState} from 'react';
 import {View, Text, Button, ScrollView, TouchableOpacity} from 'react-native';
 
-import {Card, Image} from '@rneui/base';
+import {Image} from '@rneui/base';
 import {Controller, useForm} from 'react-hook-form';
 import {Input} from '@rneui/themed';
 import * as ImagePicker from 'expo-image-picker';
 import {useMedia} from '../hooks/ApiHooks';
 import {MainContext} from '../context/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {single_pixel} from '../images';
 
-const RegisterUserDataForm = () => {
-  const {fullName, image, setImage} = useContext(MainContext);
+const RegisterUserDataForm = ({navigation}) => {
+  const {fullName, image, setImage, setIsLoggedIn} = useContext(MainContext);
   const {postMedia} = useMedia();
   const [mediatype, setMediatype] = useState(null);
   const {
@@ -39,9 +45,11 @@ const RegisterUserDataForm = () => {
       setMediatype(result.type);
     }
   };
-
-  const onSubmit = async (data) => {
-    //profile pic upload media
+  const skipUserData = () => {
+    setIsLoggedIn(true);
+    // navigation.navigate('Tabs');  // TODO navi to loginstate
+  };
+  const registerUserData = async (data) => {
     const profilePic = new FormData();
     profilePic.append('title', 'profile_pic');
     const filename = image.uri.split('/').pop();
@@ -54,15 +62,16 @@ const RegisterUserDataForm = () => {
     });
 
     //user data upload media
-
+    const pixelUri = Image.resolveAssetSource(single_pixel).uri;
     const profileData = new FormData();
     profileData.append('title', 'profile_data');
     profileData.append('file', {
-      uri: require('../images/single_pixel.jpeg'),
+      uri: pixelUri,
       name: 'single_pixel.jpeg',
       type: 'image/jpeg',
     });
     const profileDataDescription = {
+      full_name: fullName,
       age: data.age,
       location: data.location,
       bio: data.bio,
@@ -70,15 +79,19 @@ const RegisterUserDataForm = () => {
     profileData.append('description', JSON.stringify(profileDataDescription));
 
     try {
-      //this is for testing
-      //TODO delete next line
-      await AsyncStorage.setItem(
-        'userToken',
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyMzAwLCJ1c2VybmFtZSI6ImJ1ZGR5I2VtYWlsQGVtYWlsLmNvbSIsImVtYWlsIjoiZW1haWxAZW1haWwuY29tIiwiZnVsbF9uYW1lIjpudWxsLCJpc19hZG1pbiI6bnVsbCwidGltZV9jcmVhdGVkIjoiMjAyMi0wOS0yOFQxMzo1NzozNy4wMDBaIiwiaWF0IjoxNjY0Mzk4NzY2LCJleHAiOjE2NjQ0ODUxNjZ9.FDHOb8HA65MKq5qxEz-wNxyVY6gTDOgUKg1L_qi6b2E'
-      );
       const token = await AsyncStorage.getItem('userToken');
-      //const pPic = await postMedia(profilePic, token);
+      console.log(
+        profileDataDescription.full_name,
+        profileDataDescription.age,
+        profileDataDescription.bio,
+        profileDataDescription.location
+      );
+      const pPic = await postMedia(profilePic, token);
       const pData = await postMedia(profileData, token);
+      if (pPic && pData) {
+        setIsLoggedIn(true);
+        // navigation.navigate('Tabs');  // TODO navi to loginstate
+      }
     } catch (error) {
       console.log('upload-onsubmit', error);
     }
@@ -153,8 +166,8 @@ const RegisterUserDataForm = () => {
             padding: 10,
           }}
         >
-          <Button title="do later" onPress={selectImage}></Button>
-          <Button title="go" onPress={handleSubmit(onSubmit)} />
+          <Button title="do later" onPress={skipUserData}></Button>
+          <Button title="go" onPress={handleSubmit(registerUserData)} />
         </View>
       </View>
     </ScrollView>
