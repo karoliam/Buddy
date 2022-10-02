@@ -1,3 +1,7 @@
+/**
+ * Tähän viewiin nestataan LoginMainViewContainer.js ja RegisterUserDataForm.js
+*/
+
 import React, {useContext, useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import PropTypes from 'prop-types';

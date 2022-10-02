@@ -1,3 +1,8 @@
+/**
+ * Tällä formilla otetaan vastaan käyttäjän sähköposti ja salasana kirjautumista
+ * varten.
+*/
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useContext} from 'react';
 import {Controller, useForm} from 'react-hook-form';
