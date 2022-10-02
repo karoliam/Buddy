@@ -11,6 +11,7 @@ const MainProvider = (props) => {
   const [fullName, setFullName] = useState('');
   const [image, setImage] = useState(null);
   const [showRegisterUserDataForm, setShowRegisterUserDataForm] = useState(false);
+
   return (
     <MainContext.Provider
       value={{

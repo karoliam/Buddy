@@ -1,7 +1,7 @@
 /**
  * Tällä formilla otetaan vastaan käyttäjän sähköposti ja salasana kirjautumista
  * varten.
-*/
+ */
 // TODO username validation currently pops up unreadable text instead of an alert
 // TODO on android clicking outside alert message doesn't dismiss it
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -53,7 +53,7 @@ const LoginForm = () => {
         'Try again',
         'E-mail or password wrong',
         [{ text: "OK", onPress: () => console.log("OK Pressed") }],
-        );
+      );
     }
   };
 

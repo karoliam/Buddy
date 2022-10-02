@@ -1,24 +1,24 @@
-import React from 'react';
-import {StyleSheet, SafeAreaView, Text} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import CreatePostForm from '../components/CreatePostForm';
+import PropTypes from 'prop-types';
+import {Platform, StyleSheet, View} from 'react-native';
 
-// KAIKKI TÄÄLLÄ ON VAIN PLACEHOLDERIA JOKA KORVATAAN OIKEALLA KOODILLA JOSSAIN VAIHEESSA
-
-const Single = () => {
+const CreatePost = (props) => {
+  const {navigation} = props;
   return (
-    <SafeAreaView style={styles.container}>
-      <Text>Create post</Text>
-    </SafeAreaView>
+    <View style={styles.droidSafeArea}>
+      <CreatePostForm navigation={navigation}></CreatePostForm>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingTop: 40,
+  droidSafeArea: {
+    flex: 1
   },
 });
 
-export default Single;
+CreatePost.propTypes = {
+  navigation: PropTypes.object,
+};
+export default CreatePost;
