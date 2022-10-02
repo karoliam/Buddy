@@ -64,6 +64,22 @@ const useTag = () => {
   return {getFilesByTag, postTag};
 };
 
+const userMedia = () => {
+  const userProfilePostData = async (profileID, tag) => {
+    const options = {
+      method: 'GET',
+    };
+    try {
+      const response = await fetch(apiUrl + 'media/user/' + profileID, options);
+      const userData = await response.json();
+      return userData;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+  return {userProfilePostData};
+};
+
 const useLogin = () => {
   const postLogin = async (userCredentials) => {
     const options = {
@@ -118,4 +134,4 @@ const useUser = () => {
   return {getUserByToken, postUser};
 };
 
-export {useLogin, useUser, useMedia, useTag};
+export {useLogin, useUser, userMedia, useMedia, useTag};

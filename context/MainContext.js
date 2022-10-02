@@ -10,6 +10,8 @@ const MainProvider = (props) => {
   const [update, setUpdate] = useState(true);
   const [fullName, setFullName] = useState('');
   const [image, setImage] = useState(null);
+  const [avatar, setAvatar] = useState('');
+  const [profileData, setProfileData] = useState({});
   const [showRegisterUserDataForm, setShowRegisterUserDataForm] = useState(false);
 
   return (
@@ -25,6 +27,10 @@ const MainProvider = (props) => {
         setFullName,
         image,
         setImage,
+        avatar,
+        setAvatar,
+        profileData,
+        setProfileData,
         showRegisterUserDataForm,
         setShowRegisterUserDataForm
       }}
