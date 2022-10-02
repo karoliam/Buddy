@@ -13,11 +13,10 @@ import {
 import {MainContext} from '../context/MainContext';
 import {useLogin} from '../hooks/ApiHooks';
 import PropTypes from 'prop-types';
-import RegisterForm from './RegisterForm';
 let {width} = Dimensions.get('window');
 
 const LoginForm = () => {
-  const {isLoggedIn, setIsLoggedIn, setUser} = useContext(MainContext);
+  const {setIsLoggedIn, setUser} = useContext(MainContext);
   const {postLogin} = useLogin();
   const {
     control,
@@ -123,18 +122,15 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     borderStyle: 'solid',
     marginTop: 32,
-    marginLeft: width / 2 - 142.5,
+    marginLeft: width / 2 - 142.5
   },
   usernameInput: {
-    fontFamily: 'roboto-regular',
     color: '#121212',
     height: 30,
     width: 260,
     fontSize: 16,
     marginTop: 15,
-    marginLeft: 13,
-    backgroundColor: 'rgba(255,0,0,0.6)',
-
+    marginLeft: 13
   },
   fieldBoxPassword: {
     width: 285,
@@ -145,18 +141,16 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     borderStyle: 'solid',
     marginTop: 16,
-    marginLeft: width / 2 - 142.5,
+    marginLeft: width / 2 - 142.5
   },
   passwordInput: {
-    fontFamily: 'roboto-regular',
     color: '#121212',
     height: 30,
     width: 260,
     lineHeight: 14,
     fontSize: 16,
     marginTop: 15,
-    marginLeft: 12,
-    backgroundColor: 'rgba(255,0,0,0.6)',
+    marginLeft: 12
   },
   buttonSignIn: {
     position: "absolute",
@@ -169,16 +163,15 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     borderStyle: 'solid',
     marginBottom: 64,
-    marginLeft: width / 2 - 142.5,
+    marginLeft: width / 2 - 142.5
   },
   signInText: {
-    fontFamily: 'roboto-regular',
     color: 'rgba(255,255,255,1)',
     height: 25,
     width: 70,
     fontSize: 20,
     marginTop: 14,
-    marginLeft: 103,
+    marginLeft: 103
   },
 });
 

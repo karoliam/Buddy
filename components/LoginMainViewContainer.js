@@ -106,17 +106,13 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   logoBackgroundStack: {
-    height: (height/100) * 30,
-    marginTop: 0,
-    backgroundColor: "rgba(255,0,0,0.30)",
+    height: (height/100) * 30
   },
   loginFormContainer: {
-    height: (height/100) * 55,
-    backgroundColor: "rgba(0,255,0,0.30)"
+    height: (height/100) * 55
   },
   bottomLineAndSwitchContainer: {
-    height: (height/100) * 15,
-    backgroundColor: "rgba(0,0,255,0.30)"
+    height: (height/100) * 15
   },
   lineOrLeft: {
     width: 112,
@@ -125,7 +121,6 @@ const styles = StyleSheet.create({
     marginTop: 9
   },
   lineOrText: {
-    fontFamily: "roboto-regular",
     color: "rgba(255,255,255,1)",
     height: 17,
     width: 34,
@@ -155,7 +150,6 @@ const styles = StyleSheet.create({
     marginLeft: (width/2) - 140
   },
   dontHaveText: {
-    fontFamily: "roboto-regular",
     textAlign: "right",
     paddingRight: 8,
     color: "rgba(255,255,255,1)",
@@ -164,7 +158,6 @@ const styles = StyleSheet.create({
     fontSize: 16
   },
   signUpText: {
-    fontFamily: "roboto-regular",
     color: "rgba(255,153,0,1)",
     height: 30,
     width: 80,

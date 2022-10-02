@@ -17,7 +17,7 @@ import {
   View,
   StyleSheet,
   TextInput,
-  TouchableOpacity,
+  TouchableOpacity, Dimensions,
 } from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
 import {useLogin, useUser} from '../hooks/ApiHooks';
@@ -25,6 +25,7 @@ import {appId} from '../utils/variables';
 import {MainContext} from '../context/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import PropTypes from 'prop-types';
+let {width} = Dimensions.get('window');
 
 const RegisterForm = ({navigation}) => {
   const {showRegisterUserDataForm, setShowRegisterUserDataForm} = useContext(MainContext);
@@ -73,7 +74,7 @@ const RegisterForm = ({navigation}) => {
   };
 
   return (
-    <View>
+    <View style={{flex: 1}}>
       <Controller
         control={control}
         rules={{}}
@@ -157,6 +158,7 @@ const RegisterForm = ({navigation}) => {
         render={({field: {onChange, onBlur, value}}) => (
           <View style={styles.passwordCheckInputBox}>
             <TextInput
+              style={styles.passwordCheckInputField}
               onBlur={onBlur}
               onChangeText={onChange}
               value={value}
@@ -183,79 +185,64 @@ const RegisterForm = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
-  registerFormContainer: {
-    top: 0,
-    left: 0,
-    width: 375,
-    height: 415,
-    position: "absolute",
-    backgroundColor: "rgba(230,230, 230,1)",
-    opacity: 0
-  },
   fullNameInputBox: {
-    top: 13,
-    left: 45,
     width: 285,
     height: 61,
-    position: "absolute",
     backgroundColor: "rgba(255,255,255,1)",
     borderWidth: 2,
     borderColor: "rgba(165,171,232,1)",
     borderRadius: 14,
-    borderStyle: "solid"
+    borderStyle: "solid",
+    marginTop: 8,
+    marginLeft: width / 2 - 142.5
   },
   fullNameInputField: {
-    fontFamily: "roboto-regular",
-    color: "#121212",
-    height: 21,
-    width: 260,
-    fontSize: 16,
-    lineHeight: 16,
-    marginTop: 20,
-    marginLeft: 13
-  },
-  emailInputBox: {
-    top: 94,
-    left: 46,
-    width: 285,
-    height: 61,
-    position: "absolute",
-    backgroundColor: "rgba(255,255,255,1)",
-    borderWidth: 2,
-    borderColor: "rgba(165,171,232,1)",
-    borderRadius: 14,
-    borderStyle: "solid"
-  },
-  emailInputField: {
-    fontFamily: "roboto-regular",
-    color: "#121212",
-    height: 21,
-    width: 260,
-    lineHeight: 16,
-    fontSize: 16,
-    marginTop: 19,
-    marginLeft: 12
-  },
-  passwordInputBox: {
-    top: 174,
-    left: 45,
-    width: 285,
-    height: 61,
-    position: "absolute",
-    backgroundColor: "rgba(255,255,255,1)",
-    borderWidth: 2,
-    borderColor: "rgba(165,171,232,1)",
-    borderRadius: 14,
-    borderStyle: "solid"
-  },
-  passwordInputField: {
-    fontFamily: "roboto-regular",
-    color: "#121212",
-    height: 21,
+    color: '#121212',
+    height: 30,
     width: 260,
     lineHeight: 14,
     fontSize: 16,
-    marginTop: 20,
+    marginTop: 15,
+    marginLeft: 12
+  },
+  emailInputBox: {
+    width: 285,
+    height: 61,
+    backgroundColor: "rgba(255,255,255,1)",
+    borderWidth: 2,
+    borderColor: "rgba(165,171,232,1)",
+    borderRadius: 14,
+    borderStyle: "solid",
+    marginTop: 16,
+    marginLeft: width / 2 - 142.5
+  },
+  emailInputField: {
+    color: '#121212',
+    height: 30,
+    width: 260,
+    lineHeight: 14,
+    fontSize: 16,
+    marginTop: 15,
+    marginLeft: 12
+  },
+  passwordInputBox: {
+    width: 285,
+    height: 61,
+    backgroundColor: "rgba(255,255,255,1)",
+    borderWidth: 2,
+    borderColor: "rgba(165,171,232,1)",
+    borderRadius: 14,
+    borderStyle: "solid",
+    marginTop: 16,
+    marginLeft: width / 2 - 142.5
+  },
+  passwordInputField: {
+    color: '#121212',
+    height: 30,
+    width: 260,
+    lineHeight: 14,
+    fontSize: 16,
+    marginTop: 15,
     marginLeft: 12
   },
   passwordCheckInputBox: {
@@ -266,44 +253,38 @@ const styles = StyleSheet.create({
     borderColor: "rgba(165,171,232,1)",
     borderRadius: 14,
     borderStyle: "solid",
-    marginTop: 254,
-    marginLeft: 45
+    marginTop: 16,
+    marginLeft: width / 2 - 142.5
   },
   passwordCheckInputField: {
-    fontFamily: "roboto-regular",
-    color: "#121212",
-    height: 21,
+    color: '#121212',
+    height: 30,
     width: 260,
     lineHeight: 14,
     fontSize: 16,
-    marginTop: 20,
+    marginTop: 15,
     marginLeft: 12
   },
   buttonSignUp: {
-    top: 355,
-    left: 46,
+    position: "absolute",
+    bottom: 0,
     width: 285,
     height: 61,
-    position: "absolute",
     backgroundColor: "rgba(0,0,0,0.65)",
     borderWidth: 2,
     borderColor: "rgba(255,255,255,1)",
     borderRadius: 14,
-    borderStyle: "solid"
+    borderStyle: "solid",
+    marginBottom: 32,
+    marginLeft: width / 2 - 142.5
   },
   signUpButtonText: {
-    fontFamily: "roboto-regular",
-    color: "rgba(255,255,255,1)",
+    color: 'rgba(255,255,255,1)',
     height: 25,
-    width: 75,
+    width: 70,
     fontSize: 20,
-    marginTop: 5,
-    marginLeft: 105
-  },
-  registerFormContainerStack: {
-    width: 375,
-    height: 416,
-    marginTop: 1
+    marginTop: 14,
+    marginLeft: 103
   },
 });
 
