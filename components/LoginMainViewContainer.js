@@ -2,7 +2,7 @@
  * Tähän Containeriin nestataan LoginForm.js ja RegisterForm.js
 */
 // TODO background image resizes when keyboard isw pulled up
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {
   Dimensions,
   Image,
@@ -18,7 +18,7 @@ import {
 import PropTypes from 'prop-types';
 import {LoginForm} from './LoginForm';
 import RegisterForm from './RegisterForm';
-let {height, width} = Dimensions.get('window')
+let {height, width} = Dimensions.get('window');
 
 const LoginMainViewContainer = () => {
   const [showRegForm, setShowRegForm] = useState(false);

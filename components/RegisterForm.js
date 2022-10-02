@@ -11,7 +11,7 @@
  * full name tallennetaan contextiin jota käytetään RegisterUserDataForm sisällä
  */
 // TODO alerts don't show up at all
-import React, {useContext, useState} from 'react';
+import React, {useContext} from 'react';
 import {
   Text,
   View,
@@ -30,7 +30,6 @@ let {width} = Dimensions.get('window');
 const RegisterForm = ({navigation}) => {
   const {showRegisterUserDataForm, setShowRegisterUserDataForm} = useContext(MainContext);
   const {setFullName} = useContext(MainContext);
-  const {update, setUpdate} = useContext(MainContext);
   const {postUser} = useUser();
   const {postLogin} = useLogin();
   const {

@@ -8,8 +8,6 @@ import React, {useContext, useState} from 'react';
 import {
   View,
   Text,
-  Button,
-  ScrollView,
   TouchableOpacity,
   StyleSheet,
   TextInput,
@@ -17,7 +15,6 @@ import {
 } from 'react-native';
 import {Image} from '@rneui/base';
 import {Controller, useForm} from 'react-hook-form';
-import {Input} from '@rneui/themed';
 import * as ImagePicker from 'expo-image-picker';
 import {useMedia} from '../hooks/ApiHooks';
 import {MainContext} from '../context/MainContext';
@@ -26,6 +23,7 @@ import {single_pixel} from '../images';
 let {width} = Dimensions.get('window');
 
 const RegisterUserDataForm = ({navigation}) => {
+  const {setShowRegisterUserDataForm} = useContext(MainContext);
   const {fullName, image, setImage, setIsLoggedIn} = useContext(MainContext);
   const {postMedia} = useMedia();
   const [mediatype, setMediatype] = useState(null);
@@ -57,6 +55,7 @@ const RegisterUserDataForm = ({navigation}) => {
   };
   const skipUserData = () => {
     setIsLoggedIn(true);
+    setShowRegisterUserDataForm(false);
     // navigation.navigate('Tabs');  // TODO navi to loginstate
   };
   const registerUserData = async (data) => {
@@ -100,6 +99,7 @@ const RegisterUserDataForm = ({navigation}) => {
       const pData = await postMedia(token, profileData);
       if (pPic && pData) {
         setIsLoggedIn(true);
+        setShowRegisterUserDataForm(false);
         // navigation.navigate('Tabs');  // TODO navi to loginstate
       }
     } catch (error) {
