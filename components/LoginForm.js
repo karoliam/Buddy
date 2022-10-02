@@ -53,7 +53,7 @@ const LoginForm = () => {
   };
 
   return (
-    <View>
+    <View style={{flex: 1}}>
       <Controller
         control={control}
         rules={{
@@ -122,17 +122,19 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(165,171,232,1)',
     borderRadius: 14,
     borderStyle: 'solid',
-    marginTop: 30,
+    marginTop: 32,
     marginLeft: width / 2 - 142.5,
   },
   usernameInput: {
     fontFamily: 'roboto-regular',
     color: '#121212',
-    height: 21,
+    height: 30,
     width: 260,
     fontSize: 16,
-    marginTop: 20,
+    marginTop: 15,
     marginLeft: 13,
+    backgroundColor: 'rgba(255,0,0,0.6)',
+
   },
   fieldBoxPassword: {
     width: 285,
@@ -142,20 +144,23 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(165,171,232,1)',
     borderRadius: 14,
     borderStyle: 'solid',
-    marginTop: 22,
+    marginTop: 16,
     marginLeft: width / 2 - 142.5,
   },
   passwordInput: {
     fontFamily: 'roboto-regular',
     color: '#121212',
-    height: 21,
+    height: 30,
     width: 260,
     lineHeight: 14,
     fontSize: 16,
-    marginTop: 19,
+    marginTop: 15,
     marginLeft: 12,
+    backgroundColor: 'rgba(255,0,0,0.6)',
   },
   buttonSignIn: {
+    position: "absolute",
+    bottom: 0,
     width: 285,
     height: 61,
     backgroundColor: 'rgba(0,0,0,0.65)',
@@ -163,7 +168,7 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255,255,255,1)',
     borderRadius: 14,
     borderStyle: 'solid',
-    marginTop: 59,
+    marginBottom: 64,
     marginLeft: width / 2 - 142.5,
   },
   signInText: {

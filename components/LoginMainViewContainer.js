@@ -14,7 +14,7 @@ import {
 import PropTypes from 'prop-types';
 import {LoginForm} from './LoginForm';
 import RegisterForm from './RegisterForm';
-let {width} = Dimensions.get('window')
+let {height, width} = Dimensions.get('window')
 
 const LoginMainViewContainer = () => {
   const [showRegForm, setShowRegForm] = useState(false);
@@ -34,43 +34,49 @@ const LoginMainViewContainer = () => {
       >
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={{flex: 1}}
         >
           <TouchableOpacity
             onPress={Keyboard.dismiss}
             activeOpacity={1}
+            style={{flex: 1}}
           >
             <View style={styles.logoBackgroundStack}>
-              <View source={require("../assets/blackBox.jpg")}
-                style={styles.logoBackground}></View>
-              <Image
-                source={require("../assets/buddyLogoNoBack.png")}
-                resizeMode="contain"
-                style={styles.imageLogoBuddy}
-              ></Image>
+              <View
+                source={require("../assets/blackBox.jpg")}
+                style={styles.logoBackground}>
+                <Image
+                  source={require("../assets/buddyLogoNoBack.png")}
+                  resizeMode="contain"
+                  style={styles.imageLogoBuddy}
+                />
+              </View>
             </View>
             <View style={styles.loginFormContainer}>
               {showRegForm ? <RegisterForm /> : <LoginForm />}
             </View>
-            <View style={styles.lineOrContainer}>
-              <View style={styles.lineOrLeft}></View>
-              <Text style={styles.lineOrText}>OR</Text>
-              <View style={styles.lineOrRight}></View>
-            </View>
-            <TouchableOpacity
-              style={styles.buttonSignUp}
-              onPress={() => {
-                setShowRegForm(!showRegForm);
-                setShowLoginText(!showLoginText);
-                setShowLoginText2(!showLoginText2);
-              }}
-            >
-              <View style={styles.signUpTextContainer}>
-                <Text style={styles.dontHaveText}>
-                  {showLoginText ? loginText12 : loginText11}
-                </Text>
-                <Text style={styles.signUpText}>{showLoginText ? loginText22 : loginText21}</Text>
+            <View style={styles.bottomLineAndSwitchContainer}>
+              <View style={styles.lineOrContainer}>
+                <View style={styles.lineOrLeft}></View>
+                <Text style={styles.lineOrText}>OR</Text>
+                <View style={styles.lineOrRight}></View>
               </View>
-            </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.buttonSignUp}
+                onPress={() => {
+                  setShowRegForm(!showRegForm);
+                  setShowLoginText(!showLoginText);
+                  setShowLoginText2(!showLoginText2);
+                }}
+              >
+                <View style={styles.signUpTextContainer}>
+                  <Text style={styles.dontHaveText}>
+                    {showLoginText ? loginText12 : loginText11}
+                  </Text>
+                  <Text style={styles.signUpText}>{showLoginText ? loginText22 : loginText21}</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
           </TouchableOpacity>
         </KeyboardAvoidingView>
       </ImageBackground>
@@ -84,28 +90,33 @@ const styles = StyleSheet.create({
   },
   backGroundImage_imageStyle: {},
   logoBackground: {
-    top: 58,
-    left: 10,
+    bottom: 0,
     width: 286,
     height: 85,
     position: "absolute",
     backgroundColor: "rgba(0,0,0,0.65)",
+    marginBottom: 32,
+    marginLeft: (width/2) - 143
   },
   imageLogoBuddy: {
-    top: 0,
-    left: 0,
+    top: -57,
+    left: -9,
     width: 304,
     height: 200,
-    position: "absolute"
+    position: "absolute",
   },
   logoBackgroundStack: {
-    width: 304,
-    height: 200,
+    height: (height/100) * 30,
     marginTop: 0,
-    marginLeft: (width/2) - 152
+    backgroundColor: "rgba(255,0,0,0.30)",
   },
   loginFormContainer: {
-    height: 300,
+    height: (height/100) * 55,
+    backgroundColor: "rgba(0,255,0,0.30)"
+  },
+  bottomLineAndSwitchContainer: {
+    height: (height/100) * 15,
+    backgroundColor: "rgba(0,0,255,0.30)"
   },
   lineOrLeft: {
     width: 112,
@@ -132,38 +143,36 @@ const styles = StyleSheet.create({
   lineOrContainer: {
     height: 17,
     flexDirection: "row",
-    marginTop: 40,
+    marginTop: 8,
     marginLeft: (width/2) - 142.5,
     marginRight: (width/2) - 142.5
   },
   buttonSignUp: {
-    width: 236,
-    height: 41,
-    backgroundColor: "rgba(230,230, 230,0)",
+    width: 280,
+    height: 50,
     flexDirection: "row",
     marginTop: 36,
-    marginLeft: (width/2) - 118
+    marginLeft: (width/2) - 140
   },
   dontHaveText: {
     fontFamily: "roboto-regular",
+    textAlign: "right",
+    paddingRight: 8,
     color: "rgba(255,255,255,1)",
-    height: 22,
-    width: 176,
+    height: 30,
+    width: 200,
     fontSize: 16
   },
   signUpText: {
     fontFamily: "roboto-regular",
     color: "rgba(255,153,0,1)",
-    height: 22,
-    width: 58,
+    height: 30,
+    width: 80,
     fontSize: 16
   },
   signUpTextContainer: {
-    height: 16,
+    paddingTop: 12,
     flexDirection: "row",
-    flex: 1,
-    marginLeft: 2,
-    marginTop: 12
   }
 });
 
