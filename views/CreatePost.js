@@ -14,7 +14,8 @@ const CreatePost = (props) => {
 
 const styles = StyleSheet.create({
   droidSafeArea: {
-    flex: 1
+    flex: 1,
+    backgroundColor: '#fff',
   },
 });
 
