@@ -1,12 +1,15 @@
 import {Platform, SafeAreaView, StyleSheet} from 'react-native';
 import PropTypes from 'prop-types';
 import SinglePost from '../components/SinglePost';
+import CommentField from '../components/CommentField';
 
 const Single = (props) => {
   const {navigation} = props;
+  const {route} = props;
   return (
     <SafeAreaView style={styles.droidSafeArea}>
       <SinglePost navigation={navigation}></SinglePost>
+      <CommentField navigation={navigation} route={route}></CommentField>
     </SafeAreaView>
   );
 };
@@ -21,6 +24,7 @@ const styles = StyleSheet.create({
 
 Single.propTypes = {
   navigation: PropTypes.object,
+  route: PropTypes.object,
 };
 
 export default Single;
