@@ -17,7 +17,8 @@ import {
   View,
   StyleSheet,
   TextInput,
-  TouchableOpacity, Dimensions,
+  TouchableOpacity,
+  Dimensions,
 } from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
 import {useLogin, useUser} from '../hooks/ApiHooks';
@@ -28,8 +29,9 @@ import PropTypes from 'prop-types';
 let {width} = Dimensions.get('window');
 
 const RegisterForm = ({navigation}) => {
-  const {showRegisterUserDataForm, setShowRegisterUserDataForm} = useContext(MainContext);
-  const {setFullName} = useContext(MainContext);
+  const {showRegisterUserDataForm, setShowRegisterUserDataForm} =
+    useContext(MainContext);
+  const {setFullName, setUser} = useContext(MainContext);
   const {postUser} = useUser();
   const {postLogin} = useLogin();
   const {
@@ -64,6 +66,8 @@ const RegisterForm = ({navigation}) => {
         //await AsyncStorage.setItem('userId', userLoginData.user_id);
         if ((await AsyncStorage.getItem('userToken')) != null) {
           // navigation.navigate('RegisterChecker', {name: 'RegisterChecker'}); // TODO fix navigation to userDataForm
+          setUser(userLoginData.user);
+          console.log('RegisterForm onSubmit ', userLoginData.user);
           setShowRegisterUserDataForm(!showRegisterUserDataForm);
         }
       }
@@ -187,13 +191,13 @@ const styles = StyleSheet.create({
   fullNameInputBox: {
     width: 285,
     height: 61,
-    backgroundColor: "rgba(255,255,255,1)",
+    backgroundColor: 'rgba(255,255,255,1)',
     borderWidth: 2,
-    borderColor: "rgba(165,171,232,1)",
+    borderColor: 'rgba(165,171,232,1)',
     borderRadius: 14,
-    borderStyle: "solid",
+    borderStyle: 'solid',
     marginTop: 8,
-    marginLeft: width / 2 - 142.5
+    marginLeft: width / 2 - 142.5,
   },
   fullNameInputField: {
     color: '#121212',
@@ -202,18 +206,18 @@ const styles = StyleSheet.create({
     lineHeight: 14,
     fontSize: 16,
     marginTop: 15,
-    marginLeft: 12
+    marginLeft: 12,
   },
   emailInputBox: {
     width: 285,
     height: 61,
-    backgroundColor: "rgba(255,255,255,1)",
+    backgroundColor: 'rgba(255,255,255,1)',
     borderWidth: 2,
-    borderColor: "rgba(165,171,232,1)",
+    borderColor: 'rgba(165,171,232,1)',
     borderRadius: 14,
-    borderStyle: "solid",
+    borderStyle: 'solid',
     marginTop: 16,
-    marginLeft: width / 2 - 142.5
+    marginLeft: width / 2 - 142.5,
   },
   emailInputField: {
     color: '#121212',
@@ -222,18 +226,18 @@ const styles = StyleSheet.create({
     lineHeight: 14,
     fontSize: 16,
     marginTop: 15,
-    marginLeft: 12
+    marginLeft: 12,
   },
   passwordInputBox: {
     width: 285,
     height: 61,
-    backgroundColor: "rgba(255,255,255,1)",
+    backgroundColor: 'rgba(255,255,255,1)',
     borderWidth: 2,
-    borderColor: "rgba(165,171,232,1)",
+    borderColor: 'rgba(165,171,232,1)',
     borderRadius: 14,
-    borderStyle: "solid",
+    borderStyle: 'solid',
     marginTop: 16,
-    marginLeft: width / 2 - 142.5
+    marginLeft: width / 2 - 142.5,
   },
   passwordInputField: {
     color: '#121212',
@@ -242,18 +246,18 @@ const styles = StyleSheet.create({
     lineHeight: 14,
     fontSize: 16,
     marginTop: 15,
-    marginLeft: 12
+    marginLeft: 12,
   },
   passwordCheckInputBox: {
     width: 285,
     height: 61,
-    backgroundColor: "rgba(255,255,255,1)",
+    backgroundColor: 'rgba(255,255,255,1)',
     borderWidth: 2,
-    borderColor: "rgba(165,171,232,1)",
+    borderColor: 'rgba(165,171,232,1)',
     borderRadius: 14,
-    borderStyle: "solid",
+    borderStyle: 'solid',
     marginTop: 16,
-    marginLeft: width / 2 - 142.5
+    marginLeft: width / 2 - 142.5,
   },
   passwordCheckInputField: {
     color: '#121212',
@@ -262,20 +266,20 @@ const styles = StyleSheet.create({
     lineHeight: 14,
     fontSize: 16,
     marginTop: 15,
-    marginLeft: 12
+    marginLeft: 12,
   },
   buttonSignUp: {
-    position: "absolute",
+    position: 'absolute',
     bottom: 0,
     width: 285,
     height: 61,
-    backgroundColor: "rgba(0,0,0,0.65)",
+    backgroundColor: 'rgba(0,0,0,0.65)',
     borderWidth: 2,
-    borderColor: "rgba(255,255,255,1)",
+    borderColor: 'rgba(255,255,255,1)',
     borderRadius: 14,
-    borderStyle: "solid",
+    borderStyle: 'solid',
     marginBottom: 32,
-    marginLeft: width / 2 - 142.5
+    marginLeft: width / 2 - 142.5,
   },
   signUpButtonText: {
     color: 'rgba(255,255,255,1)',
@@ -283,7 +287,7 @@ const styles = StyleSheet.create({
     width: 70,
     fontSize: 20,
     marginTop: 14,
-    marginLeft: 103
+    marginLeft: 103,
   },
 });
 

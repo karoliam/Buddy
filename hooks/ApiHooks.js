@@ -26,7 +26,7 @@ const useMedia = (update) => {
     const options = {
       method: 'POST',
       headers: {
-        'x-access-token': token
+        'x-access-token': token,
       },
       body: data,
     };
@@ -65,13 +65,14 @@ const useTag = () => {
 };
 
 const userMedia = () => {
-  const userProfilePostData = async (profileID, tag) => {
+  const userProfilePostData = async (profileID) => {
     const options = {
       method: 'GET',
     };
     try {
       const response = await fetch(apiUrl + 'media/user/' + profileID, options);
       const userData = await response.json();
+      console.log(userData);
       return userData;
     } catch (error) {
       throw new Error(error.message);
