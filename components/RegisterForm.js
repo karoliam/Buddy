@@ -28,7 +28,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import PropTypes from 'prop-types';
 let {width} = Dimensions.get('window');
 
-const RegisterForm = ({navigation}) => {
+const RegisterForm = () => {
   const {showRegisterUserDataForm, setShowRegisterUserDataForm} =
     useContext(MainContext);
   const {setFullName, setUser} = useContext(MainContext);

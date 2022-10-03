@@ -12,7 +12,9 @@ const MainProvider = (props) => {
   const [image, setImage] = useState(null);
   const [avatar, setAvatar] = useState('');
   const [profileData, setProfileData] = useState({});
-  const [showRegisterUserDataForm, setShowRegisterUserDataForm] = useState(false);
+  const [showRegisterUserDataForm, setShowRegisterUserDataForm] =
+    useState(false);
+  const [showEditProfile, setEditProfile] = useState(false);
 
   return (
     <MainContext.Provider
@@ -32,7 +34,9 @@ const MainProvider = (props) => {
         profileData,
         setProfileData,
         showRegisterUserDataForm,
-        setShowRegisterUserDataForm
+        setShowRegisterUserDataForm,
+        showEditProfile,
+        setEditProfile,
       }}
     >
       {props.children}

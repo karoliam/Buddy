@@ -22,7 +22,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {single_pixel} from '../images';
 let {width} = Dimensions.get('window');
 
-const RegisterUserDataForm = ({navigation}) => {
+const RegisterUserDataForm = () => {
   const {setShowRegisterUserDataForm} = useContext(MainContext);
   const {fullName, image, setImage, setIsLoggedIn} = useContext(MainContext);
   const {postMedia} = useMedia();
@@ -95,7 +95,6 @@ const RegisterUserDataForm = ({navigation}) => {
         setShowRegisterUserDataForm(false);
         // navigation.navigate('Tabs');  // TODO navi to loginstate
         setImage(null);
-        navigation.navigate('Login');
       }
     } catch (error) {
       console.log('RegisterUserDAtaForm upload-onsubmit', error);

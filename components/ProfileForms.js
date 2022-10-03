@@ -104,6 +104,8 @@ const ProfileForms = () => {
     setAvatar(''), setUser({}), setIsLoggedIn(false);
   };
 
+  const editProfile = () => {};
+
   return (
     <SafeAreaView style={styles.container}>
       <Image
