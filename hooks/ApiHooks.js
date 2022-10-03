@@ -131,7 +131,20 @@ const useUser = () => {
     }
   };
 
-  return {getUserByToken, postUser};
+  const getUserById = async (token, user_id) => {
+    try {
+      const options = {
+        method: 'GET',
+        headers: {'x-access-token': token},
+      };
+      const userData = await doFetch(apiUrl + 'users/' + user_id, options);
+      return userData;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+
+  return {getUserByToken, postUser, getUserById};
 };
 
 export {useLogin, useUser, userMedia, useMedia, useTag};

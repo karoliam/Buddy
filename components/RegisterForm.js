@@ -45,6 +45,7 @@ const RegisterForm = ({navigation}) => {
   const onSubmit = async (data) => {
     setFullName(data.full_name);
     const registerCredentials = {
+      full_name: data.full_name,
       username: appId + data.email,
       password: data.password,
       email: data.email,

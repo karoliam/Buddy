@@ -1,12 +1,12 @@
 import {Platform, SafeAreaView, StyleSheet} from 'react-native';
 import PropTypes from 'prop-types';
-import List from '../components/List';
+import SinglePost from '../components/SinglePost';
 
-const Home = (props) => {
+const Single = (props) => {
   const {navigation} = props;
   return (
     <SafeAreaView style={styles.droidSafeArea}>
-      <List navigation={navigation}></List>
+      <SinglePost navigation={navigation}></SinglePost>
     </SafeAreaView>
   );
 };
@@ -19,8 +19,8 @@ const styles = StyleSheet.create({
   },
 });
 
-Home.propTypes = {
+Single.propTypes = {
   navigation: PropTypes.object,
 };
 
-export default Home;
+export default Single;

@@ -30,7 +30,7 @@ const CreatePostForm = ({navigation}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [city, setCity] = useState('');
   const {postMedia} = useMedia();
-  const {update, setUpdate} = useContext(MainContext);
+  const {user, update, setUpdate} = useContext(MainContext);
   const {postTag} = useTag();
   const data = [
     {key: '0', value: 'Espoo'},
@@ -60,6 +60,7 @@ const CreatePostForm = ({navigation}) => {
     formState: {errors},
   } = useForm({
     defaultValues: {
+      token: '',
       location: '',
       when: '',
       writePost: '',
@@ -69,8 +70,10 @@ const CreatePostForm = ({navigation}) => {
 
   const onSubmit = async (data) => {
     const formData = new FormData();
+    const token = await AsyncStorage.getItem('userToken');
 
     const formObject = {
+      token: token,
       location: city,
       when: data.when,
       writePost: data.writePost,
@@ -92,7 +95,6 @@ const CreatePostForm = ({navigation}) => {
     });
     setIsLoading(true);
     try {
-      const token = await AsyncStorage.getItem('userToken');
       const mediaResponse = await postMedia(token, formData);
       console.log('result', mediaResponse);
       const tag = {file_id: mediaResponse.file_id, tag: applicationTag};

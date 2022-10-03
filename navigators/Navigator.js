@@ -7,6 +7,7 @@ import Profile from '../views/Profile';
 import Login from '../views/Login';
 import CreatePost from '../views/CreatePost';
 import {MainContext} from '../context/MainContext';
+import Single from '../views/Single';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -32,6 +33,9 @@ const StackScreen = () => {
             component={TabScreen}
             options={{headerShown: false}}
           />
+            <Stack.Screen
+            name="Single"
+            component={Single} />
         </>
       ) : (
         <Stack.Screen name="Login" component={Login} />
