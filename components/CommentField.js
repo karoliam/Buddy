@@ -53,7 +53,7 @@ const CommentField = () => {
           text: 'OK',
           onPress: () => {
             console.log(error);
-            console.log('hups', data);
+            console.log('CommentFiels.js Commenting()', data);
           },
         },
       ]);

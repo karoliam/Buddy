@@ -26,7 +26,7 @@ const useMedia = (update) => {
     const options = {
       method: 'POST',
       headers: {
-        'x-access-token': token
+        'x-access-token': token,
       },
       body: data,
     };
@@ -147,21 +147,21 @@ const useUser = () => {
   return {getUserByToken, postUser, getUserById};
 };
 const useComments = () => {
-    const postComment = async (token, data) => {
-      const options = {
-        method: 'POST',
-        headers: {
-          'x-access-token': token,
-        },
-        body: data
-      };
-      try {
-        return await doFetch(apiUrl + '/comments', options);
-      } catch (error) {
-        throw new Error(error.message);
-      }
+  const postComment = async (token, data) => {
+    const options = {
+      method: 'POST',
+      headers: {
+        'x-access-token': token,
+      },
+      body: data,
     };
-    return {postComment};
+    try {
+      return await doFetch(apiUrl + 'comments', options);
+    } catch (error) {
+      throw new Error(error.message);
+    }
   };
+  return {postComment};
+};
 
 export {useLogin, useUser, userMedia, useMedia, useTag, useComments};
