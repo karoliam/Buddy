@@ -16,16 +16,14 @@ const SinglePost = () => {
   const getFullName = async (token) => {
     try {
       const userData = await getUserById(token, user_id);
-      console.log('userData', userData);
+      //console.log('userData', userData);
       const fullName = userData.full_name;
       setUserFullName(fullName);
-      console.log('here', userData);
     } catch (error) {
       console.log('getFullName error', error);
     }
   };
   getFullName(descriptionObject.token);
-  console.log('fullname',userFullName);
   return (
     <ScrollView>
       <Image
