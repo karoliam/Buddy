@@ -152,15 +152,18 @@ const useComments = () => {
       method: 'POST',
       headers: {
         'x-access-token': token,
+        'Content-Type': 'application/json',
       },
-      body: data,
+      body: JSON.stringify(data),
     };
+    console.log('options', options);
     try {
       return await doFetch(apiUrl + 'comments', options);
     } catch (error) {
       throw new Error(error.message);
     }
   };
+
   return {postComment};
 };
 

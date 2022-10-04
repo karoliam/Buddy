@@ -25,24 +25,16 @@ const CommentField = () => {
   });
 
   const commenting = async (data) => {
-    const formData = new FormData();
     const token = await AsyncStorage.getItem('userToken');
-    formData.append('file_id', file_id);
-    formData.append('comment', data.comment);
 
     try {
-      const commentResponse = await postComment(token, formData);
+      const commentResponse = await postComment(token, data);
       console.log('comment response', commentResponse);
-      // const tag = {file_id: commentResponse.file_id, tag: applicationTag};
-      // const tagResponse = await postTag(token, tag);
-      // console.log(tagResponse);
       Alert.alert(commentResponse.message, '', [
         {
           text: 'OK',
           onPress: () => {
-            // setUpdate(!update);
             console.log('jee kommentointi toimii');
-            // navigation.navigate('Home');
           },
         },
       ]);
@@ -53,7 +45,7 @@ const CommentField = () => {
           text: 'OK',
           onPress: () => {
             console.log(error);
-            console.log('CommentFiels.js Commenting()', data);
+            console.log('CommentField.js Commenting()', data);
           },
         },
       ]);
