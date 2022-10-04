@@ -239,7 +239,7 @@ const EditProfileForms = () => {
         <Controller
           control={control}
           render={({field: {onChange, onBlur, value}}) => (
-            <View>
+            <View style={styles.locationBox}>
               <SelectList
                 setSelected={handleSelect}
                 data={cityNames}
