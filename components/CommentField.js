@@ -1,18 +1,18 @@
-import {Alert, Text, TextInput, TouchableOpacity, View} from 'react-native';
+import {Alert, FlatList, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import PropTypes from 'prop-types';
 import {useComments} from '../hooks/ApiHooks';
-import {useContext} from 'react';
+import {useContext, useEffect, useState} from 'react';
 import {MainContext} from '../context/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useRoute} from '@react-navigation/native';
 import {Controller, useForm} from 'react-hook-form';
 
 const CommentField = () => {
-  const {postComment} = useComments();
+  const {postComment, getCommentByFileId} = useComments();
   const route = useRoute();
   const {user} = useContext(MainContext);
   const {file_id} = route.params;
-
+  const [userComments, setUserComments, commentSender, setCommentSender] = useState([]);
   const {
     control,
     handleSubmit,
@@ -51,6 +51,28 @@ const CommentField = () => {
       ]);
     }
   };
+  // const getComment = async () => {
+  //     const commentByFileId = await getCommentByFileId(file_id);
+  //     setUserComments(commentByFileId);
+  //    // const commentParsing = JSON.parse(commentByFileId);
+  //    console.log('täällä on usercomments', userComments);
+  // };
+
+  const fetchComments = async () => {
+    try {
+      const commentArray = await getCommentByFileId(file_id);
+      const onlyComment = commentArray.map(comments => comments.comment);
+      setUserComments(onlyComment);
+      // setUserComments(commentArray);
+      console.log('comments here', commentArray);
+    } catch (error) {
+      console.log('fetchComments', error.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchComments();
+  }, []);
 
   return (
     <View style={{flex: 1}}>
@@ -62,6 +84,10 @@ const CommentField = () => {
         }}
         render={({field: {onChange, onBlur, value}}) => (
           <View>
+            <FlatList
+        data={userComments}
+        renderItem={({item}) => <Text>{item}</Text>}
+      />
             <TextInput
               onBlur={onBlur}
               onChangeText={onChange}

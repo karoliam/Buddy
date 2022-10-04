@@ -7,11 +7,9 @@ import React, {useContext, useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {
   StyleSheet,
-  SafeAreaView,
   Text,
   Image,
   TextInput,
-  Button,
   Alert, View, TouchableOpacity, Dimensions
 } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
@@ -24,7 +22,6 @@ import SelectList from 'react-native-dropdown-select-list';
 let {width} = Dimensions.get('window');
 
 const CreatePostForm = ({navigation}) => {
-  // const navigation = useNavigation();
   const [mediafile, setMediafile] = useState(null);
   const [mediaType, setMediaType] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -60,7 +57,6 @@ const CreatePostForm = ({navigation}) => {
     formState: {errors},
   } = useForm({
     defaultValues: {
-      token: '',
       location: '',
       when: '',
       writePost: '',
@@ -73,7 +69,6 @@ const CreatePostForm = ({navigation}) => {
     const token = await AsyncStorage.getItem('userToken');
 
     const formObject = {
-      token: token,
       location: city,
       when: data.when,
       writePost: data.writePost,
