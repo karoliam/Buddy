@@ -76,7 +76,20 @@ const userMedia = () => {
       throw new Error(error.message);
     }
   };
-  return {userProfilePostData};
+  const deleteMediaById = async (token, fileId) => {
+    const options = {
+      method: 'DELETE',
+      headers: {'x-access-token': token},
+    };
+    try {
+      const response = await fetch(apiUrl + 'media/' + fileId, options);
+      const deleteResponce = await response.json();
+      return deleteResponce;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+  return {userProfilePostData, deleteMediaById};
 };
 
 const useLogin = () => {

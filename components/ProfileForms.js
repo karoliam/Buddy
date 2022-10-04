@@ -22,15 +22,19 @@ const ProfileForms = () => {
     user,
     setUser,
     setIsLoggedIn,
-    avatar,
-    setAvatar,
     profileData,
     setProfileData,
     setShowEditProfile,
+
+    avatar,
+    setAvatar,
+    setProfilePId,
     profileBackground,
     setProfileBackgorund,
+    setProfileBId,
     profileDescriptionData,
     setProfileDescriptionData,
+    setProfileDId,
   } = useContext(MainContext);
   const {userProfilePostData} = userMedia();
 
@@ -64,6 +68,7 @@ const ProfileForms = () => {
     );
     const profileBg = profilePostDataArray.pop();
     if (profileBg) {
+      setProfileBId(profileBg.file_id);
       setProfileBackgorund(mediaUrl + profileBg.filename);
     }
   };
@@ -74,6 +79,7 @@ const ProfileForms = () => {
     );
     const profilePicture = profilePostDataArray.pop();
     if (profilePicture) {
+      setProfilePId(profilePicture.file_id);
       setAvatar(mediaUrl + profilePicture.filename);
     }
   };
@@ -84,6 +90,7 @@ const ProfileForms = () => {
     );
     const profileDesc = profilePostDataArray.pop();
     if (profileDesc) {
+      setProfileDId(profileDesc.file_id);
       setProfileDescriptionData(JSON.parse(profileDesc.description));
     }
   };
@@ -92,7 +99,10 @@ const ProfileForms = () => {
   const logout = async () => {
     await AsyncStorage.clear();
     setProfileData({});
-    setAvatar(''), setUser({}), setIsLoggedIn(false);
+    setAvatar(null),
+      setUser({}),
+      setProfileBackgorund(null),
+      setIsLoggedIn(false);
   };
 
   const editProfile = () => {

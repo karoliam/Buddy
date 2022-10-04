@@ -10,13 +10,16 @@ const MainProvider = (props) => {
   const [update, setUpdate] = useState(true);
   const [fullName, setFullName] = useState('');
   const [image, setImage] = useState(null);
-  const [avatar, setAvatar] = useState(null);
   const [profileData, setProfileData] = useState({});
   const [showRegisterUserDataForm, setShowRegisterUserDataForm] =
     useState(false);
   const [showEditProfile, setShowEditProfile] = useState(false);
+  const [avatar, setAvatar] = useState(null);
   const [profileBackground, setProfileBackgorund] = useState('');
   const [profileDescriptionData, setProfileDescriptionData] = useState({});
+  const [profilePId, setProfilePId] = useState(0);
+  const [profileBId, setProfileBId] = useState(0);
+  const [profileDId, setProfileDId] = useState(0);
 
   return (
     <MainContext.Provider
@@ -43,6 +46,12 @@ const MainProvider = (props) => {
         setProfileBackgorund,
         profileDescriptionData,
         setProfileDescriptionData,
+        profilePId,
+        setProfilePId,
+        profileBId,
+        setProfileBId,
+        profileDId,
+        setProfileDId,
       }}
     >
       {props.children}

@@ -16,28 +16,31 @@ import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Controller, useForm} from 'react-hook-form';
 import {single_pixel} from '../images';
-
+import SelectList from 'react-native-dropdown-select-list';
+import cityNames from '../utils/cityNames';
 const EditProfileForms = () => {
   const {
-    user,
-    setUser,
-    setIsLoggedIn,
     avatar,
     setAvatar,
-
     setShowEditProfile,
     profileBackground,
     setProfileBackgorund,
     profileDescriptionData,
-    setProfileDescriptionData,
+    setProfilePId,
+    setProfileBId,
+    setProfileDId,
+    profilePId,
+    profileBId,
+    profileDId,
   } = useContext(MainContext);
-  const {userProfilePostData} = userMedia();
   const [tempProfBack, setTempProfBack] = useState(null);
   const [tempProfAvatar, setTempProfAvatar] = useState(null);
-  const [tempProfDesc, setTempProfDesc] = useState({});
   const [avatarMediatype, setAvatarMediatype] = useState(null);
   const [backgroundMediatype, setBackgroundMediatype] = useState(null);
   const {postMedia} = useMedia();
+  const {deleteMediaById} = userMedia();
+  const [city, setCity] = useState('');
+
   const {
     control,
     handleSubmit,
@@ -83,7 +86,6 @@ const EditProfileForms = () => {
   const saveData = (data) => {
     setProfileBackgorund(tempProfBack);
     setAvatar(tempProfAvatar);
-    setProfileDescriptionData(tempProfDesc);
     updateserData(data);
   };
 
@@ -100,7 +102,7 @@ const EditProfileForms = () => {
     const profileDataDescription = {
       full_name: data.full_name,
       age: data.age,
-      location: data.location,
+      location: city,
       bio: data.bio,
     };
     profileData.append('description', JSON.stringify(profileDataDescription));
@@ -135,19 +137,27 @@ const EditProfileForms = () => {
     if (token) {
       try {
         if (profilePic != null) {
-          console.log(profilePic);
+          const delPic = await deleteMediaById(token, profilePId);
           const profilePicUpdate = await postMedia(token, profilePic);
+          setProfilePId(profilePicUpdate.file_id);
         }
         if (profileBack != null) {
-          console.log(profileBack);
+          const delBack = await deleteMediaById(token, profileBId);
           const backgroundUpdate = await postMedia(token, profileBack);
+          setProfileBId(backgroundUpdate.file_id);
         }
+        const delData = await deleteMediaById(token, profileDId);
         const profileDataUpdate = await postMedia(token, profileData);
+        setProfileDId(profileDataUpdate.file_id);
       } catch (error) {
         console.log('EditProfileForms.js upDateData', error);
       }
     }
     setShowEditProfile(false);
+  };
+  const handleSelect = (e) => {
+    console.log(cityNames[e].value);
+    setCity(cityNames[e].value);
   };
 
   return (
@@ -228,19 +238,16 @@ const EditProfileForms = () => {
         />
         <Controller
           control={control}
-          rules={{}}
           render={({field: {onChange, onBlur, value}}) => (
             <View>
-              <TextInput
+              <SelectList
+                setSelected={handleSelect}
+                data={cityNames}
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
+                search={false}
                 placeholder="Location"
-                style={styles.yourAgeTextInput}
-                autoCapitalize="none"
-                errorMessage={
-                  errors.location && <Text>{errors.location.message}</Text>
-                }
               />
             </View>
           )}

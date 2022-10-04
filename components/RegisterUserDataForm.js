@@ -21,12 +21,16 @@ import {MainContext} from '../context/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {single_pixel} from '../images';
 let {width} = Dimensions.get('window');
+import SelectList from 'react-native-dropdown-select-list';
+import cityNames from '../utils/cityNames';
 
 const RegisterUserDataForm = () => {
   const {setShowRegisterUserDataForm} = useContext(MainContext);
   const {fullName, image, setImage, setIsLoggedIn} = useContext(MainContext);
   const {postMedia} = useMedia();
   const [mediatype, setMediatype] = useState(null);
+  const [city, setCity] = useState('');
+
   const {
     control,
     handleSubmit,
@@ -107,7 +111,7 @@ const RegisterUserDataForm = () => {
     const profileDataDescription = {
       full_name: fullName,
       age: data.age,
-      location: data.location,
+      location: city,
       bio: data.bio,
     };
     profileData.append('description', JSON.stringify(profileDataDescription));
@@ -127,7 +131,10 @@ const RegisterUserDataForm = () => {
       console.log('RegisterUserDAtaForm upload-onsubmit', error);
     }
   };
-
+  const handleSelect = (e) => {
+    console.log(cityNames[e].value);
+    setCity(cityNames[e].value);
+  };
   return (
     <View style={styles.container}>
       <Text style={styles.makeMoreInterestingText}>
@@ -164,19 +171,16 @@ const RegisterUserDataForm = () => {
       />
       <Controller
         control={control}
-        rules={{}}
         render={({field: {onChange, onBlur, value}}) => (
-          <View style={styles.locationBox}>
-            <TextInput
+          <View>
+            <SelectList
+              setSelected={handleSelect}
+              data={cityNames}
               onBlur={onBlur}
               onChangeText={onChange}
               value={value}
+              search={false}
               placeholder="Location"
-              style={styles.locationBoxTextInput}
-              autoCapitalize="none"
-              errorMessage={
-                errors.location && <Text>{errors.location.message}</Text>
-              }
             />
           </View>
         )}
