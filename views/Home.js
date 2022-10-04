@@ -7,7 +7,6 @@ import {MainContext} from '../context/MainContext';
 const Home = (props) => {
   const {navigation} = props;
   const {isLoggedIn} = useContext(MainContext);
-  console.log(isLoggedIn);
 
   return (
     <SafeAreaView style={styles.droidSafeArea}>

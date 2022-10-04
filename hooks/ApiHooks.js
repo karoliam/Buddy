@@ -22,7 +22,6 @@ const useMedia = (update) => {
   }, [update]);
 
   const postMedia = async (token, data) => {
-    console.log('token tossa', token);
     const options = {
       method: 'POST',
       headers: {
@@ -72,7 +71,6 @@ const userMedia = () => {
     try {
       const response = await fetch(apiUrl + 'media/user/' + profileID, options);
       const userData = await response.json();
-      console.log(userData);
       return userData;
     } catch (error) {
       throw new Error(error.message);

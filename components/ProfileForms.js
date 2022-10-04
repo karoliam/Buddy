@@ -26,23 +26,14 @@ const ProfileForms = () => {
     setAvatar,
     profileData,
     setProfileData,
+    setShowEditProfile,
+    profileBackground,
+    setProfileBackgorund,
+    profileDescriptionData,
+    setProfileDescriptionData,
   } = useContext(MainContext);
   const {userProfilePostData} = userMedia();
-  const [profileBackground, setProfileBackgorund] = useState('');
-  const [profileDescriptionData, setProfileDescriptionData] = useState({});
-  console.log(
-    'ProfileForms.js profileforms() ',
-    'user',
-    user,
-    'avatar',
-    avatar,
-    'profileData',
-    profileData,
-    'profileBackground',
-    profileBackground,
-    'profileDescriptionData',
-    profileDescriptionData
-  );
+
   const getProfileData = async (profileID) => {
     try {
       const profileDescrData = await userProfilePostData(profileID);
@@ -104,7 +95,9 @@ const ProfileForms = () => {
     setAvatar(''), setUser({}), setIsLoggedIn(false);
   };
 
-  const editProfile = () => {};
+  const editProfile = () => {
+    setShowEditProfile(true);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -156,6 +149,7 @@ const ProfileForms = () => {
         <Text>no</Text>
       )}
       <Button title={'Logout'} onPress={logout} />
+      <Button title={'Edit profile'} onPress={editProfile} />
     </SafeAreaView>
   );
 };

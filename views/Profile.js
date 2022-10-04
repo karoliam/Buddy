@@ -8,12 +8,16 @@
  *  HUOM enkelikissa on placeholderi
  */
 
-import React from 'react';
+import React, {useContext} from 'react';
+import {View} from 'react-native';
+import EditProfileForms from '../components/EditProfileForms';
 
 import ProfileForms from '../components/ProfileForms';
+import {MainContext} from '../context/MainContext';
 
 const Profile = () => {
-  return <ProfileForms></ProfileForms>;
+  const {showEditProfile} = useContext(MainContext);
+  return <>{showEditProfile ? <EditProfileForms /> : <ProfileForms />}</>;
 };
 
 export default Profile;

@@ -41,19 +41,46 @@ const RegisterUserDataForm = () => {
   const selectImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       aspect: [4, 4],
       quality: 1,
     });
-    console.log(result);
     if (!result.cancelled) {
       setImage(result);
       setMediatype(result.type);
     }
   };
-  const skipUserData = () => {
-    setIsLoggedIn(true);
-    setShowRegisterUserDataForm(false);
+  const skipUserData = async () => {
+    const pixelUri = Image.resolveAssetSource(single_pixel).uri;
+    const profileData = new FormData();
+    profileData.append('title', 'profile_data');
+    profileData.append('file', {
+      uri: pixelUri,
+      name: 'single_pixel.jpeg',
+      type: 'image/jpeg',
+    });
+    const profileDataDescription = {
+      full_name: fullName,
+      age: '',
+      location: '',
+      bio: '',
+    };
+    profileData.append('description', JSON.stringify(profileDataDescription));
+
+    try {
+      const token = await AsyncStorage.getItem('userToken');
+
+      const pData = await postMedia(token, profileData);
+      if (pData) {
+        setIsLoggedIn(true);
+        setShowRegisterUserDataForm(false);
+        // navigation.navigate('Tabs');  // TODO navi to loginstate
+        setImage(null);
+      }
+    } catch (error) {
+      console.log('RegisterUserDAtaForm upload-onsubmit', error);
+    }
+
     // navigation.navigate('Tabs');  // TODO navi to loginstate
   };
   const registerUserData = async (data) => {
