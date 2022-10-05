@@ -16,7 +16,7 @@ import {
 import {Image} from '@rneui/base';
 import {Controller, useForm} from 'react-hook-form';
 import * as ImagePicker from 'expo-image-picker';
-import {useMedia} from '../hooks/ApiHooks';
+import {useMedia, useTag} from '../hooks/ApiHooks';
 import {MainContext} from '../context/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {single_pixel} from '../images';
@@ -26,10 +26,11 @@ import cityNames from '../utils/cityNames';
 
 const RegisterUserDataForm = () => {
   const {setShowRegisterUserDataForm} = useContext(MainContext);
-  const {fullName, image, setImage, setIsLoggedIn} = useContext(MainContext);
+  const {fullName, image, setImage, setIsLoggedIn, user, city, setCity} =
+    useContext(MainContext);
   const {postMedia} = useMedia();
+  const {postTag} = useTag();
   const [mediatype, setMediatype] = useState(null);
-  const [city, setCity] = useState('');
 
   const {
     control,
@@ -54,58 +55,29 @@ const RegisterUserDataForm = () => {
       setMediatype(result.type);
     }
   };
-  const skipUserData = async () => {
-    const pixelUri = Image.resolveAssetSource(single_pixel).uri;
-    const profileData = new FormData();
-    profileData.append('title', 'profile_data');
-    profileData.append('file', {
-      uri: pixelUri,
-      name: 'single_pixel.jpeg',
-      type: 'image/jpeg',
-    });
-    const profileDataDescription = {
-      full_name: fullName,
-      age: '',
-      location: '',
-      bio: '',
-    };
-    profileData.append('description', JSON.stringify(profileDataDescription));
 
-    try {
-      const token = await AsyncStorage.getItem('userToken');
-
-      const pData = await postMedia(token, profileData);
-      if (pData) {
-        setIsLoggedIn(true);
-        setShowRegisterUserDataForm(false);
-        // navigation.navigate('Tabs');  // TODO navi to loginstate
-        setImage(null);
-      }
-    } catch (error) {
-      console.log('RegisterUserDAtaForm upload-onsubmit', error);
-    }
-
-    // navigation.navigate('Tabs');  // TODO navi to loginstate
-  };
   const registerUserData = async (data) => {
     const profilePic = new FormData();
-    profilePic.append('title', 'profile_pic');
-    const filename = image.uri.split('/').pop();
-    let extension = filename.split('.').pop();
-    extension = extension === 'jpg' ? 'jpeg' : extension;
-    profilePic.append('file', {
-      uri: image.uri,
-      name: filename,
-      type: mediatype + '/' + extension,
-    });
+    if (image) {
+      profilePic.append('title', 'profile_pic');
+      const filename = image.uri.split('/').pop();
+      let extension = filename.split('.').pop();
+      extension = extension === 'jpg' ? 'jpeg' : extension;
+      profilePic.append('file', {
+        uri: image.uri,
+        name: filename,
+        type: mediatype + '/' + extension,
+      });
+    }
 
     //user data upload media
     const pixelUri = Image.resolveAssetSource(single_pixel).uri;
+    console.log('pixel uri', pixelUri);
     const profileData = new FormData();
     profileData.append('title', 'profile_data');
     profileData.append('file', {
-      uri: pixelUri,
-      name: 'single_pixel.jpeg',
+      uri: 'https://placekitten.com/100',
+      name: 'placekitten',
       type: 'image/jpeg',
     });
     const profileDataDescription = {
@@ -115,18 +87,28 @@ const RegisterUserDataForm = () => {
       bio: data.bio,
     };
     profileData.append('description', JSON.stringify(profileDataDescription));
-
+    console.log('profile data', profileData);
     try {
       const token = await AsyncStorage.getItem('userToken');
-
-      const pPic = await postMedia(token, profilePic);
+      if (image) {
+        const pPic = await postMedia(token, profilePic);
+        const profilePicTag = {
+          file_id: pPic.file_id,
+          tag: 'buddyprofile_pic' + user.user_id,
+        };
+        const pocTag = await postTag(token, profilePicTag);
+        console.log(pocTag);
+      }
       const pData = await postMedia(token, profileData);
-      if (pPic && pData) {
+      const profileDataTag = {
+        file_id: pData.file_id,
+        tag: 'buddyprofile_Data' + user.user_id,
+      };
+      const dataTag = await postTag(token, profileDataTag);
         setIsLoggedIn(true);
         setShowRegisterUserDataForm(false);
         // navigation.navigate('Tabs');  // TODO navi to loginstate
         setImage(null);
-      }
     } catch (error) {
       console.log('RegisterUserDAtaForm upload-onsubmit', error);
     }
@@ -206,7 +188,10 @@ const RegisterUserDataForm = () => {
       />
       <View style={styles.doLaterButtonStackRow}>
         <View style={styles.doLaterButtonStack}>
-          <TouchableOpacity style={styles.doLaterButton} onPress={skipUserData}>
+          <TouchableOpacity
+            style={styles.doLaterButton}
+            onPress={handleSubmit(registerUserData)}
+          >
             <Text style={styles.doLaterText}>or do this later...</Text>
           </TouchableOpacity>
         </View>

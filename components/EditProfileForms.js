@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import {MainContext} from '../context/MainContext';
 import {Image, Input} from '@rneui/themed';
-import {useMedia, userMedia} from '../hooks/ApiHooks';
+import {useMedia, userMedia, useTag} from '../hooks/ApiHooks';
 import {TouchableOpacity} from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -20,6 +20,8 @@ import SelectList from 'react-native-dropdown-select-list';
 import cityNames from '../utils/cityNames';
 const EditProfileForms = () => {
   const {
+    user,
+    setUser,
     avatar,
     setAvatar,
     setShowEditProfile,
@@ -32,14 +34,16 @@ const EditProfileForms = () => {
     profilePId,
     profileBId,
     profileDId,
+    city,
+    setCity,
   } = useContext(MainContext);
   const [tempProfBack, setTempProfBack] = useState(null);
   const [tempProfAvatar, setTempProfAvatar] = useState(null);
   const [avatarMediatype, setAvatarMediatype] = useState(null);
   const [backgroundMediatype, setBackgroundMediatype] = useState(null);
   const {postMedia} = useMedia();
+  const {postTag} = useTag();
   const {deleteMediaById} = userMedia();
-  const [city, setCity] = useState('');
 
   const {
     control,
@@ -140,15 +144,30 @@ const EditProfileForms = () => {
           const delPic = await deleteMediaById(token, profilePId);
           const profilePicUpdate = await postMedia(token, profilePic);
           setProfilePId(profilePicUpdate.file_id);
+          const profilePicTag = {
+            file_id: profilePicUpdate.file_id,
+            tag: 'buddyprofile_pic' + user.user_id,
+          };
+          const picTag = await postTag(token, profilePicTag);
         }
         if (profileBack != null) {
           const delBack = await deleteMediaById(token, profileBId);
           const backgroundUpdate = await postMedia(token, profileBack);
           setProfileBId(backgroundUpdate.file_id);
+          const profileBackTag = {
+            file_id: backgroundUpdate.file_id,
+            tag: 'buddyprofile_background' + user.user_id,
+          };
+          const BTag = await postTag(token, profileBackTag);
         }
         const delData = await deleteMediaById(token, profileDId);
         const profileDataUpdate = await postMedia(token, profileData);
         setProfileDId(profileDataUpdate.file_id);
+        const profileDataTag = {
+          file_id: profileDataUpdate.file_id,
+          tag: 'buddyprofile_Data' + user.user_id,
+        };
+        const DTag = await postTag(token, profileDataTag);
       } catch (error) {
         console.log('EditProfileForms.js upDateData', error);
       }
