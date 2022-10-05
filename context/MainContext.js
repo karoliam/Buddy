@@ -20,6 +20,7 @@ const MainProvider = (props) => {
   const [profilePId, setProfilePId] = useState(0);
   const [profileBId, setProfileBId] = useState(0);
   const [profileDId, setProfileDId] = useState(0);
+  const [city, setCity] = useState('');
 
   return (
     <MainContext.Provider
@@ -52,6 +53,8 @@ const MainProvider = (props) => {
         setProfileBId,
         profileDId,
         setProfileDId,
+        city,
+        setCity,
       }}
     >
       {props.children}

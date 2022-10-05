@@ -12,7 +12,7 @@ import {mediaUrl} from '../utils/variables';
 const CommentField = () => {
   const {postComment, getCommentByFileId} = useComments();
   const route = useRoute();
-  const {user} = useContext(MainContext);
+  const {update,setUpdate} = useContext(MainContext);
   const {file_id} = route.params;
   const [userComments, setUserComments] = useState();
   const {getUserById} = useUser();
@@ -20,6 +20,7 @@ const CommentField = () => {
   const {
     control,
     handleSubmit,
+    setValue,
     formState: {errors},
   } = useForm({
     defaultValues: {
@@ -38,6 +39,8 @@ const CommentField = () => {
         {
           text: 'OK',
           onPress: () => {
+            setUpdate(!update);
+            resetCommentInput();
             console.log('jee kommentointi toimii');
           },
         },
@@ -54,6 +57,10 @@ const CommentField = () => {
         },
       ]);
     }
+  };
+
+  const resetCommentInput = () => {
+    setValue('comment', '')
   };
 
   const fetchComments = async () => {
@@ -134,7 +141,7 @@ const CommentField = () => {
 
   useEffect(() => {
     fetchComments();
-  }, []);
+  }, [update]);
 
   return (
     <View style={{flex: 4, marginBottom: 100}}>

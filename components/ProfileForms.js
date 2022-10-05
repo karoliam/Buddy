@@ -13,7 +13,7 @@ import {StyleSheet, SafeAreaView, Text, Button} from 'react-native';
 import {MainContext} from '../context/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Image} from '@rneui/themed';
-import {userMedia} from '../hooks/ApiHooks';
+import {userMedia, useTag} from '../hooks/ApiHooks';
 import {mediaUrl} from '../utils/variables';
 import {setStatusBarNetworkActivityIndicatorVisible} from 'expo-status-bar';
 
@@ -37,11 +37,32 @@ const ProfileForms = () => {
     setProfileDId,
   } = useContext(MainContext);
   const {userProfilePostData} = userMedia();
-
+  const {getFilesByTag} = useTag();
   const getProfileData = async (profileID) => {
     try {
-      const profileDescrData = await userProfilePostData(profileID);
-      setProfileData(profileDescrData);
+      //const profileDescrData = await userProfilePostData(profileID);
+      //setProfileData(profileDescrData);
+      const profilePicTag = await getFilesByTag('buddyprofile_pic' + profileID);
+      if (profilePicTag[0].filename != undefined) {
+        setAvatar(mediaUrl + profilePicTag[0].filename);
+        setProfilePId(profilePicTag[0].file_id);
+      }
+      const profileDataTag = await getFilesByTag(
+        'buddyprofile_data' + profileID
+      );
+
+      if (profileDataTag[0].description != undefined) {
+        setProfileDescriptionData(JSON.parse(profileDataTag[0].description));
+        setProfileDId(profileDataTag[0].file_id);
+      }
+
+      const profileBackTag = await getFilesByTag(
+        'buddyprofile_background' + profileID
+      );
+      if (profileBackTag[0].filename != undefined) {
+        setProfileBackgorund(mediaUrl + profileBackTag[0].filename);
+        setProfileBId(profileBackTag[0].file_id);
+      }
     } catch (error) {
       console.log('Profile.js getProfileData ' + error);
     }
@@ -50,50 +71,6 @@ const ProfileForms = () => {
   useEffect(() => {
     getProfileData(user.user_id);
   }, []);
-
-  useEffect(() => {
-    if (profileData != null) {
-      handleProfileData();
-    }
-  }, [profileData]);
-
-  const handleProfileData = async () => {
-    getProfileBackground();
-    getProfileDescription();
-    getProfilePic();
-  };
-  const getProfileBackground = () => {
-    const profilePostDataArray = profileData.filter(
-      (file) => file.title === 'profile_background'
-    );
-    const profileBg = profilePostDataArray.pop();
-    if (profileBg) {
-      setProfileBId(profileBg.file_id);
-      setProfileBackgorund(mediaUrl + profileBg.filename);
-    }
-  };
-
-  const getProfilePic = () => {
-    const profilePostDataArray = profileData.filter(
-      (file) => file.title === 'profile_pic'
-    );
-    const profilePicture = profilePostDataArray.pop();
-    if (profilePicture) {
-      setProfilePId(profilePicture.file_id);
-      setAvatar(mediaUrl + profilePicture.filename);
-    }
-  };
-
-  const getProfileDescription = () => {
-    const profilePostDataArray = profileData.filter(
-      (file) => file.title === 'profile_data'
-    );
-    const profileDesc = profilePostDataArray.pop();
-    if (profileDesc) {
-      setProfileDId(profileDesc.file_id);
-      setProfileDescriptionData(JSON.parse(profileDesc.description));
-    }
-  };
 
   //getProfileData(user.user_id);
   const logout = async () => {
