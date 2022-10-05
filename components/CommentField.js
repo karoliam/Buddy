@@ -67,16 +67,51 @@ const CommentField = () => {
       // fetching comments
       const token = await AsyncStorage.getItem('userToken');
       const commentArray = await getCommentByFileId(file_id);
+      console.log("commentArray", commentArray);
+
+      for (const commentArrayKey in commentArray) {
+        const userUploads = await userProfilePostData(commentArray[commentArrayKey].user_id);
+        console.log('userUploads', userUploads);
+        let userProfileData;
+        let userProfilePic;
+        for (let userUploadsKey in userUploads) {
+          console.log("forloop" + userUploadsKey, userUploads[userUploadsKey].title)
+          if (userUploads[userUploadsKey].title == "profile_data") {
+            userProfileData = userUploads[userUploadsKey].description;
+          }
+          if (userUploads[userUploadsKey].title == "profile_pic") {
+            userProfilePic = userUploads[userUploadsKey];
+          }
+        }
+
+        const userDescription = JSON.parse(userProfileData);
+        const userFullname = {user_name: userDescription.full_name};
+        commentArray[commentArrayKey].user_name = (userFullname.user_name);
+        commentArray[commentArrayKey].profile_pic = userProfilePic;
+        console.log('userProfileData', userProfileData);
+        console.log('userDescription', userDescription);
+        console.log('tyypin kuva', userProfilePic);
+      }
+      console.log("commentArray with names",commentArray)
+
+
+
       const onlyComment = commentArray.map((comments) => comments.comment);
       setUserComments(onlyComment);
       // console.log('commentArray', commentArray);
       // fetching the sender of a comment
       const userID = commentArray.map((comments) => comments.user_id);
       userID.forEach(async(item) => {
-        const userDescription = await userProfilePostData(item);
-        console.log('userdescription', userDescription);
-        const lol = userDescription.map((item) => item.description);
-        //console.log('userdescription', lol);
+
+
+        let userProfilePic;
+        for (let userUploadsKey in userUploads) {
+          console.log("forloop" + userUploadsKey, userUploads[userUploadsKey].title)
+          if (userUploads[userUploadsKey].title == "profile_pic") {
+            userProfilePic = userUploads[userUploadsKey];
+          }
+        }
+        console.log('userProfilePic', userProfilePic);
       });
 
       console.log('tossa userID',userID);
