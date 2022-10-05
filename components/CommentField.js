@@ -1,10 +1,4 @@
-import {
-  Alert,
-  FlatList,
-  Text,
-  TextInput,
-  View,
-} from 'react-native';
+import {Alert, FlatList, Text, TextInput, View} from 'react-native';
 import PropTypes from 'prop-types';
 import {useComments, userMedia, useUser} from '../hooks/ApiHooks';
 import {useContext, useEffect, useState} from 'react';
@@ -12,15 +6,15 @@ import {MainContext} from '../context/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useRoute} from '@react-navigation/native';
 import {Controller, useForm} from 'react-hook-form';
-import {Button} from '@rneui/themed';
+import {Button, Image} from '@rneui/themed';
+import {mediaUrl} from '../utils/variables';
 
 const CommentField = () => {
   const {postComment, getCommentByFileId} = useComments();
   const route = useRoute();
   const {user} = useContext(MainContext);
   const {file_id} = route.params;
-  const [userComments, setUserComments] = useState([]);
-  const [commentSender, setCommentSender] = useState([]);
+  const [userComments, setUserComments] = useState();
   const {getUserById} = useUser();
   const {userProfilePostData} = userMedia();
   const {
@@ -67,58 +61,62 @@ const CommentField = () => {
       // fetching comments
       const token = await AsyncStorage.getItem('userToken');
       const commentArray = await getCommentByFileId(file_id);
-      console.log("commentArray", commentArray);
+      console.log('commentArray', commentArray);
 
       for (const commentArrayKey in commentArray) {
-        const userUploads = await userProfilePostData(commentArray[commentArrayKey].user_id);
+        const userUploads = await userProfilePostData(
+          commentArray[commentArrayKey].user_id
+        );
         console.log('userUploads', userUploads);
         let userProfileData;
         let userProfilePic;
         for (let userUploadsKey in userUploads) {
-          console.log("forloop" + userUploadsKey, userUploads[userUploadsKey].title)
-          if (userUploads[userUploadsKey].title == "profile_data") {
+          console.log(
+            'forloop' + userUploadsKey,
+            userUploads[userUploadsKey].title
+          );
+          if (userUploads[userUploadsKey].title == 'profile_data') {
             userProfileData = userUploads[userUploadsKey].description;
           }
-          if (userUploads[userUploadsKey].title == "profile_pic") {
+          if (userUploads[userUploadsKey].title == 'profile_pic') {
             userProfilePic = userUploads[userUploadsKey];
           }
         }
 
         const userDescription = JSON.parse(userProfileData);
         const userFullname = {user_name: userDescription.full_name};
-        commentArray[commentArrayKey].user_name = (userFullname.user_name);
+        commentArray[commentArrayKey].user_name = userFullname.user_name;
         commentArray[commentArrayKey].profile_pic = userProfilePic;
         console.log('userProfileData', userProfileData);
         console.log('userDescription', userDescription);
         console.log('tyypin kuva', userProfilePic);
       }
-      console.log("commentArray with names",commentArray)
+      console.log('commentArray with names', commentArray);
+      setUserComments(commentArray);
 
-
-
-      const onlyComment = commentArray.map((comments) => comments.comment);
-      setUserComments(onlyComment);
+      //const onlyComment = commentArray.map((comments) => comments.comment);
+      //setUserComments(onlyComment);
       // console.log('commentArray', commentArray);
       // fetching the sender of a comment
       const userID = commentArray.map((comments) => comments.user_id);
-      userID.forEach(async(item) => {
-
-
+      userID.forEach(async (item) => {
         let userProfilePic;
         for (let userUploadsKey in userUploads) {
-          console.log("forloop" + userUploadsKey, userUploads[userUploadsKey].title)
-          if (userUploads[userUploadsKey].title == "profile_pic") {
+          console.log(
+            'forloop' + userUploadsKey,
+            userUploads[userUploadsKey].title
+          );
+          if (userUploads[userUploadsKey].title == 'profile_pic') {
             userProfilePic = userUploads[userUploadsKey];
           }
         }
         console.log('userProfilePic', userProfilePic);
       });
 
-      console.log('tossa userID',userID);
+      console.log('tossa userID', userID);
       userID.forEach((commentArray) => {
         console.log('array', commentArray);
-
-      })
+      });
       console.log('userid', userID);
       userID.forEach(async (user_id) => {
         const gettingUsers = await getUserById(token, userID);
@@ -145,8 +143,17 @@ const CommentField = () => {
         style={{marginLeft: 16, marginBottom: 16}}
         renderItem={({item}) => (
           <>
-            <Text>{item}</Text>
-            <Text></Text>
+            <View style={{flexDirection: 'row'}}>
+              <Image
+                source={{uri: mediaUrl + item.profile_pic.filename}}
+                style={{width: 25, height: 25, borderRadius: 100}}
+              />
+              <Text style={{color: 'grey'}}>{item.user_name}</Text>
+            </View>
+            <Text>{item.time_added}</Text>
+
+            <Text>{item.comment}</Text>
+            {/* <Text>{item.user_name}</Text> */}
           </>
         )}
       />
