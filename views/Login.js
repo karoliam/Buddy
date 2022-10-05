@@ -21,7 +21,6 @@ const Login = () => {
     try {
       if (userToken != null) {
         const userData = await getUserByToken(userToken);
-        console.log(userToken);
         setIsLoggedIn(true);
         setUser(userData);
       }
@@ -35,7 +34,11 @@ const Login = () => {
 
   return (
     <View style={styles.container}>
-      {showRegisterUserDataForm ? <RegisterUserDataForm /> : <LoginMainViewContainer />}
+      {showRegisterUserDataForm ? (
+        <RegisterUserDataForm />
+      ) : (
+        <LoginMainViewContainer />
+      )}
     </View>
   );
 };
@@ -43,7 +46,7 @@ const Login = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  }
+  },
 });
 
 Login.propTypes = {

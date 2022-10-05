@@ -3,7 +3,6 @@ import {
   FlatList,
   Text,
   TextInput,
-  TouchableOpacity,
   View,
 } from 'react-native';
 import PropTypes from 'prop-types';
@@ -76,6 +75,8 @@ const CommentField = () => {
       userID.forEach(async(item) => {
         const userDescription = await userProfilePostData(item);
         console.log('userdescription', userDescription);
+        const lol = userDescription.map((item) => item.description);
+        //console.log('userdescription', lol);
       });
 
       console.log('tossa userID',userID);
@@ -86,7 +87,7 @@ const CommentField = () => {
       console.log('userid', userID);
       userID.forEach(async (user_id) => {
         const gettingUsers = await getUserById(token, userID);
-        console.log('getting users', gettingUsers);
+        //console.log('getting users', gettingUsers);
       });
 
       // console.log('comment senders', userById);

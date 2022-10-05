@@ -22,7 +22,6 @@ const useMedia = (update) => {
   }, [update]);
 
   const postMedia = async (token, data) => {
-    // console.log('token tossa', token);
     const options = {
       method: 'POST',
       headers: {
@@ -65,7 +64,7 @@ const useTag = () => {
 };
 
 const userMedia = () => {
-  const userProfilePostData = async (profileID, tag) => {
+  const userProfilePostData = async (profileID) => {
     const options = {
       method: 'GET',
     };
@@ -77,7 +76,20 @@ const userMedia = () => {
       throw new Error(error.message);
     }
   };
-  return {userProfilePostData};
+  const deleteMediaById = async (token, fileId) => {
+    const options = {
+      method: 'DELETE',
+      headers: {'x-access-token': token},
+    };
+    try {
+      const response = await fetch(apiUrl + 'media/' + fileId, options);
+      const deleteResponce = await response.json();
+      return deleteResponce;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+  return {userProfilePostData, deleteMediaById};
 };
 
 const useLogin = () => {

@@ -21,12 +21,16 @@ import {MainContext} from '../context/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {single_pixel} from '../images';
 let {width} = Dimensions.get('window');
+import SelectList from 'react-native-dropdown-select-list';
+import cityNames from '../utils/cityNames';
 
-const RegisterUserDataForm = ({navigation}) => {
+const RegisterUserDataForm = () => {
   const {setShowRegisterUserDataForm} = useContext(MainContext);
   const {fullName, image, setImage, setIsLoggedIn} = useContext(MainContext);
   const {postMedia} = useMedia();
   const [mediatype, setMediatype] = useState(null);
+  const [city, setCity] = useState('');
+
   const {
     control,
     handleSubmit,
@@ -39,23 +43,48 @@ const RegisterUserDataForm = ({navigation}) => {
     },
   });
   const selectImage = async () => {
-    console.log('lol');
-
     const result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       aspect: [4, 4],
       quality: 1,
     });
-    console.log(result);
     if (!result.cancelled) {
       setImage(result);
       setMediatype(result.type);
     }
   };
-  const skipUserData = () => {
-    setIsLoggedIn(true);
-    setShowRegisterUserDataForm(false);
+  const skipUserData = async () => {
+    const pixelUri = Image.resolveAssetSource(single_pixel).uri;
+    const profileData = new FormData();
+    profileData.append('title', 'profile_data');
+    profileData.append('file', {
+      uri: pixelUri,
+      name: 'single_pixel.jpeg',
+      type: 'image/jpeg',
+    });
+    const profileDataDescription = {
+      full_name: fullName,
+      age: '',
+      location: '',
+      bio: '',
+    };
+    profileData.append('description', JSON.stringify(profileDataDescription));
+
+    try {
+      const token = await AsyncStorage.getItem('userToken');
+
+      const pData = await postMedia(token, profileData);
+      if (pData) {
+        setIsLoggedIn(true);
+        setShowRegisterUserDataForm(false);
+        // navigation.navigate('Tabs');  // TODO navi to loginstate
+        setImage(null);
+      }
+    } catch (error) {
+      console.log('RegisterUserDAtaForm upload-onsubmit', error);
+    }
+
     // navigation.navigate('Tabs');  // TODO navi to loginstate
   };
   const registerUserData = async (data) => {
@@ -82,39 +111,36 @@ const RegisterUserDataForm = ({navigation}) => {
     const profileDataDescription = {
       full_name: fullName,
       age: data.age,
-      location: data.location,
+      location: city,
       bio: data.bio,
     };
     profileData.append('description', JSON.stringify(profileDataDescription));
 
     try {
       const token = await AsyncStorage.getItem('userToken');
-      console.log(
-        profileDataDescription.full_name,
-        profileDataDescription.age,
-        profileDataDescription.bio,
-        profileDataDescription.location
-      );
+
       const pPic = await postMedia(token, profilePic);
       const pData = await postMedia(token, profileData);
       if (pPic && pData) {
         setIsLoggedIn(true);
         setShowRegisterUserDataForm(false);
         // navigation.navigate('Tabs');  // TODO navi to loginstate
+        setImage(null);
       }
     } catch (error) {
-      console.log('upload-onsubmit', error);
+      console.log('RegisterUserDAtaForm upload-onsubmit', error);
     }
   };
-
+  const handleSelect = (e) => {
+    console.log(cityNames[e].value);
+    setCity(cityNames[e].value);
+  };
   return (
     <View style={styles.container}>
       <Text style={styles.makeMoreInterestingText}>
         Make your profile more interesting
       </Text>
-      <TouchableOpacity
-        style={styles.addPictureButton}
-        onPress={selectImage}>
+      <TouchableOpacity style={styles.addPictureButton} onPress={selectImage}>
         <Image
           source={
             image ? {uri: image.uri} : require('../assets/adaptive-icon.png')
@@ -145,19 +171,16 @@ const RegisterUserDataForm = ({navigation}) => {
       />
       <Controller
         control={control}
-        rules={{}}
         render={({field: {onChange, onBlur, value}}) => (
-          <View style={styles.locationBox}>
-            <TextInput
+          <View>
+            <SelectList
+              setSelected={handleSelect}
+              data={cityNames}
               onBlur={onBlur}
               onChangeText={onChange}
               value={value}
+              search={false}
               placeholder="Location"
-              style={styles.locationBoxTextInput}
-              autoCapitalize="none"
-              errorMessage={
-                errors.location && <Text>{errors.location.message}</Text>
-              }
             />
           </View>
         )}
@@ -183,10 +206,7 @@ const RegisterUserDataForm = ({navigation}) => {
       />
       <View style={styles.doLaterButtonStackRow}>
         <View style={styles.doLaterButtonStack}>
-          <TouchableOpacity
-            style={styles.doLaterButton}
-            onPress={skipUserData}
-          >
+          <TouchableOpacity style={styles.doLaterButton} onPress={skipUserData}>
             <Text style={styles.doLaterText}>or do this later...</Text>
           </TouchableOpacity>
         </View>
@@ -206,166 +226,165 @@ const RegisterUserDataForm = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "rgba(255,255,255,1)",
+    backgroundColor: 'rgba(255,255,255,1)',
   },
   makeMoreInterestingText: {
-    color: "rgba(0,0,0,1)",
+    color: 'rgba(0,0,0,1)',
     height: 31,
     width: 285,
     lineHeight: 20,
     fontSize: 16,
-    textAlign: "center",
+    textAlign: 'center',
     marginTop: 88,
-    marginLeft: (width / 2) - 142.5
+    marginLeft: width / 2 - 142.5,
   },
   addPictureButton: {
     width: 100,
     height: 100,
-    backgroundColor: "#E6E6E6",
+    backgroundColor: '#E6E6E6',
     borderRadius: 100,
     marginTop: 14,
-    marginLeft: (width / 2) - 50
+    marginLeft: width / 2 - 50,
   },
   addPicturePreview: {
     width: 100,
     height: 100,
-    borderRadius: 400/2,
+    borderRadius: 400 / 2,
   },
   addPictureIcon: {
     width: 31,
     height: 31,
-    backgroundColor: "rgba(247,3,3,1)",
+    backgroundColor: 'rgba(247,3,3,1)',
     marginTop: 69,
-    marginLeft: 69
+    marginLeft: 69,
   },
   addProfilePicText: {
-    color: "rgba(0,0,0,1)",
+    color: 'rgba(0,0,0,1)',
     height: 21,
     width: 260,
     lineHeight: 20,
     fontSize: 16,
-    textAlign: "center",
+    textAlign: 'center',
     marginTop: 14,
-    marginLeft: (width / 2) - 130
+    marginLeft: width / 2 - 130,
   },
   yourAgeBox: {
     width: 285,
     height: 61,
-    backgroundColor: "rgba(255,255,255,1)",
+    backgroundColor: 'rgba(255,255,255,1)',
     borderWidth: 2,
-    borderColor: "rgba(165,171,232,1)",
+    borderColor: 'rgba(165,171,232,1)',
     borderRadius: 14,
-    borderStyle: "solid",
+    borderStyle: 'solid',
     marginTop: 14,
-    marginLeft: (width / 2) - 142.5
+    marginLeft: width / 2 - 142.5,
   },
   yourAgeTextInput: {
-    color: "#121212",
+    color: '#121212',
     height: 21,
     width: 260,
     fontSize: 16,
     lineHeight: 16,
     marginTop: 19,
-    marginLeft: 12
+    marginLeft: 12,
   },
   locationBox: {
     width: 285,
     height: 61,
-    backgroundColor: "rgba(255,255,255,1)",
+    backgroundColor: 'rgba(255,255,255,1)',
     borderWidth: 2,
-    borderColor: "rgba(165,171,232,1)",
+    borderColor: 'rgba(165,171,232,1)',
     borderRadius: 14,
-    borderStyle: "solid",
+    borderStyle: 'solid',
     marginTop: 16,
-    marginLeft: (width / 2) - 142.5
+    marginLeft: width / 2 - 142.5,
   },
   locationBoxTextInput: {
-    color: "#121212",
+    color: '#121212',
     height: 21,
     width: 260,
     lineHeight: 14,
     fontSize: 16,
     marginTop: 20,
-    marginLeft: 13
+    marginLeft: 13,
   },
   bioBox: {
     width: 285,
     height: 183,
-    backgroundColor: "rgba(255,255,255,1)",
+    backgroundColor: 'rgba(255,255,255,1)',
     borderWidth: 2,
-    borderColor: "rgba(165,171,232,1)",
+    borderColor: 'rgba(165,171,232,1)',
     borderRadius: 14,
-    borderStyle: "solid",
+    borderStyle: 'solid',
     marginTop: 16,
-    marginLeft: (width / 2) - 142.5
+    marginLeft: width / 2 - 142.5,
   },
   bioText: {
-    color: "#121212",
+    color: '#121212',
     height: 21,
     width: 260,
     lineHeight: 16,
     fontSize: 16,
     marginTop: 20,
-    marginLeft: 13
+    marginLeft: 13,
   },
   doLaterButton: {
     top: 0,
     left: 0,
     width: 175,
     height: 36,
-    position: "absolute",
-    backgroundColor: "rgba(255,255,255,1)",
+    position: 'absolute',
+    backgroundColor: 'rgba(255,255,255,1)',
     borderWidth: 2,
-    borderColor: "rgba(165,171,232,1)",
+    borderColor: 'rgba(165,171,232,1)',
     borderRadius: 14,
-    borderStyle: "solid"
+    borderStyle: 'solid',
   },
   doLaterText: {
     top: 6,
     left: 14,
-    position: "absolute",
-    color: "rgba(83,134,234,1)",
+    position: 'absolute',
+    color: 'rgba(83,134,234,1)',
     height: 30,
     width: 147,
     fontSize: 16,
-    textAlign: "center"
+    textAlign: 'center',
   },
   doLaterButtonStack: {
     width: 175,
-    height: 40
+    height: 40,
   },
   goButton: {
     top: 0,
     left: 0,
     width: 103,
     height: 36,
-    position: "absolute",
-    backgroundColor: "rgba(165,171,232,1)",
-    borderRadius: 14
+    position: 'absolute',
+    backgroundColor: 'rgba(165,171,232,1)',
+    borderRadius: 14,
   },
   goText: {
     top: 8,
     left: 11,
-    position: "absolute",
-    color: "rgba(0,0,0,1)",
+    position: 'absolute',
+    color: 'rgba(0,0,0,1)',
     height: 30,
     width: 82,
     fontSize: 16,
-    textAlign: "center"
+    textAlign: 'center',
   },
   goButtonStack: {
     width: 103,
     height: 40,
-    marginLeft: 7
+    marginLeft: 7,
   },
   doLaterButtonStackRow: {
     height: 40,
-    flexDirection: "row",
+    flexDirection: 'row',
     marginTop: 16,
-    marginLeft: (width / 2) - 142.5,
-    marginRight: 44
-  }
+    marginLeft: width / 2 - 142.5,
+    marginRight: 44,
+  },
 });
-
 
 export default RegisterUserDataForm;
