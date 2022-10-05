@@ -26,12 +26,11 @@ import cityNames from '../utils/cityNames';
 
 const RegisterUserDataForm = () => {
   const {setShowRegisterUserDataForm} = useContext(MainContext);
-  const {fullName, image, setImage, setIsLoggedIn, user, setUser} =
+  const {fullName, image, setImage, setIsLoggedIn, user, city, setCity} =
     useContext(MainContext);
   const {postMedia} = useMedia();
   const {postTag} = useTag();
   const [mediatype, setMediatype] = useState(null);
-  const [city, setCity] = useState('');
 
   const {
     control,
