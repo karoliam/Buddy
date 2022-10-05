@@ -13,7 +13,7 @@ import {StyleSheet, SafeAreaView, Text, Button} from 'react-native';
 import {MainContext} from '../context/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Image} from '@rneui/themed';
-import {userMedia} from '../hooks/ApiHooks';
+import {userMedia, useTag} from '../hooks/ApiHooks';
 import {mediaUrl} from '../utils/variables';
 import {setStatusBarNetworkActivityIndicatorVisible} from 'expo-status-bar';
 
@@ -37,11 +37,19 @@ const ProfileForms = () => {
     setProfileDId,
   } = useContext(MainContext);
   const {userProfilePostData} = userMedia();
-
+  const {getFilesByTag} = useTag();
   const getProfileData = async (profileID) => {
     try {
-      const profileDescrData = await userProfilePostData(profileID);
-      setProfileData(profileDescrData);
+      //const profileDescrData = await userProfilePostData(profileID);
+      //setProfileData(profileDescrData);
+      const profilePicTag = await getFilesByTag('buddyprofile_pic' + profileID);
+      setAvatar(mediaUrl + profilePicTag.pop().filename);
+      console.log(profilePicTag);
+      const profileBackTag = await getFilesByTag(
+        'buddyprofile_background' + profileID
+      );
+
+      setProfileBackgorund(mediaUrl + profileBackTag.pop().filename);
     } catch (error) {
       console.log('Profile.js getProfileData ' + error);
     }
@@ -70,17 +78,6 @@ const ProfileForms = () => {
     if (profileBg) {
       setProfileBId(profileBg.file_id);
       setProfileBackgorund(mediaUrl + profileBg.filename);
-    }
-  };
-
-  const getProfilePic = () => {
-    const profilePostDataArray = profileData.filter(
-      (file) => file.title === 'profile_pic'
-    );
-    const profilePicture = profilePostDataArray.pop();
-    if (profilePicture) {
-      setProfilePId(profilePicture.file_id);
-      setAvatar(mediaUrl + profilePicture.filename);
     }
   };
 

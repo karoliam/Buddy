@@ -94,16 +94,17 @@ const RegisterUserDataForm = () => {
         const pPic = await postMedia(token, profilePic);
         const profilePicTag = {
           file_id: pPic.file_id,
-          tag: 'buddy#profile_pic#' + user.user_id,
+          tag: 'buddyprofile_pic' + user.user_id,
         };
-        postTag(token, profilePicTag);
+        const pocTag = await postTag(token, profilePicTag);
+        console.log(pocTag);
       }
       const pData = await postMedia(token, profileData);
       const profileDataTag = {
         file_id: pData.file_id,
-        tag: 'buddy#profile_Data#' + user.user_id,
+        tag: 'buddyprofile_Data' + user.user_id,
       };
-        postTag(token, profileDataTag);
+      const dataTag = await postTag(token, profileDataTag);
         setIsLoggedIn(true);
         setShowRegisterUserDataForm(false);
         // navigation.navigate('Tabs');  // TODO navi to loginstate
