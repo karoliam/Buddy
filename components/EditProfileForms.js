@@ -99,8 +99,8 @@ const EditProfileForms = () => {
     const profileData = new FormData();
     profileData.append('title', 'profile_data');
     profileData.append('file', {
-      uri: pixelUri,
-      name: 'single_pixel.jpeg',
+      uri: 'https://placekitten.com/100',
+      name: 'placekitten',
       type: 'image/jpeg',
     });
     const profileDataDescription = {
