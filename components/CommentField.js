@@ -7,7 +7,7 @@ import {
   View,
 } from 'react-native';
 import PropTypes from 'prop-types';
-import {useComments, useUser} from '../hooks/ApiHooks';
+import {useComments, userMedia, useUser} from '../hooks/ApiHooks';
 import {useContext, useEffect, useState} from 'react';
 import {MainContext} from '../context/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -23,6 +23,7 @@ const CommentField = () => {
   const [userComments, setUserComments] = useState([]);
   const [commentSender, setCommentSender] = useState([]);
   const {getUserById} = useUser();
+  const {userProfilePostData} = userMedia();
   const {
     control,
     handleSubmit,
@@ -64,15 +65,32 @@ const CommentField = () => {
 
   const fetchComments = async () => {
     try {
+      // fetching comments
       const token = await AsyncStorage.getItem('userToken');
       const commentArray = await getCommentByFileId(file_id);
       const onlyComment = commentArray.map((comments) => comments.comment);
       setUserComments(onlyComment);
-      console.log('commentArray', commentArray);
+      // console.log('commentArray', commentArray);
+      // fetching the sender of a comment
       const userID = commentArray.map((comments) => comments.user_id);
-      const userById = await getUserById(token, userID);
-      console.log('fullname here', userById.full_name);
-      setCommentSender(userById.full_name);
+      userID.forEach(async(item) => {
+        const userDescription = await userProfilePostData(item);
+        console.log('userdescription', userDescription);
+      });
+
+      console.log('tossa userID',userID);
+      userID.forEach((commentArray) => {
+        console.log('array', commentArray);
+
+      })
+      console.log('userid', userID);
+      userID.forEach(async (user_id) => {
+        const gettingUsers = await getUserById(token, userID);
+        console.log('getting users', gettingUsers);
+      });
+
+      // console.log('comment senders', userById);
+      // setCommentSender(userById.full_name);
       // setUserComments(commentArray);
       //console.log('comments here', commentArray);
     } catch (error) {
@@ -115,10 +133,11 @@ const CommentField = () => {
         name="comment"
       />
 
-
       <Button
-      style={{width: 100, marginTop: 16, marginLeft: 16}} onPress={handleSubmit(commenting)} title="Send">
-      </Button>
+        style={{width: 100, marginTop: 16, marginLeft: 16}}
+        onPress={handleSubmit(commenting)}
+        title="Send"
+      ></Button>
     </View>
   );
 };
