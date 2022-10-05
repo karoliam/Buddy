@@ -29,9 +29,12 @@ import PropTypes from 'prop-types';
 let {width} = Dimensions.get('window');
 
 const RegisterForm = () => {
-  const {showRegisterUserDataForm, setShowRegisterUserDataForm} =
-    useContext(MainContext);
-  const {setFullName, setUser} = useContext(MainContext);
+  const {
+    setFullName,
+    setUser,
+    showRegisterUserDataForm,
+    setShowRegisterUserDataForm,
+  } = useContext(MainContext);
   const {postUser} = useUser();
   const {postLogin} = useLogin();
   const {
