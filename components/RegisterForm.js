@@ -21,8 +21,8 @@ import {
   Dimensions,
 } from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
-import {useLogin, useUser} from '../hooks/ApiHooks';
-import {appId} from '../utils/variables';
+import {useLogin, useMedia, useTag, useUser} from '../hooks/ApiHooks';
+import {appId, kissalinkki} from '../utils/variables';
 
 import {MainContext} from '../context/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -32,11 +32,16 @@ let {width} = Dimensions.get('window');
 const RegisterForm = () => {
   const {
     setFullName,
+    fullName,
+    user,
     setUser,
     showRegisterUserDataForm,
     setShowRegisterUserDataForm,
+    setProfileDId,
   } = useContext(MainContext);
   const {postUser} = useUser();
+  const {postTag} = useTag();
+  const {postMedia} = useMedia();
   const {postLogin} = useLogin();
   const {
     control,
@@ -51,6 +56,7 @@ const RegisterForm = () => {
   const onSubmit = async (data) => {
     setFullName(data.full_name);
     const registerCredentials = {
+      full_name: data.full_name,
       username: appId + data.email,
       password: data.password,
       email: data.email,
@@ -73,6 +79,33 @@ const RegisterForm = () => {
           setUser(userLoginData.user);
           console.log('RegisterForm onSubmit ', userLoginData.user);
           setShowRegisterUserDataForm(!showRegisterUserDataForm);
+
+          const profileData = new FormData();
+          profileData.append('title', 'profile_data');
+          profileData.append('file', {
+            uri: kissalinkki,
+            name: 'single_pixel.jpeg',
+            type: 'image/jpeg',
+          });
+          const profileDataDescription = {
+            full_name: data.fullName,
+            age: '',
+            location: '',
+            bio: '',
+          };
+          profileData.append(
+            'description',
+            JSON.stringify(profileDataDescription)
+          );
+          const pData = await postMedia(userLoginData.token, profileData);
+          //etsi userid tägiä varten
+          const profileDataTag = {
+            file_id: pData.file_id,
+            tag: 'buddyprofile_Data' + userLoginData.user.user_id,
+          };
+          setProfileDId(pData.file_id);
+          const dataTag = await postTag(userLoginData.token, profileDataTag);
+          console.log(dataTag);
         }
       }
     } catch (error) {

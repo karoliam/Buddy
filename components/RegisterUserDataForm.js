@@ -16,19 +16,29 @@ import {
 import {Image} from '@rneui/base';
 import {Controller, useForm} from 'react-hook-form';
 import * as ImagePicker from 'expo-image-picker';
-import {useMedia, useTag} from '../hooks/ApiHooks';
+import {useMedia, userMedia, useTag} from '../hooks/ApiHooks';
 import {MainContext} from '../context/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {single_pixel} from '../images';
 let {width} = Dimensions.get('window');
 import SelectList from 'react-native-dropdown-select-list';
 import cityNames from '../utils/cityNames';
+import {kissalinkki} from '../utils/variables';
 
 const RegisterUserDataForm = () => {
   const {setShowRegisterUserDataForm} = useContext(MainContext);
-  const {fullName, image, setImage, setIsLoggedIn, user, city, setCity} =
-    useContext(MainContext);
+  const {
+    fullName,
+    image,
+    setImage,
+    setIsLoggedIn,
+    user,
+    city,
+    setCity,
+    profileDId,
+  } = useContext(MainContext);
   const {postMedia} = useMedia();
+  const {deleteMediaById} = userMedia();
   const {postTag} = useTag();
   const [mediatype, setMediatype] = useState(null);
 
@@ -71,11 +81,10 @@ const RegisterUserDataForm = () => {
     }
 
     //user data upload media
-    const pixelUri = Image.resolveAssetSource(single_pixel).uri;
     const profileData = new FormData();
     profileData.append('title', 'profile_data');
     profileData.append('file', {
-      uri: pixelUri,
+      uri: kissalinkki,
       name: 'single_pixel.jpeg',
       type: 'image/jpeg',
     });
@@ -98,16 +107,19 @@ const RegisterUserDataForm = () => {
         const pocTag = await postTag(token, profilePicTag);
         console.log(pocTag);
       }
+      const delData = await deleteMediaById(token, profileDId);
+
       const pData = await postMedia(token, profileData);
+
       const profileDataTag = {
         file_id: pData.file_id,
         tag: 'buddyprofile_Data' + user.user_id,
       };
       const dataTag = await postTag(token, profileDataTag);
-        setIsLoggedIn(true);
-        setShowRegisterUserDataForm(false);
-        // navigation.navigate('Tabs');  // TODO navi to loginstate
-        setImage(null);
+      setIsLoggedIn(true);
+      setShowRegisterUserDataForm(false);
+      // navigation.navigate('Tabs');  // TODO navi to loginstate
+      setImage(null);
     } catch (error) {
       console.log('RegisterUserDAtaForm upload-onsubmit', error);
     }

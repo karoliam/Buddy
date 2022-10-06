@@ -7,16 +7,11 @@ import React, {useContext, useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {
   StyleSheet,
-  SafeAreaView,
   Text,
   Image,
   TextInput,
-  Button,
-  Alert,
-  View,
-  TouchableOpacity,
-  Dimensions,
-} from 'react-native';
+  Alert, View, TouchableOpacity, Dimensions
+} from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 import {MainContext} from '../context/MainContext';
 import {useMedia, useTag} from '../hooks/ApiHooks';
@@ -27,13 +22,12 @@ import SelectList from 'react-native-dropdown-select-list';
 let {width} = Dimensions.get('window');
 
 const CreatePostForm = ({navigation}) => {
-  // const navigation = useNavigation();
   const [mediafile, setMediafile] = useState(null);
   const [mediaType, setMediaType] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [city, setCity] = useState('');
   const {postMedia} = useMedia();
-  const {update, setUpdate} = useContext(MainContext);
+  const {user, update, setUpdate} = useContext(MainContext);
   const {postTag} = useTag();
   const data = [
     {key: '0', value: 'Espoo'},
@@ -72,6 +66,7 @@ const CreatePostForm = ({navigation}) => {
 
   const onSubmit = async (data) => {
     const formData = new FormData();
+    const token = await AsyncStorage.getItem('userToken');
 
     const formObject = {
       location: city,
@@ -82,12 +77,12 @@ const CreatePostForm = ({navigation}) => {
     const formJSON = JSON.stringify(formObject);
     formData.append('description', formJSON);
     formData.append('title', 'feedPost');
-    console.log('here is data', data);
+    // console.log('here is data', data);
 
     const filename = mediafile.split('/').pop();
     let extension = filename.split('.').pop();
     extension = extension === 'jpg' ? 'jpeg' : extension;
-    console.log('filename', extension);
+    // console.log('filename', extension);
     formData.append('file', {
       uri: mediafile,
       name: filename,
@@ -95,7 +90,6 @@ const CreatePostForm = ({navigation}) => {
     });
     setIsLoading(true);
     try {
-      const token = await AsyncStorage.getItem('userToken');
       const mediaResponse = await postMedia(token, formData);
       console.log('result', mediaResponse);
       const tag = {file_id: mediaResponse.file_id, tag: applicationTag};

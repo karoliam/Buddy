@@ -9,9 +9,9 @@ import {
   Dimensions,
 } from 'react-native';
 
-const ListItem = ({singleMedia}) => {
+const ListItem = ({singleMedia, navigation}) => {
   // console.log('tässä singlemedia', singleMedia);
-  console.log('tossa ois description', singleMedia.description);
+ // console.log('tossa ois description', singleMedia.description);
   const data = JSON.parse(singleMedia.description);
   const {location, when, writePost} = data;
   // console.log('here is data', JSON.parse(singleMedia));
@@ -19,7 +19,7 @@ const ListItem = ({singleMedia}) => {
     <TouchableOpacity
       style={styles.touchable}
       onPress={() => {
-        // navigation.navigate('Single', singleMedia);
+        navigation.navigate('Single', singleMedia);
       }}
     >
       <Image
@@ -29,9 +29,9 @@ const ListItem = ({singleMedia}) => {
         }}
       />
       <View>
-        <Text style={styles.text}>{when}</Text>
-        <Text style={styles.text}>{location}</Text>
-        <Text style={styles.text}>{writePost}</Text>
+        <Text>{when}</Text>
+        <Text>{location}</Text>
+        <Text>{writePost}</Text>
       </View>
     </TouchableOpacity>
   );

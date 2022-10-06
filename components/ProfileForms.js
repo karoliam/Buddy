@@ -42,11 +42,6 @@ const ProfileForms = () => {
     try {
       //const profileDescrData = await userProfilePostData(profileID);
       //setProfileData(profileDescrData);
-      const profilePicTag = await getFilesByTag('buddyprofile_pic' + profileID);
-      if (profilePicTag[0].filename != undefined) {
-        setAvatar(mediaUrl + profilePicTag[0].filename);
-        setProfilePId(profilePicTag[0].file_id);
-      }
       const profileDataTag = await getFilesByTag(
         'buddyprofile_data' + profileID
       );
@@ -54,6 +49,11 @@ const ProfileForms = () => {
       if (profileDataTag[0].description != undefined) {
         setProfileDescriptionData(JSON.parse(profileDataTag[0].description));
         setProfileDId(profileDataTag[0].file_id);
+      }
+      const profilePicTag = await getFilesByTag('buddyprofile_pic' + profileID);
+      if (profilePicTag[0].filename != undefined) {
+        setAvatar(mediaUrl + profilePicTag[0].filename);
+        setProfilePId(profilePicTag[0].file_id);
       }
 
       const profileBackTag = await getFilesByTag(
