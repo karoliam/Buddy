@@ -36,7 +36,23 @@ const useMedia = (update) => {
       throw new Error(error.message);
     }
   };
-  return {mediaArray, postMedia, loadMedia};
+  const putMedia = async (token, data, fileId) => {
+    console.log('putmedia', data);
+    const options = {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+         'x-access-token': token
+        },
+      body: JSON.stringify(data),
+    };
+    try {
+      return await doFetch(apiUrl + 'media/' + fileId, options);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+  return {mediaArray, postMedia, loadMedia, putMedia};
 };
 
 const useTag = () => {
@@ -180,7 +196,10 @@ const useComments = (update) => {
       const options = {
         method: 'GET',
       };
-      const response = await fetch(apiUrl + 'comments/file/' + file_id, options);
+      const response = await fetch(
+        apiUrl + 'comments/file/' + file_id,
+        options
+      );
       const commentData = await response.json();
       if (response.ok) {
         return commentData;

@@ -19,6 +19,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {applicationTag} from '../utils/variables';
 import PropTypes from 'prop-types';
 import SelectList from 'react-native-dropdown-select-list';
+import cityNames from '../utils/cityNames';
 let {width} = Dimensions.get('window');
 
 const CreatePostForm = ({navigation}) => {
@@ -29,11 +30,7 @@ const CreatePostForm = ({navigation}) => {
   const {postMedia} = useMedia();
   const {user, update, setUpdate} = useContext(MainContext);
   const {postTag} = useTag();
-  const data = [
-    {key: '0', value: 'Espoo'},
-    {key: '1', value: 'Helsinki'},
-    {key: '2', value: 'Vantaa'},
-  ];
+  const data = cityNames;
 
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({

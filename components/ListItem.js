@@ -14,7 +14,7 @@ const ListItem = ({singleMedia, navigation}) => {
  // console.log('tossa ois description', singleMedia.description);
   const data = JSON.parse(singleMedia.description);
   const {location, when, writePost} = data;
-  // console.log('here is data', JSON.parse(singleMedia));
+  //console.log('here is data', JSON.parse(singleMedia));
   return (
     <TouchableOpacity
       style={styles.touchable}

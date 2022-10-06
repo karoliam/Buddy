@@ -1,19 +1,18 @@
 import {Platform, SafeAreaView, StyleSheet} from 'react-native';
 import PropTypes from 'prop-types';
-import SinglePost from '../components/SinglePost';
-import CommentField from '../components/CommentField';
+import List from '../components/List';
+import {useContext} from 'react';
+import {MainContext} from '../context/MainContext';
+import EditPostForm from '../components/EditPostForm';
 
-const Single = (props) => {
-  const {navigation} = props;
-  const {route} = props;
+const EditPost = ({navigation, route}) => {
+
   return (
     <SafeAreaView style={styles.droidSafeArea}>
-      <SinglePost navigation={navigation} route={route}></SinglePost>
-      <CommentField navigation={navigation} route={route}></CommentField>
+      <EditPostForm navigation={navigation} route={route}></EditPostForm>
     </SafeAreaView>
   );
 };
-
 const styles = StyleSheet.create({
   droidSafeArea: {
     flex: 1,
@@ -22,9 +21,9 @@ const styles = StyleSheet.create({
   },
 });
 
-Single.propTypes = {
+EditPost.propTypes = {
   navigation: PropTypes.object,
   route: PropTypes.object,
 };
 
-export default Single;
+export default EditPost;
