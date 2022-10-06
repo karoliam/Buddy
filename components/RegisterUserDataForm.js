@@ -105,7 +105,6 @@ const RegisterUserDataForm = () => {
           tag: 'buddyprofile_pic' + user.user_id,
         };
         const pocTag = await postTag(token, profilePicTag);
-        console.log(pocTag);
       }
       const delData = await deleteMediaById(token, profileDId);
 
@@ -125,7 +124,6 @@ const RegisterUserDataForm = () => {
     }
   };
   const handleSelect = (e) => {
-    console.log(cityNames[e].value);
     setCity(cityNames[e].value);
   };
   return (
