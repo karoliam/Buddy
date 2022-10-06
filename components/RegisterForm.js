@@ -80,7 +80,6 @@ const RegisterForm = () => {
     };
     profileData.append('description', JSON.stringify(profileDataDescription));
     try {
-      console.log(registerCredentials);
       const userData = await postUser(registerCredentials);
       if (userData) {
         const userLoginData = await postLogin(loginCredentials);
@@ -89,19 +88,16 @@ const RegisterForm = () => {
         if ((await AsyncStorage.getItem('userToken')) != null) {
           // navigation.navigate('RegisterChecker', {name: 'RegisterChecker'}); // TODO fix navigation to userDataForm
           setUser(userLoginData.user);
-          console.log('RegisterForm onSubmit ', userLoginData.user);
           setShowRegisterUserDataForm(!showRegisterUserDataForm);
 
           const pData = await postMedia(userLoginData.token, profileData);
           //etsi userid tägiä varten
-          console.log(pData);
           const profileDataTag = {
             file_id: pData.file_id,
             tag: 'buddyprofile_Data' + userLoginData.user.user_id,
           };
           setProfileDId(pData.file_id);
           const dataTag = await postTag(userLoginData.token, profileDataTag);
-          console.log(dataTag);
         }
       }
     } catch (error) {
