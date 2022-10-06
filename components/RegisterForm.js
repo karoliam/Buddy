@@ -65,10 +65,22 @@ const RegisterForm = () => {
       username: appId + data.email,
       password: data.password,
     };
-
+    const profileData = new FormData();
+    profileData.append('title', 'profile_data');
+    profileData.append('file', {
+      uri: kissalinkki,
+      name: 'single_pixel.jpeg',
+      type: 'image/jpeg',
+    });
+    const profileDataDescription = {
+      full_name: data.full_name,
+      age: '',
+      location: '',
+      bio: '',
+    };
+    profileData.append('description', JSON.stringify(profileDataDescription));
     try {
       console.log(registerCredentials);
-      setFullName(data.full_name);
       const userData = await postUser(registerCredentials);
       if (userData) {
         const userLoginData = await postLogin(loginCredentials);
@@ -80,25 +92,9 @@ const RegisterForm = () => {
           console.log('RegisterForm onSubmit ', userLoginData.user);
           setShowRegisterUserDataForm(!showRegisterUserDataForm);
 
-          const profileData = new FormData();
-          profileData.append('title', 'profile_data');
-          profileData.append('file', {
-            uri: kissalinkki,
-            name: 'single_pixel.jpeg',
-            type: 'image/jpeg',
-          });
-          const profileDataDescription = {
-            full_name: data.fullName,
-            age: '',
-            location: '',
-            bio: '',
-          };
-          profileData.append(
-            'description',
-            JSON.stringify(profileDataDescription)
-          );
           const pData = await postMedia(userLoginData.token, profileData);
           //etsi userid tägiä varten
+          console.log(pData);
           const profileDataTag = {
             file_id: pData.file_id,
             tag: 'buddyprofile_Data' + userLoginData.user.user_id,
