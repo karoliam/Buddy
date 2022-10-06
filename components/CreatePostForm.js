@@ -58,6 +58,9 @@ const CreatePostForm = ({navigation}) => {
       when: '',
       writePost: '',
       title: 'feedPost',
+      tag_1: '',
+      tag_2: '',
+      tag_3: '',
     },
   });
 
@@ -184,6 +187,43 @@ const CreatePostForm = ({navigation}) => {
         )}
         name="writePost"
       />
+      <Controller
+        control={control}
+        render={({field: {onChange, onBlur, value}}) => (
+          <TextInput
+            onBlur={onBlur}
+            onChangeText={onChange}
+            value={value}
+            placeholder="add single tag"
+          />
+        )}
+        name="tag_1"
+      />
+      <Controller
+        control={control}
+        render={({field: {onChange, onBlur, value}}) => (
+          <TextInput
+            onBlur={onBlur}
+            onChangeText={onChange}
+            value={value}
+            placeholder="add single tag"
+          />
+        )}
+        name="tag_2"
+      />
+      <Controller
+        control={control}
+        render={({field: {onChange, onBlur, value}}) => (
+          <TextInput
+            onBlur={onBlur}
+            onChangeText={onChange}
+            value={value}
+            placeholder="add single tag"
+          />
+        )}
+        name="tag_3"
+      />
+
       <Button
         title="Send"
         loading={isLoading}
