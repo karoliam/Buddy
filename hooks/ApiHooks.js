@@ -44,7 +44,7 @@ const useMedia = (update) => {
         'Content-Type': 'application/json',
          'x-access-token': token
         },
-      body: JSON.stringify(data),
+      body: data,
     };
     try {
       return await doFetch(apiUrl + 'media/' + fileId, options);

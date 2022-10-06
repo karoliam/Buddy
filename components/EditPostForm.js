@@ -35,22 +35,22 @@ const EditPostForm = ({navigation, route}) => {
   const updatePost = async (data) => {
     setIsLoading(true);
     delete data.title;
-    const obj = ('description', data);
-    // const dataObject = ('description', {description});
-    // const flatten = (obj) => Object.values(obj).flat();
-    // console.log('dataobject', flatten(dataObject));
-    // const stringObj = JSON.stringify(flatten(dataObject));
-    // console.log('string', stringObj);
+    const stringData = JSON.stringify(data);
+    const descriptionString = "description";
+    const doubleStringData = JSON.stringify(stringData);
+    const finalData = ('{"' + descriptionString + '"' + ':' + doubleStringData + '}');
+      console.log('tuosa', finalData);
+
     try {
       const token = await AsyncStorage.getItem('userToken');
-      const response = await putMedia(token, obj, paramsObject.file_id);
+      const response = await putMedia(token, finalData, paramsObject.file_id);
       console.log('response', response);
       Alert.alert(response.message, '', [
         {
           text: 'Ok',
           onPress: () => {
             setUpdate(!update);
-             navigation.navigate('Single');
+             navigation.navigate('Home');
           },
         },
       ]);
