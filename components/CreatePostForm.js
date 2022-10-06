@@ -76,18 +76,26 @@ const CreatePostForm = ({navigation}) => {
 
     const formJSON = JSON.stringify(formObject);
     formData.append('description', formJSON);
-    formData.append('title', 'feedPost');
     // console.log('here is data', data);
-
-    const filename = mediafile.split('/').pop();
-    let extension = filename.split('.').pop();
-    extension = extension === 'jpg' ? 'jpeg' : extension;
-    // console.log('filename', extension);
-    formData.append('file', {
-      uri: mediafile,
-      name: filename,
-      type: mediaType + '/' + extension,
-    });
+    if (mediafile == null) {
+      formData.append('title', 'feedPostTxt');
+      formData.append('file', {
+        uri: 'https://placekitten.com/100',
+        name: 'placekitten',
+        type: 'image/jpeg',
+      });
+    } else {
+      formData.append('title', 'feedPost');
+      const filename = mediafile.split('/').pop();
+      let extension = filename.split('.').pop();
+      extension = extension === 'jpg' ? 'jpeg' : extension;
+      // console.log('filename', extension);
+      formData.append('file', {
+        uri: mediafile,
+        name: filename,
+        type: mediaType + '/' + extension,
+      });
+    }
     setIsLoading(true);
     try {
       const mediaResponse = await postMedia(token, formData);
