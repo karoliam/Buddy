@@ -11,9 +11,10 @@ import {
 
 const ListItem = ({singleMedia, navigation}) => {
   // console.log('tässä singlemedia', singleMedia);
- // console.log('tossa ois description', singleMedia.description);
+  // console.log('tossa ois description', singleMedia.description);
   const data = JSON.parse(singleMedia.description);
   const {location, when, writePost} = data;
+  console.log('tilte',singleMedia.title);
   //console.log('here is data', JSON.parse(singleMedia));
   return (
     <TouchableOpacity
@@ -22,12 +23,17 @@ const ListItem = ({singleMedia, navigation}) => {
         navigation.navigate('Single', singleMedia);
       }}
     >
-      <Image
-        style={styles.image}
-        source={{
-          uri: mediaUrl + singleMedia.thumbnails.w160,
-        }}
-      />
+      {singleMedia.title === 'feedPost' ? (
+        <Image
+          style={styles.image}
+          source={{
+            uri: mediaUrl + singleMedia.thumbnails.w160,
+          }}
+        />
+      ) : (
+        <Text></Text>
+      )}
+
       <View>
         <Text>{when}</Text>
         <Text>{location}</Text>
