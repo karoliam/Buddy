@@ -11,7 +11,7 @@ const Home = (props) => {
 
   return (
     <SafeAreaView style={styles.droidSafeArea}>
-      {/* <List navigation={navigation}></List> */}
+      <List navigation={navigation}></List>
     </SafeAreaView>
   );
 };
