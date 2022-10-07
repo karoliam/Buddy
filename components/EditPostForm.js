@@ -13,10 +13,11 @@ import cityNames from '../utils/cityNames';
 const EditPostForm = ({navigation, route}) => {
   const paramsObject = route.params;
   const [isLoading, setIsLoading] = useState(false);
-  const {putMedia} = useMedia();
+  const {putMedia, deleteMedia} = useMedia();
   const {update, setUpdate} = useContext(MainContext);
   const [city, setCity] = useState('');
   const cityData = cityNames;
+  const [currentUserToken, setCurrentUserToken] = useState();
   const paramsObjectDescription = JSON.parse(paramsObject.description);
   const {
     control,
@@ -67,8 +68,36 @@ const EditPostForm = ({navigation, route}) => {
     setCity(cityData[e].value);
   };
 
-  useEffect(() => {
+  const deletePost = () => {
+    const deleting = async () => {
+      try {
+        const token = await AsyncStorage.getItem('userToken');
+        await deleteMedia(token, paramsObject.file_id);
+      } catch (error) {
+        console.log('deleting error', error);
+      }
+    }
+         Alert.alert('Are you sure?', 'Do you want to delete your post?', [
+      {
+        text: 'Yes, delete',
+        onPress: () => {
+          deleting();
+          Alert.alert('Deleted successfully!', '', [
+            {
+              text: 'Ok',
+              onPress:() => {
+                setUpdate(!update);
+              }
+            }
+          ]);
+           navigation.navigate('Home');
+        },
+      },
+      { text: "Cancel", onPress: () => console.log('cancel pressed') }
+    ]);
+  }
 
+  useEffect(() => {
   }, [update]);
 
   return (
@@ -122,6 +151,9 @@ const EditPostForm = ({navigation, route}) => {
         loading={isLoading}
         onPress={handleSubmit(updatePost)}
       />
+      <Button
+      title='Delete'
+      onPress={handleSubmit(deletePost)}></Button>
     </Card>
   );
 };

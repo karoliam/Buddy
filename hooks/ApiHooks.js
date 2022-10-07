@@ -52,7 +52,20 @@ const useMedia = (update) => {
       throw new Error(error.message);
     }
   };
-  return {mediaArray, postMedia, loadMedia, putMedia};
+  const deleteMedia = async (token, fileId) => {
+    const options = {
+      method: 'DELETE',
+      headers: {
+        'x-access-token': token
+      }
+    };
+    try {
+      return await doFetch(apiUrl + 'media/' + fileId, options);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+  return {mediaArray, postMedia, loadMedia, putMedia, deleteMedia};
 };
 
 const useTag = () => {
