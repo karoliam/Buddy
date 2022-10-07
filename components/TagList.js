@@ -13,10 +13,21 @@ const TagList = () => {
     try {
       const token = await AsyncStorage.getItem('userToken');
       const allTags = await getAllTags(token);
+
       const mappedList = allTags.map(item => item.tag);
       const filteredList = mappedList.filter(item => item.startsWith('buddytag'));
       const buddyRemoved = filteredList.map((item) => item.split('buddytag'));
-      setListOfTags(buddyRemoved.reverse());
+      const hyphensRemoved = buddyRemoved.flat().filter(item => item !== "");
+
+      const getOccurrence = (array, value) => {
+        let count = 0;
+        array.forEach((v) => (v === value && count++));
+        return count;
+    }
+      const countedArray = hyphensRemoved.filter(item => getOccurrence(hyphensRemoved, item) > 3)
+      let unique = [...new Set(countedArray)];
+      console.log('counted', countedArray)
+      setListOfTags(unique.reverse());
     } catch (error) {
       console.log('getTags error', error);
     }
