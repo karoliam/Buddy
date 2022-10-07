@@ -1,14 +1,14 @@
 import {SafeAreaView} from 'react-native-safe-area-context';
 import CreatePostForm from '../components/CreatePostForm';
 import PropTypes from 'prop-types';
-import {Platform, StyleSheet, View} from 'react-native';
+import { Platform, ScrollView, StyleSheet, View } from "react-native";
 
 const CreatePost = (props) => {
   const {navigation} = props;
   return (
-    <View style={styles.droidSafeArea}>
+    <ScrollView style={styles.droidSafeArea}>
       <CreatePostForm navigation={navigation}></CreatePostForm>
-    </View>
+    </ScrollView>
   );
 };
 
