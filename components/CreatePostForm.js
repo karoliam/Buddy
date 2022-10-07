@@ -1,17 +1,15 @@
 /**
  * Täällä tehdään ihmeitä ja käyttäjien postauksia
-*/
+ */
 // TODO Location dropdown bugaa ainakin androidilla
 
 import React, {useContext, useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {
   StyleSheet,
-  SafeAreaView,
   Text,
   Image,
   TextInput,
-  Button,
   Alert, View, TouchableOpacity, Dimensions
 } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
@@ -21,22 +19,18 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {applicationTag} from '../utils/variables';
 import PropTypes from 'prop-types';
 import SelectList from 'react-native-dropdown-select-list';
+import cityNames from '../utils/cityNames';
 let {width} = Dimensions.get('window');
 
 const CreatePostForm = ({navigation}) => {
-  // const navigation = useNavigation();
   const [mediafile, setMediafile] = useState(null);
   const [mediaType, setMediaType] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [city, setCity] = useState('');
   const {postMedia} = useMedia();
-  const {update, setUpdate} = useContext(MainContext);
+  const {user, update, setUpdate} = useContext(MainContext);
   const {postTag} = useTag();
-  const data = [
-    {key: '0', value: 'Espoo'},
-    {key: '1', value: 'Helsinki'},
-    {key: '2', value: 'Vantaa'},
-  ];
+  const data = cityNames;
 
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -69,6 +63,7 @@ const CreatePostForm = ({navigation}) => {
 
   const onSubmit = async (data) => {
     const formData = new FormData();
+    const token = await AsyncStorage.getItem('userToken');
 
     const formObject = {
       location: city,
@@ -79,12 +74,12 @@ const CreatePostForm = ({navigation}) => {
     const formJSON = JSON.stringify(formObject);
     formData.append('description', formJSON);
     formData.append('title', 'feedPost');
-    console.log('here is data', data);
+    // console.log('here is data', data);
 
     const filename = mediafile.split('/').pop();
     let extension = filename.split('.').pop();
     extension = extension === 'jpg' ? 'jpeg' : extension;
-    console.log('filename', extension);
+    // console.log('filename', extension);
     formData.append('file', {
       uri: mediafile,
       name: filename,
@@ -92,7 +87,6 @@ const CreatePostForm = ({navigation}) => {
     });
     setIsLoading(true);
     try {
-      const token = await AsyncStorage.getItem('userToken');
       const mediaResponse = await postMedia(token, formData);
       console.log('result', mediaResponse);
       const tag = {file_id: mediaResponse.file_id, tag: applicationTag};
@@ -137,26 +131,23 @@ const CreatePostForm = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        style={styles.addPictureButton}
-        onPress={pickImage}
-      >
+      <TouchableOpacity style={styles.addPictureButton} onPress={pickImage}>
         <Image
-        source={{uri: mediafile || 'https://placekitten.com/300'}}
-        style={styles.addPictureImage}
+          source={{uri: mediafile || 'https://placekitten.com/300'}}
+          style={styles.addPictureImage}
         ></Image>
       </TouchableOpacity>
       <Controller
         control={control}
         render={({field: {onChange, onBlur, value}}) => (
           <View style={styles.postTextBox}>
-              <TextInput
-                style={styles.postTextInput}
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                placeholder="Write your post..."
-              />
+            <TextInput
+              style={styles.postTextInput}
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+              placeholder="Write your post..."
+            />
           </View>
         )}
         name="writePost"
@@ -164,7 +155,7 @@ const CreatePostForm = ({navigation}) => {
       <Controller
         control={control}
         render={({field: {onChange, onBlur, value}}) => (
-          <View style={styles.locationBox}>
+          // <View style={styles.locationBox}>
             <SelectList
               setSelected={handleSelect}
               data={data}
@@ -173,8 +164,10 @@ const CreatePostForm = ({navigation}) => {
               value={value}
               search={false}
               placeholder="Location"
+              boxStyles={styles.locationBox}
+              dropdownStyles={styles.locationBoxDropDown}
             />
-          </View>
+          // </View>
         )}
         name="location"
       />
@@ -218,13 +211,13 @@ const styles = StyleSheet.create({
   addPictureButton: {
     width: 285,
     height: 180,
-    backgroundColor: "#E6E6E6",
+    backgroundColor: '#E6E6E6',
     borderBottomRightRadius: 0,
     borderBottomLeftRadius: 0,
     borderTopLeftRadius: 14,
     borderTopRightRadius: 14,
     marginTop: 32,
-    marginLeft: width / 2 - 142.5
+    marginLeft: width / 2 - 142.5,
   },
   addPictureImage: {
     width: 285,
@@ -237,84 +230,95 @@ const styles = StyleSheet.create({
   postTextBox: {
     width: 285,
     height: 160,
-    backgroundColor: "rgba(255,255,255,1)",
+    backgroundColor: 'rgba(255,255,255,1)',
     borderWidth: 2,
-    borderColor: "rgba(165,171,232,1)",
+    borderColor: 'rgba(165,171,232,1)',
     borderRadius: 14,
-    borderStyle: "solid",
+    borderStyle: 'solid',
     borderTopLeftRadius: 0,
     borderTopRightRadius: 0,
-    marginLeft: width / 2 - 142.5
+    marginLeft: width / 2 - 142.5,
   },
   postTextInput: {
-    color: "#121212",
+    color: '#121212',
     height: 31,
     width: 260,
     lineHeight: 16,
     fontSize: 16,
-    textAlign: "left",
+    textAlign: 'left',
     marginTop: 12,
-    marginLeft: 12
+    marginLeft: 12,
   },
   locationBox: {
     width: 285,
     height: 61,
-    backgroundColor: "rgba(255,255,255,1)",
+    backgroundColor: 'rgba(255,255,255,1)',
     borderWidth: 2,
-    borderColor: "rgba(165,171,232,1)",
+    borderColor: 'rgba(165,171,232,1)',
     borderRadius: 14,
-    borderStyle: "solid",
+    borderStyle: 'solid',
     marginTop: 16,
-    marginLeft: width / 2 - 142.5
+    marginLeft: width / 2 - 142.5,
+  },
+  locationBoxDropDown: {
+    width: 285,
+    height: 244,
+    backgroundColor: 'rgba(255,255,255,1)',
+    borderWidth: 2,
+    borderColor: 'rgba(165,171,232,1)',
+    borderRadius: 14,
+    borderStyle: 'solid',
+    marginTop: 16,
+    marginLeft: width / 2 - 142.5,
   },
   locationTextInput: {
-    color: "#121212",
+    color: '#121212',
     height: 30,
     width: 260,
     lineHeight: 14,
     fontSize: 16,
     marginTop: 15,
-    marginLeft: 12
+    marginLeft: 12,
   },
   whenBox: {
     width: 285,
     height: 61,
-    backgroundColor: "rgba(255,255,255,1)",
+    backgroundColor: 'rgba(255,255,255,1)',
     borderWidth: 2,
-    borderColor: "rgba(165,171,232,1)",
+    borderColor: 'rgba(165,171,232,1)',
     borderRadius: 14,
-    borderStyle: "solid",
+    borderStyle: 'solid',
     marginTop: 16,
-    marginLeft: width / 2 - 142.5
+    marginLeft: width / 2 - 142.5,
   },
   whenBoxTextInput: {
-    color: "#121212",
+    color: '#121212',
     height: 30,
     width: 260,
     lineHeight: 14,
     fontSize: 16,
     marginTop: 15,
-    marginLeft: 12
+    marginLeft: 12,
   },
   publishButton: {
     width: 285,
     height: 61,
-    backgroundColor: "rgba(246,203,100,1)",
+    backgroundColor: 'rgba(246,203,100,1)',
     borderRadius: 14,
     marginTop: 32,
-    marginLeft: width / 2 - 142.5
+    marginLeft: width / 2 - 142.5,
   },
   publishText: {
-    color: "rgba(255,255,255,1)",
+    color: 'rgba(255,255,255,1)',
     height: 30,
     width: 260,
     lineHeight: 16,
     fontSize: 24,
-    textAlign: "center",
+    textAlign: 'center',
     paddingTop: 8,
     marginTop: 19,
-    marginLeft: 12
-  }
+    marginLeft: 12,
+  },
 });
 CreatePostForm.propTypes = {
   navigation: PropTypes.object,

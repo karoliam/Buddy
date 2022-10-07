@@ -23,15 +23,19 @@ import {
 import {useForm, Controller} from 'react-hook-form';
 import {useLogin, useUser} from '../hooks/ApiHooks';
 import {appId} from '../utils/variables';
+
 import {MainContext} from '../context/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import PropTypes from 'prop-types';
 let {width} = Dimensions.get('window');
 
 const RegisterForm = () => {
-  const {showRegisterUserDataForm, setShowRegisterUserDataForm} =
-    useContext(MainContext);
-  const {setFullName, setUser} = useContext(MainContext);
+  const {
+    setFullName,
+    setUser,
+    showRegisterUserDataForm,
+    setShowRegisterUserDataForm,
+  } = useContext(MainContext);
   const {postUser} = useUser();
   const {postLogin} = useLogin();
   const {
@@ -47,6 +51,7 @@ const RegisterForm = () => {
   const onSubmit = async (data) => {
     setFullName(data.full_name);
     const registerCredentials = {
+      full_name: data.full_name,
       username: appId + data.email,
       password: data.password,
       email: data.email,

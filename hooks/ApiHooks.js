@@ -22,7 +22,6 @@ const useMedia = (update) => {
   }, [update]);
 
   const postMedia = async (token, data) => {
-    console.log('token tossa', token);
     const options = {
       method: 'POST',
       headers: {
@@ -37,7 +36,23 @@ const useMedia = (update) => {
       throw new Error(error.message);
     }
   };
-  return {mediaArray, postMedia, loadMedia};
+  const putMedia = async (token, data, fileId) => {
+    console.log('putmedia', data);
+    const options = {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+         'x-access-token': token
+        },
+      body: data,
+    };
+    try {
+      return await doFetch(apiUrl + 'media/' + fileId, options);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+  return {mediaArray, postMedia, loadMedia, putMedia};
 };
 
 const useTag = () => {
@@ -72,13 +87,25 @@ const userMedia = () => {
     try {
       const response = await fetch(apiUrl + 'media/user/' + profileID, options);
       const userData = await response.json();
-      console.log(userData);
       return userData;
     } catch (error) {
       throw new Error(error.message);
     }
   };
-  return {userProfilePostData};
+  const deleteMediaById = async (token, fileId) => {
+    const options = {
+      method: 'DELETE',
+      headers: {'x-access-token': token},
+    };
+    try {
+      const response = await fetch(apiUrl + 'media/' + fileId, options);
+      const deleteResponce = await response.json();
+      return deleteResponce;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+  return {userProfilePostData, deleteMediaById};
 };
 
 const useLogin = () => {
@@ -132,7 +159,77 @@ const useUser = () => {
     }
   };
 
-  return {getUserByToken, postUser};
+  const getUserById = async (token, user_id) => {
+    try {
+      const options = {
+        method: 'GET',
+        headers: {'x-access-token': token},
+      };
+      const userData = await doFetch(apiUrl + 'users/' + user_id, options);
+      return userData;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+
+  return {getUserByToken, postUser, getUserById};
+};
+const useComments = (update) => {
+  const postComment = async (token, data) => {
+    const options = {
+      method: 'POST',
+      headers: {
+        'x-access-token': token,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    };
+    console.log('options', options);
+    try {
+      return await doFetch(apiUrl + 'comments', options);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+  const getCommentByFileId = async (file_id) => {
+    try {
+      const options = {
+        method: 'GET',
+      };
+      const response = await fetch(
+        apiUrl + 'comments/file/' + file_id,
+        options
+      );
+      const commentData = await response.json();
+      if (response.ok) {
+        return commentData;
+      } else {
+        throw new Error(commentData.message);
+      }
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+
+  // const loadComments = async () => {
+  //   const [commentArray, setCommentArray] = useState([]);
+  //   try {
+  //     const json = await getCommentByFileId(file_id);
+  //     console.log(json);
+  //     json.reverse();
+  //     const allCommentData = json.map(async (commentItem) => {
+  //       return await doFetch(apiUrl + 'comments/file/' + file_id);
+  //     });
+  //     setCommentArray(await Promise.all(allCommentData));
+  //   } catch (error) {
+  //     console.log('comment fetch failed', error);
+  //   }
+  // };
+  // useEffect(() => {
+  //   loadComments();
+  // }, [update]);
+
+  return {postComment, getCommentByFileId};
 };
 
-export {useLogin, useUser, userMedia, useMedia, useTag};
+export {useLogin, useUser, userMedia, useMedia, useTag, useComments};

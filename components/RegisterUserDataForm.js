@@ -11,22 +11,28 @@ import {
   TouchableOpacity,
   StyleSheet,
   TextInput,
-  Dimensions,
-} from 'react-native';
+  Dimensions, ScrollView
+} from "react-native";
 import {Image} from '@rneui/base';
 import {Controller, useForm} from 'react-hook-form';
 import * as ImagePicker from 'expo-image-picker';
-import {useMedia} from '../hooks/ApiHooks';
+import {useMedia, useTag} from '../hooks/ApiHooks';
 import {MainContext} from '../context/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {single_pixel} from '../images';
 let {width} = Dimensions.get('window');
+import SelectList from 'react-native-dropdown-select-list';
+import cityNames from '../utils/cityNames';
+import { applicationTag } from "../utils/variables";
 
 const RegisterUserDataForm = () => {
   const {setShowRegisterUserDataForm} = useContext(MainContext);
-  const {fullName, image, setImage, setIsLoggedIn} = useContext(MainContext);
+  const {fullName, image, setImage, setIsLoggedIn, user, city, setCity} =
+    useContext(MainContext);
   const {postMedia} = useMedia();
+  const {postTag} = useTag();
   const [mediatype, setMediatype] = useState(null);
+
   const {
     control,
     handleSubmit,
@@ -41,68 +47,79 @@ const RegisterUserDataForm = () => {
   const selectImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       aspect: [4, 4],
       quality: 1,
     });
-    console.log(result);
     if (!result.cancelled) {
       setImage(result);
       setMediatype(result.type);
     }
   };
-  const skipUserData = () => {
-    setIsLoggedIn(true);
-    setShowRegisterUserDataForm(false);
-    // navigation.navigate('Tabs');  // TODO navi to loginstate
-  };
+
   const registerUserData = async (data) => {
     const profilePic = new FormData();
-    profilePic.append('title', 'profile_pic');
-    const filename = image.uri.split('/').pop();
-    let extension = filename.split('.').pop();
-    extension = extension === 'jpg' ? 'jpeg' : extension;
-    profilePic.append('file', {
-      uri: image.uri,
-      name: filename,
-      type: mediatype + '/' + extension,
-    });
+    if (image) {
+      profilePic.append('title', 'profile_pic');
+      const filename = image.uri.split('/').pop();
+      let extension = filename.split('.').pop();
+      extension = extension === 'jpg' ? 'jpeg' : extension;
+      profilePic.append('file', {
+        uri: image.uri,
+        name: filename,
+        type: mediatype + '/' + extension,
+      });
+    }
 
     //user data upload media
     const pixelUri = Image.resolveAssetSource(single_pixel).uri;
+    console.log('pixel uri', pixelUri);
     const profileData = new FormData();
     profileData.append('title', 'profile_data');
     profileData.append('file', {
-      uri: pixelUri,
-      name: 'single_pixel.jpeg',
+      uri: 'https://placekitten.com/100',
+      name: 'placekitten',
       type: 'image/jpeg',
     });
     const profileDataDescription = {
       full_name: fullName,
       age: data.age,
-      location: data.location,
+      location: city,
       bio: data.bio,
     };
     profileData.append('description', JSON.stringify(profileDataDescription));
-
+    console.log('profile data', profileData);
     try {
       const token = await AsyncStorage.getItem('userToken');
-
-      const pPic = await postMedia(token, profilePic);
+      if (image) {
+        const pPic = await postMedia(token, profilePic);
+        const profilePicTag = {
+          file_id: pPic.file_id,
+          tag: applicationTag + 'profile_pic' + user.user_id,
+        };
+        const pocTag = await postTag(token, profilePicTag);
+        console.log(pocTag);
+      }
       const pData = await postMedia(token, profileData);
-      if (pPic && pData) {
+      const profileDataTag = {
+        file_id: pData.file_id,
+        tag: applicationTag + 'profile_Data' + user.user_id,
+      };
+      const dataTag = await postTag(token, profileDataTag);
         setIsLoggedIn(true);
         setShowRegisterUserDataForm(false);
         // navigation.navigate('Tabs');  // TODO navi to loginstate
         setImage(null);
-      }
     } catch (error) {
       console.log('RegisterUserDAtaForm upload-onsubmit', error);
     }
   };
-
+  const handleSelect = (e) => {
+    console.log(cityNames[e].value);
+    setCity(cityNames[e].value);
+  };
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <Text style={styles.makeMoreInterestingText}>
         Make your profile more interesting
       </Text>
@@ -137,21 +154,18 @@ const RegisterUserDataForm = () => {
       />
       <Controller
         control={control}
-        rules={{}}
         render={({field: {onChange, onBlur, value}}) => (
-          <View style={styles.locationBox}>
-            <TextInput
+            <SelectList
+              setSelected={handleSelect}
+              data={cityNames}
               onBlur={onBlur}
               onChangeText={onChange}
               value={value}
+              search={false}
               placeholder="Location"
-              style={styles.locationBoxTextInput}
-              autoCapitalize="none"
-              errorMessage={
-                errors.location && <Text>{errors.location.message}</Text>
-              }
+              boxStyles={styles.locationBox}
+              dropdownStyles={styles.locationBoxDropDown}
             />
-          </View>
         )}
         name="location"
       />
@@ -175,7 +189,10 @@ const RegisterUserDataForm = () => {
       />
       <View style={styles.doLaterButtonStackRow}>
         <View style={styles.doLaterButtonStack}>
-          <TouchableOpacity style={styles.doLaterButton} onPress={skipUserData}>
+          <TouchableOpacity
+            style={styles.doLaterButton}
+            onPress={handleSubmit(registerUserData)}
+          >
             <Text style={styles.doLaterText}>or do this later...</Text>
           </TouchableOpacity>
         </View>
@@ -188,7 +205,7 @@ const RegisterUserDataForm = () => {
           </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -260,6 +277,17 @@ const styles = StyleSheet.create({
   locationBox: {
     width: 285,
     height: 61,
+    backgroundColor: 'rgba(255,255,255,1)',
+    borderWidth: 2,
+    borderColor: 'rgba(165,171,232,1)',
+    borderRadius: 14,
+    borderStyle: 'solid',
+    marginTop: 16,
+    marginLeft: width / 2 - 142.5,
+  },
+  locationBoxDropDown: {
+    width: 285,
+    height: 244,
     backgroundColor: 'rgba(255,255,255,1)',
     borderWidth: 2,
     borderColor: 'rgba(165,171,232,1)',

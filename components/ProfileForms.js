@@ -14,13 +14,16 @@ import {
   SafeAreaView,
   Text,
   Button,
-  ImageBackground, View, TouchableOpacity, Dimensions
+  ImageBackground,
+  View,
+  TouchableOpacity,
+  Dimensions
 } from "react-native";
 import {MainContext} from '../context/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Image} from '@rneui/themed';
-import {userMedia} from '../hooks/ApiHooks';
-import {mediaUrl} from '../utils/variables';
+import {userMedia, useTag} from '../hooks/ApiHooks';
+import {mediaUrl, applicationTag } from '../utils/variables';
 import {setStatusBarNetworkActivityIndicatorVisible} from 'expo-status-bar';
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 let {height, width} = Dimensions.get('window');
@@ -34,27 +37,42 @@ const ProfileForms = () => {
     setAvatar,
     profileData,
     setProfileData,
+    setShowEditProfile,
+    setProfilePId,
+    profileBackground,
+    setProfileBackgorund,
+    setProfileBId,
+    profileDescriptionData,
+    setProfileDescriptionData,
+    setProfileDId,
   } = useContext(MainContext);
   const {userProfilePostData} = userMedia();
-  const [profileBackground, setProfileBackgorund] = useState('');
-  const [profileDescriptionData, setProfileDescriptionData] = useState({});
-  console.log(
-    'ProfileForms.js profileforms() ',
-    'user',
-    user,
-    'avatar',
-    avatar,
-    'profileData',
-    profileData,
-    'profileBackground',
-    profileBackground,
-    'profileDescriptionData',
-    profileDescriptionData
-  );
+  const {getFilesByTag} = useTag();
   const getProfileData = async (profileID) => {
     try {
-      const profileDescrData = await userProfilePostData(profileID);
-      setProfileData(profileDescrData);
+      //const profileDescrData = await userProfilePostData(profileID);
+      //setProfileData(profileDescrData);
+      const profilePicTag = await getFilesByTag(applicationTag + 'profile_pic' + profileID);
+      if (profilePicTag[0].filename != undefined) {
+        setAvatar(mediaUrl + profilePicTag[0].filename);
+        setProfilePId(profilePicTag[0].file_id);
+      }
+      const profileDataTag = await getFilesByTag(
+        applicationTag + 'profile_data' + profileID
+      );
+
+      if (profileDataTag[0].description != undefined) {
+        setProfileDescriptionData(JSON.parse(profileDataTag[0].description));
+        setProfileDId(profileDataTag[0].file_id);
+      }
+
+      const profileBackTag = await getFilesByTag(
+        applicationTag + 'profile_background' + profileID
+      );
+      if (profileBackTag[0].filename != undefined) {
+        setProfileBackgorund(mediaUrl + profileBackTag[0].filename);
+        setProfileBId(profileBackTag[0].file_id);
+      }
     } catch (error) {
       console.log('Profile.js getProfileData ' + error);
     }
@@ -64,70 +82,34 @@ const ProfileForms = () => {
     getProfileData(user.user_id);
   }, []);
 
-  useEffect(() => {
-    if (profileData != null) {
-      handleProfileData();
-    }
-  }, [profileData]);
-
-  const handleProfileData = async () => {
-    getProfileBackground();
-    getProfileDescription();
-    getProfilePic();
-  };
-  const getProfileBackground = () => {
-    const profilePostDataArray = profileData.filter(
-      (file) => file.title === 'profile_background'
-    );
-    const profileBg = profilePostDataArray.pop();
-    if (profileBg) {
-      setProfileBackgorund(mediaUrl + profileBg.filename);
-    }
-  };
-
-  const getProfilePic = () => {
-    const profilePostDataArray = profileData.filter(
-      (file) => file.title === 'profile_pic'
-    );
-    const profilePicture = profilePostDataArray.pop();
-    if (profilePicture) {
-      setAvatar(mediaUrl + profilePicture.filename);
-    }
-  };
-
-  const getProfileDescription = () => {
-    const profilePostDataArray = profileData.filter(
-      (file) => file.title === 'profile_data'
-    );
-    const profileDesc = profilePostDataArray.pop();
-    if (profileDesc) {
-      setProfileDescriptionData(JSON.parse(profileDesc.description));
-    }
-  };
-
   //getProfileData(user.user_id);
   const logout = async () => {
     await AsyncStorage.clear();
     setProfileData({});
-    setAvatar(''), setUser({}), setIsLoggedIn(false);
+    setAvatar(null),
+      setUser({}),
+      setProfileBackgorund(null),
+      setIsLoggedIn(false);
   };
 
-  const editProfile = () => {};
+  const editProfile = () => {
+    setShowEditProfile(true);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.backgroundImageStack}>
-          <Image
-            source={
-              profileBackground
-                ? {uri: profileBackground}
-                : {
-                  //placeholderuri
-                  uri: 'https://i.pinimg.com/originals/d8/81/d3/d881d3e05c90688581cdeaae1be7edae.jpg',
-                }
-            }
-            style={styles.backgroundImage}
-          />
+        <Image
+          source={
+            profileBackground
+              ? {uri: profileBackground}
+              : {
+                //placeholderuri
+                uri: 'https://i.pinimg.com/originals/d8/81/d3/d881d3e05c90688581cdeaae1be7edae.jpg',
+              }
+          }
+          style={styles.backgroundImage}
+        />
         <View style={styles.profilePictureHolder}>
           <Image
             source={
@@ -144,14 +126,14 @@ const ProfileForms = () => {
       </View>
       <View style={styles.fullNameRow}>
         {profileDescriptionData.full_name ? (
-          <Text style={styles.fullName}>{profileDescriptionData.full_name}</Text>
+        <Text style={styles.fullName}>{profileDescriptionData.full_name}</Text>
         ) : (
           <Text style={styles.fullName}>no</Text>
         )}
         <TouchableOpacity style={styles.nightMode}>
           <FontAwesomeIcon icon="fa-solid fa-moon" size={32}/>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.editProfile}>
+        <TouchableOpacity style={styles.editProfile} onPress={editProfile}>
           <FontAwesomeIcon icon="fa-solid fa-pen" size={32}/>
         </TouchableOpacity>
       </View>
@@ -209,8 +191,9 @@ const ProfileForms = () => {
           <TouchableOpacity
             style={styles.logoutButton}
             onPress={logout}
-          ></TouchableOpacity>
-          <Text style={styles.logoutText}>Logout</Text>
+          >
+            <Text style={styles.logoutText}>Logout</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </SafeAreaView>

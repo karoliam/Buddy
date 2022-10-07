@@ -72,7 +72,7 @@ const LoginForm = () => {
               onChangeText={onChange}
               value={value}
               autoCapitalize="none"
-              placeholder="username"
+              placeholder="e-mail"
               required
               style={styles.usernameInput}
             />
