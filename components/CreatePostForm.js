@@ -142,6 +142,8 @@ const CreatePostForm = ({navigation}) => {
         render={({field: {onChange, onBlur, value}}) => (
           <View style={styles.postTextBox}>
             <TextInput
+              multiline={true}
+              numberOfLines={7}
               style={styles.postTextInput}
               onBlur={onBlur}
               onChangeText={onChange}
@@ -210,7 +212,7 @@ const styles = StyleSheet.create({
   },
   addPictureButton: {
     width: 285,
-    height: 180,
+    height: 213.75,
     backgroundColor: '#E6E6E6',
     borderBottomRightRadius: 0,
     borderBottomLeftRadius: 0,
@@ -221,7 +223,7 @@ const styles = StyleSheet.create({
   },
   addPictureImage: {
     width: 285,
-    height: 180,
+    height: 213.75,
     borderBottomRightRadius: 0,
     borderBottomLeftRadius: 0,
     borderTopLeftRadius: 14,
@@ -240,11 +242,12 @@ const styles = StyleSheet.create({
     marginLeft: width / 2 - 142.5,
   },
   postTextInput: {
+    paddingTop: 0,
+    backgroundColor: 'rgba(255,0,0,0)',
     color: '#121212',
-    height: 31,
     width: 260,
-    lineHeight: 16,
     fontSize: 16,
+    textAlignVertical: 'top',
     textAlign: 'left',
     marginTop: 12,
     marginLeft: 12,

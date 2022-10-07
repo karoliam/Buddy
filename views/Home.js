@@ -1,7 +1,7 @@
 import {
   Dimensions,
   Platform,
-  SafeAreaView,
+  SafeAreaView, ScrollView,
   StyleSheet, Text,
   TouchableOpacity,
   View
@@ -46,7 +46,9 @@ const Home = (props) => {
           </View>
         </View>
         <Text style={styles.exploreText}>Explore</Text>
-        <List navigation={navigation}></List>
+        <ScrollView>
+          <List navigation={navigation}></List>
+        </ScrollView>
       </View>
     </SafeAreaView>
   );
@@ -58,7 +60,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: "rgba(255, 0, 255,0.3)",
+    backgroundColor: "rgba(255, 255, 255,0.3)",
   },
   buddyLogo: {
     width: 90,
@@ -144,7 +146,8 @@ const styles = StyleSheet.create({
     width: 90,
     fontSize: 20,
     marginTop: 74,
-    marginLeft: 20
+    marginLeft: 20,
+    marginBottom: 8
   }
 });
 
