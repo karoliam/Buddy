@@ -1,18 +1,19 @@
 import {Platform, SafeAreaView, StyleSheet} from 'react-native';
 import PropTypes from 'prop-types';
-import List from '../components/List';
-import {useContext, useEffect} from 'react';
+import SinglePost from '../components/SinglePost';
+import CommentField from '../components/CommentField';
+import TagList from '../components/TagList';
+import TagViewList from '../components/TagViewList';
+import {useContext} from 'react';
 import {MainContext} from '../context/MainContext';
 
-const Home = ({navigation, route}) => {
-
+const TagView = ({navigation, route}) => {
   return (
     <SafeAreaView style={styles.droidSafeArea}>
-      <List navigation={navigation} route={route}></List>
+      <TagViewList navigation={navigation} route={route}></TagViewList>
     </SafeAreaView>
   );
 };
-
 
 const styles = StyleSheet.create({
   droidSafeArea: {
@@ -22,9 +23,9 @@ const styles = StyleSheet.create({
   },
 });
 
-Home.propTypes = {
+TagView.propTypes = {
   navigation: PropTypes.object,
   route: PropTypes.object,
 };
 
-export default Home;
+export default TagView;

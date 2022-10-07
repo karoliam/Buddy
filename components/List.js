@@ -6,17 +6,17 @@ import {useContext} from 'react';
 import {MainContext} from '../context/MainContext';
 import TagList from './TagList';
 
-const List = ({navigation}) => {
+const List = ({navigation, route}) => {
   const {update} = useContext(MainContext);
   const {mediaArray} = useMedia(update);
   return (
     <View>
-    <TagList></TagList>
+    <TagList navigation={navigation} route={route}></TagList>
     <FlatList
       data={mediaArray}
       keyExtractor={(item, index) => index.toString()}
       renderItem={({item}) => (
-        <ListItem singleMedia={item} navigation={navigation} />
+        <ListItem singleMedia={item} navigation={navigation} route={route} />
       )}
     />
 </View>
@@ -24,5 +24,6 @@ const List = ({navigation}) => {
 };
 List.propTypes = {
   navigation: PropTypes.object,
+  route: PropTypes.object,
 };
 export default List;

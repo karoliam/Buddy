@@ -3,11 +3,12 @@ import PropTypes from 'prop-types';
 import {FlatList} from 'react-native-gesture-handler';
 import {useTag} from '../hooks/ApiHooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useEffect, useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
+import {MainContext} from '../context/MainContext';
 
-const TagList = () => {
+const TagList = ({navigation}) => {
   const {getAllTags} = useTag();
-  const [listOfTags, setListOfTags] = useState();
+  const {listOfTags,setListOfTags} = useContext(MainContext);
 
   const getTags = async () => {
     try {
@@ -52,6 +53,7 @@ const TagList = () => {
             height: 40,
             justifyContent: 'center',
           }}
+          onPress={() => navigation.navigate('TagView')}
         >
           <Text style={{alignSelf: 'center'}}>{item}</Text>
         </TouchableOpacity>

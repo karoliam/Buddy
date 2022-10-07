@@ -8,13 +8,43 @@ import {
   Image,
   Dimensions,
 } from 'react-native';
+import {useTag} from '../hooks/ApiHooks';
+import {useContext, useEffect, useState} from 'react';
+import {MainContext} from '../context/MainContext';
 
-const ListItem = ({singleMedia, navigation}) => {
+const ListItem = ({singleMedia, navigation, route}) => {
   // console.log('tässä singlemedia', singleMedia);
   // console.log('tossa ois description', singleMedia.description);
   const data = JSON.parse(singleMedia.description);
   const {location, when, writePost} = data;
-  console.log('tilte',singleMedia.title);
+  const {getFilesByTag} = useTag();
+  const item = route.params;
+  const [filteredFiles, setFilteredFiles] = useState({});
+  const {filterOn} = useContext(MainContext);
+
+  console.log('filtered files', filteredFiles);
+  const getByTag = async () => {
+    if (item !== null) {
+      try {
+        const filesByTag = await getFilesByTag('buddytag' + item);
+        //console.log('files HERE', filesByTag);
+        // setFilteredFiles(filesByTag);
+        //console.log('filesbytag', filteredFiles);
+      } catch (error) {
+        console.log('getByTag error', error);
+      }
+    }
+  };
+  const filtering = (files) => {
+    const filterDesc = files.map((item) => item.description);
+    console.log('filtered', filterDesc);
+    const filterFilename = files.map((item) => item.filename);
+    console.log('filenames', filterFilename);
+  }
+  // const descriptionJSON = JSON.parse(filteredDescription);
+  // const filteredWhen = filteredDescription.map((item) => item.when);
+  //onsole.log('tuosa',filteredDescription);
+  getByTag();
   //console.log('here is data', JSON.parse(singleMedia));
   return (
     <TouchableOpacity
@@ -27,7 +57,9 @@ const ListItem = ({singleMedia, navigation}) => {
         <Image
           style={styles.image}
           source={{
-            uri: mediaUrl + singleMedia.thumbnails.w160,
+            uri:
+              mediaUrl + singleMedia.thumbnails.w160
+
           }}
         />
       ) : (
@@ -62,6 +94,7 @@ const styles = StyleSheet.create({
 ListItem.propTypes = {
   singleMedia: PropTypes.object,
   navigation: PropTypes.object,
+  route: PropTypes.object,
 };
 
 export default ListItem;

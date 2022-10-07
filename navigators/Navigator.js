@@ -9,14 +9,17 @@ import CreatePost from '../views/CreatePost';
 import {MainContext} from '../context/MainContext';
 import Single from '../views/Single';
 import EditPost from '../views/EditPost';
+import TagView from '../views/TagView';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
 const TabScreen = () => {
+  const {filterOn, setFilterOn} = useContext(MainContext);
+
   return (
     <Tab.Navigator screenOptions={{headerShown: false}}>
-      <Tab.Screen name="Home" component={Home} />
+      <Tab.Screen name="Home" component={Home} onPress={() => setFilterOn(false)}/>
       <Tab.Screen name="Create post" component={CreatePost} />
       <Tab.Screen name="Profile" component={Profile} />
     </Tab.Navigator>
@@ -36,6 +39,8 @@ const StackScreen = () => {
           />
           <Stack.Screen name="Single" component={Single} />
           <Stack.Screen name="EditPost" component={EditPost} />
+          <Stack.Screen name="TagView" component={TagView} />
+
         </>
       ) : (
         <Stack.Screen name="Login" component={Login} />

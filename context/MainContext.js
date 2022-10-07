@@ -21,7 +21,9 @@ const MainProvider = (props) => {
   const [profilePId, setProfilePId] = useState(0);
   const [profileBId, setProfileBId] = useState(0);
   const [profileDId, setProfileDId] = useState(0);
+  const [listOfTags, setListOfTags] = useState();
   const [city, setCity] = useState('');
+  const [filterOn, setFilterOn] =  useState(false);
 
   return (
     <MainContext.Provider
@@ -38,6 +40,8 @@ const MainProvider = (props) => {
         setImage,
         avatar,
         setAvatar,
+        listOfTags,
+        setListOfTags,
         profileData,
         setProfileData,
         showRegisterUserDataForm,
@@ -58,6 +62,8 @@ const MainProvider = (props) => {
         setProfileDId,
         city,
         setCity,
+        filterOn,
+        setFilterOn
       }}
     >
       {props.children}
