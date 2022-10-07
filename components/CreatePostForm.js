@@ -15,6 +15,7 @@ import {
   TouchableOpacity,
   Dimensions,
   ScrollView,
+  Touchable,
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import {MainContext} from '../context/MainContext';
@@ -30,11 +31,13 @@ const CreatePostForm = ({navigation}) => {
   const [mediafile, setMediafile] = useState(null);
   const [mediaType, setMediaType] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  // const [showMoreTags, setShowMoreTags] = useState(false);
   const [city, setCity] = useState('');
   const {postMedia} = useMedia();
   const {user, update, setUpdate} = useContext(MainContext);
   const {postTag} = useTag();
   const data = cityNames;
+  const [showMoreTags, setShowMoreTags] = useState(false);
 
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -67,6 +70,10 @@ const CreatePostForm = ({navigation}) => {
       tag_3: '',
     },
   });
+  const openMoreTags = (data) => {
+    setShowMoreTags(!showMoreTags);
+    console.log('showmore tags', showMoreTags);
+  };
 
   const onSubmit = async (data) => {
     const formData = new FormData();
@@ -107,16 +114,23 @@ const CreatePostForm = ({navigation}) => {
       //apptag
       const tag = {file_id: mediaResponse.file_id, tag: applicationTag};
       const tagResponse = await postTag(token, tag);
+
       //media user set tags
-      const fTag1 = {file_id: mediaResponse.file_id, tag: data.tag_1};
+      const fTag1 = {file_id: mediaResponse.file_id, tag: 'buddytag' + data.tag_1};
       const fTagResponse1 = await postTag(token, fTag1);
-
-      const fTag2 = {file_id: mediaResponse.file_id, tag: data.tag_2};
+      if (data.tag_1 === null) {
+        delete data.tag_1;
+      }
+      const fTag2 = {file_id: mediaResponse.file_id, tag: 'buddytag' + data.tag_2};
       const fTagResponse2 = await postTag(token, fTag2);
-
-      const fTag3 = {file_id: mediaResponse.file_id, tag: data.tag_3};
+      if (data.tag_2 === null) {
+        delete data.tag_2;
+      }
+      const fTag3 = {file_id: mediaResponse.file_id, tag: 'buddytag' + data.tag_3};
       const fTagResponse3 = await postTag(token, fTag3);
-
+      if (data.tag_3 === null) {
+        delete data.tag_3;
+      }
       console.log(tagResponse);
 
       Alert.alert(mediaResponse.message, '', [
@@ -149,12 +163,17 @@ const CreatePostForm = ({navigation}) => {
     setValue('location', '');
     setValue('when', '');
     setValue('writePost', '');
+    setValue('tag_1', '');
+    setValue('tag_2', '');
+    setValue('tag_3', '');
   };
 
   const handleSelect = (e) => {
     console.log(data[e].value);
     setCity(data[e].value);
   };
+
+
 
   return (
     <View style={styles.container}>
@@ -165,6 +184,7 @@ const CreatePostForm = ({navigation}) => {
             style={styles.addPictureImage}
           ></Image>
         </TouchableOpacity>
+
         <Controller
           control={control}
           render={({field: {onChange, onBlur, value}}) => (
@@ -182,23 +202,6 @@ const CreatePostForm = ({navigation}) => {
         />
         <Controller
           control={control}
-          render={({field: {onChange, onBlur, value}}) => (
-            <View style={styles.locationBox}>
-              <SelectList
-                setSelected={handleSelect}
-                data={data}
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                search={false}
-                placeholder="Location"
-              />
-            </View>
-          )}
-          name="location"
-        />
-        <Controller
-          control={control}
           rules={{
             minLength: 3,
             required: true,
@@ -210,34 +213,27 @@ const CreatePostForm = ({navigation}) => {
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
-                placeholder="When"
-                required
-              />
-            </View>
-          )}
-          name="when"
-        />
-        <Controller
-          control={control}
-          rules={{
-            minLength: 3,
-            required: true,
-          }}
-          render={({field: {onChange, onBlur, value}}) => (
-            <View style={styles.whenBox}>
-              <TextInput
-                style={styles.whenBoxTextInput}
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                placeholder="tag 1"
+                placeholder="Add your tag"
                 required
               />
             </View>
           )}
           name="tag_1"
         />
-        <Controller
+        <TouchableOpacity
+          style={{
+            marginLeft: 54,
+            marginTop: 8,
+            backgroundColor: 'rgba(165,171,232,1)',
+            width: 120,
+            borderRadius: 8,
+            height: 30,
+            justifyContent: 'center'
+          }}
+          onPress={() => setShowMoreTags(!showMoreTags)}>
+          <Text style={{alignSelf: 'center', }}>+ Add more tags</Text>
+        </TouchableOpacity>
+        {showMoreTags ? <><Controller
           control={control}
           rules={{
             minLength: 3,
@@ -276,7 +272,48 @@ const CreatePostForm = ({navigation}) => {
             </View>
           )}
           name="tag_3"
+        /></> : <></>
+
+        }
+        <Controller
+          control={control}
+          render={({field: {onChange, onBlur, value}}) => (
+            <View style={styles.locationBox}>
+              <SelectList
+                setSelected={handleSelect}
+                data={data}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                search={false}
+                placeholder="Location"
+              />
+            </View>
+          )}
+          name="location"
         />
+        <Controller
+          control={control}
+          rules={{
+            minLength: 3,
+            required: true,
+          }}
+          render={({field: {onChange, onBlur, value}}) => (
+            <View style={styles.whenBox}>
+              <TextInput
+                style={styles.whenBoxTextInput}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                placeholder="When"
+                required
+              />
+            </View>
+          )}
+          name="when"
+        />
+
+
         {errors.location?.type === 'required' && <Text>This is required.</Text>}
         {errors.location?.type === 'minLength' && <Text>Min 3 chars!</Text>}
         <TouchableOpacity
@@ -371,7 +408,7 @@ const styles = StyleSheet.create({
     color: '#121212',
     height: 30,
     width: 260,
-    lineHeight: 14,
+    lineHeight: 16,
     fontSize: 16,
     marginTop: 15,
     marginLeft: 12,
