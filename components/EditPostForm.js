@@ -17,7 +17,6 @@ const EditPostForm = ({navigation, route}) => {
   const {update, setUpdate} = useContext(MainContext);
   const [city, setCity] = useState('');
   const cityData = cityNames;
-  const [currentUserToken, setCurrentUserToken] = useState();
   const paramsObjectDescription = JSON.parse(paramsObject.description);
   const {
     control,
@@ -57,7 +56,11 @@ const EditPostForm = ({navigation, route}) => {
       ]);
     } catch (error) {
       console.error('onSubmit modify file failed', error);
-      // TODO: add error user notification
+      Alert.alert('Editing failed', 'Try again', [
+        {
+          text: 'Ok'
+        }
+      ])
     } finally {
       setIsLoading(false);
     }
