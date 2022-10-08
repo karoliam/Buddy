@@ -10,7 +10,6 @@
  * kirjautuu bäkkäriin tiedoilla ja saa usertokenin sekä id:n (id ei ole tallentumassa atm mihinkään) sieltä
  * full name tallennetaan contextiin jota käytetään RegisterUserDataForm sisällä
  */
-// TODO alerts don't show up at all
 import React, {useContext} from 'react';
 import {
   Text,

@@ -1,7 +1,6 @@
 /**
  * Tähän Containeriin nestataan LoginForm.js ja RegisterForm.js
 */
-// TODO background image resizes when keyboard isw pulled up
 import React, {useState} from 'react';
 import {
   Dimensions,

@@ -12,7 +12,7 @@ const MainProvider = (props) => {
   const [image, setImage] = useState(null);
   const [profileData, setProfileData] = useState({});
   const [showRegisterUserDataForm, setShowRegisterUserDataForm] =
-    useState(false);
+    useState(true);
   const [showEditPost, setShowEditPost] = useState(false);
   const [showEditProfile, setShowEditProfile] = useState(false);
   const [avatar, setAvatar] = useState(null);

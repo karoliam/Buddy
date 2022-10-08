@@ -2,8 +2,6 @@
  * Tällä formilla otetaan vastaan käyttäjän sähköposti ja salasana kirjautumista
  * varten.
  */
-// TODO username validation currently pops up unreadable text instead of an alert
-// TODO on android clicking outside alert message doesn't dismiss it
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useContext, useState } from "react";
 import {Controller, useForm} from 'react-hook-form';
