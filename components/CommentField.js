@@ -1,4 +1,11 @@
-import {Alert, FlatList, Text, TextInput, View} from 'react-native';
+import {
+  Alert, Dimensions,
+  FlatList,
+  StyleSheet,
+  Text,
+  TextInput,
+  View
+} from "react-native";
 import PropTypes from 'prop-types';
 import {useComments, userMedia, useUser} from '../hooks/ApiHooks';
 import {useContext, useEffect, useState} from 'react';
@@ -8,6 +15,7 @@ import {useRoute} from '@react-navigation/native';
 import {Controller, useForm} from 'react-hook-form';
 import {Button, Image} from '@rneui/themed';
 import {mediaUrl} from '../utils/variables';
+const {height, width} = Dimensions.get('window');
 
 const CommentField = () => {
   const {postComment, getCommentByFileId} = useComments();
@@ -150,16 +158,20 @@ const CommentField = () => {
         style={{marginLeft: 16, marginBottom: 16}}
         renderItem={({item}) => (
           <>
-            <View style={{flexDirection: 'row'}}>
-              <Image
-                source={{uri: mediaUrl + item.profile_pic.filename}}
-                style={{width: 25, height: 25, borderRadius: 100}}
-              />
-              <Text style={{color: 'grey'}}>{item.user_name}</Text>
+            <View style={styles.commentContainer}>
+              <View style={styles.userAvatarContainer}>
+                <Image
+                  source={{uri: mediaUrl + item.profile_pic.filename}}
+                  style={styles.userAvatarImage}
+                />
+              </View>
+              <View>
+                <Text style={styles.userNameText}>{item.user_name}</Text>
+                <Text style={styles.commentText}>{item.comment}</Text>
+                <Text style={styles.timeStampText}>{item.time_added}</Text>
+              </View>
             </View>
-            <Text>{item.time_added}</Text>
 
-            <Text>{item.comment}</Text>
             {/* <Text>{item.user_name}</Text> */}
           </>
         )}
@@ -191,6 +203,42 @@ const CommentField = () => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  commentContainer: {
+    flexDirection: 'row',
+    marginBottom: 8,
+    backgroundColor: "rgba(0, 255, 0,0)",
+    width: width - 32,
+
+  },
+  userAvatarContainer: {
+    marginRight: 8,
+    width: 52,
+    height: 52,
+    backgroundColor: "rgba(0, 255, 0,0.3)",
+    borderRadius: 100
+  },
+  userAvatarImage: {
+    width: 52,
+    height: 52,
+    borderRadius: 100
+  },
+  userNameText: {
+    backgroundColor: "rgba(0, 0, 255,0)",
+    fontSize: 16,
+  },
+  commentText: {
+    backgroundColor: "rgba(0, 0, 255,0)",
+    width: width - 92,
+    fontSize: 14,
+  },
+  timeStampText: {
+    backgroundColor: "rgba(0, 0, 255,0)",
+    color: 'rgba(124,124,124,1)',
+  },
+});
+
 
 CommentField.propTypes = {
   route: PropTypes.object,

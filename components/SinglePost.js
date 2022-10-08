@@ -130,7 +130,7 @@ const SinglePost = ({navigation, route}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginBottom: 8,
+    marginBottom: 32,
     backgroundColor: 'rgba(255,0,0,0)'
   },
   postImageContainer: {
