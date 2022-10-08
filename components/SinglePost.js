@@ -4,10 +4,10 @@ import {
   ActivityIndicator,
   TouchableOpacity, StyleSheet, View, Dimensions
 } from "react-native";
-import {mediaUrl} from '../utils/variables';
+import { applicationTag, mediaUrl } from "../utils/variables";
 import {Button, Image} from '@rneui/themed';
 import {useRoute} from '@react-navigation/native';
-import {useUser} from '../hooks/ApiHooks';
+import { useTag, useUser } from "../hooks/ApiHooks";
 import React, {useContext, useEffect, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {MainContext} from '../context/MainContext';
@@ -18,7 +18,9 @@ const SinglePost = ({navigation, route}) => {
   // const route = useRoute();
   const {filename, title, description, user_id, file_id} = route.params;
   const [userFullName, setUserFullName] = useState('');
+  const [posterAvatar, setPosterAvatar] = useState('');
   const descriptionObject = JSON.parse(description);
+  const {getFilesByTag} = useTag();
   const {getUserById} = useUser();
   const {user, showEditPost, setShowEditPost, update, setUpdate} = useContext(MainContext);
 
@@ -34,6 +36,12 @@ const SinglePost = ({navigation, route}) => {
     try {
       const token = await AsyncStorage.getItem('userToken');
       const userData = await getUserById(token, user_id);
+      const profilePicTag = await getFilesByTag(applicationTag + 'profile_pic' + user_id);
+      console.log('profilePicTag ', profilePicTag);
+      console.log('profilePicTag0 ', mediaUrl + profilePicTag[0].filename);
+      if (profilePicTag[0].filename != undefined) {
+        setPosterAvatar(mediaUrl + profilePicTag[0].filename);
+      }
       //console.log('userData', userData);
       const fullName = userData.full_name;
       setUserFullName(fullName);
@@ -102,14 +110,19 @@ const SinglePost = ({navigation, route}) => {
       </View>
       <View style={styles.postTextRow}>
         <View style={styles.userAvatarContainer}>
-
+          <Image
+            style={styles.userAvatarImage}
+            source={{
+              uri: posterAvatar,
+            }}/>
         </View>
         <Text style={styles.postText}>{descriptionObject.writePost}</Text>
       </View>
       <View style={styles.postLocationTimeRow}>
-        <Text>{descriptionObject.when}</Text>
-        <Text>{descriptionObject.location}</Text>
+        <Text style={styles.postWhenText}>{descriptionObject.when}</Text>
+        <Text style={styles.postLocationText}>{descriptionObject.location}</Text>
       </View>
+      <View style={styles.postBottomBorder}></View>
     </View>
   );
 };
@@ -117,7 +130,8 @@ const SinglePost = ({navigation, route}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'rgba(255,0,0,0.3)'
+    marginBottom: 8,
+    backgroundColor: 'rgba(255,0,0,0)'
   },
   postImageContainer: {
     width: width - 64,
@@ -142,7 +156,7 @@ const styles = StyleSheet.create({
     width: width - 64,
     height: 26,
     flexDirection: "row",
-    backgroundColor: "rgba(255, 255, 0,0.3)",
+    backgroundColor: "rgba(255, 255, 0,0)",
     marginLeft: 32,
 
   },
@@ -205,7 +219,7 @@ const styles = StyleSheet.create({
   },
   postTopRow: {
     flexDirection: "row",
-    backgroundColor: "rgba(0, 255, 0,0.3)",
+    backgroundColor: "rgba(0, 255, 0,0)",
     width: width - 64,
     height: 32,
     marginLeft: 32,
@@ -227,20 +241,34 @@ const styles = StyleSheet.create({
     left: 8,
     fontSize: 16,
     width: width - 124,
-    backgroundColor: "rgba(0, 255, 255,0.3)",
+    backgroundColor: "rgba(0, 255, 255,0)",
   },
   postTextRow: {
     flexDirection: 'row',
-    backgroundColor: "rgba(255, 255, 0,0.3)",
+    backgroundColor: "rgba(255, 255, 0,0)",
     width: width - 64,
     marginLeft: 32,
   },
+  postWhenText: {
+
+  },
+  postLocationText: {
+    position: 'absolute',
+    right: 0
+  },
   postLocationTimeRow: {
     flexDirection: 'row',
-    backgroundColor: "rgba(0, 0, 255,0.3)",
+    backgroundColor: "rgba(0, 0, 255,0)",
     width: width - 64,
     height: 26,
     marginLeft: 32,
+  },
+  postBottomBorder: {
+    width: width - 64,
+    height: 2,
+    backgroundColor: "rgba(165,171,232,0.5)",
+    marginTop: 3,
+    alignSelf: "center"
   },
 });
 

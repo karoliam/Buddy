@@ -19,7 +19,7 @@ const Single = (props) => {
 const styles = StyleSheet.create({
   droidSafeArea: {
     flex: 1,
-    backgroundColor: 'rgba(255,0,0,0.3)',
+    backgroundColor: 'rgba(255,0,0,0)',
     paddingTop: Platform.OS === 'android' ? 30 : 0,
   },
 });
