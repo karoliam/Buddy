@@ -1,4 +1,4 @@
-import {Platform, SafeAreaView, StyleSheet} from 'react-native';
+import { Platform, SafeAreaView, ScrollView, StyleSheet } from "react-native";
 import PropTypes from 'prop-types';
 import SinglePost from '../components/SinglePost';
 import CommentField from '../components/CommentField';
@@ -8,8 +8,10 @@ const Single = (props) => {
   const {route} = props;
   return (
     <SafeAreaView style={styles.droidSafeArea}>
-      <SinglePost navigation={navigation} route={route}></SinglePost>
-      <CommentField navigation={navigation} route={route}></CommentField>
+      <ScrollView>
+        <SinglePost navigation={navigation} route={route}></SinglePost>
+        <CommentField navigation={navigation} route={route}></CommentField>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -17,7 +19,7 @@ const Single = (props) => {
 const styles = StyleSheet.create({
   droidSafeArea: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: 'rgba(255,0,0,0.3)',
     paddingTop: Platform.OS === 'android' ? 30 : 0,
   },
 });

@@ -6,7 +6,7 @@ import {
   View,
   Button,
   TextInput,
-  ImagePickerIOS, Dimensions
+  ImagePickerIOS, Dimensions, ScrollView
 } from "react-native";
 import {MainContext} from '../context/MainContext';
 import {Image, Input} from '@rneui/themed';
@@ -264,19 +264,17 @@ const EditProfileForms = () => {
           <Controller
             control={control}
             render={({field: {onChange, onBlur, value}}) => (
-              <View>
-                <SelectList
-                  setSelected={handleSelect}
-                  data={cityNames}
-                  onBlur={onBlur}
-                  onChangeText={onChange}
-                  value={value}
-                  search={false}
-                  placeholder="Location"
-                  boxStyles={styles.locationBox}
-                  dropdownStyles={styles.locationBoxDropDown}
-                />
-              </View>
+              <SelectList
+                setSelected={handleSelect}
+                data={cityNames}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                search={false}
+                placeholder="Location"
+                boxStyles={styles.locationBox}
+                dropdownStyles={styles.locationBoxDropDown}
+              />
             )}
             name="location"
           />
@@ -368,7 +366,7 @@ const styles = StyleSheet.create({
   fullNameRow: {
     height: 32,
     flexDirection: "row",
-    marginTop: 6,
+    marginTop: 16,
     marginLeft: 16,
     marginRight: 16
   },
