@@ -89,62 +89,65 @@ const LoginMainViewContainer = () => {
 
 const styles = StyleSheet.create({
   backGroundImage: {
+    width: width,
+    height: 1.1 * height,
     flex: 1,
     justifyContent: 'center',
   },
   backGroundImage_imageStyle: {},
   logoBackground: {
     bottom: 0,
-    width: 286,
+    width: width - 126,
     height: 85,
     position: "absolute",
     backgroundColor: "rgba(0,0,0,0.65)",
     marginBottom: 32,
-    marginLeft: (width/2) - 143
+    marginLeft: 63
   },
   imageLogoBuddy: {
     top: -57,
     left: -9,
-    width: 304,
-    height: 200,
+    width: width - 107,
+    height: width - 211,
     position: "absolute",
   },
   logoBackgroundStack: {
-    height: (height/100) * 30
+    height: 0.3 * height
   },
   loginFormContainer: {
-    height: (height/100) * 55
+    height: 0.5 * height
   },
   bottomLineAndSwitchContainer: {
-    height: (height/100) * 15
+    height: 0.2 * height
   },
   lineOrLeft: {
-    width: 112,
+    width: width - 301,
     height: 2,
     backgroundColor: "rgba(255,255,255,1)",
     marginTop: 9
   },
   lineOrText: {
     color: "rgba(255,255,255,1)",
-    height: 17,
     width: 34,
     textAlign: "center",
     fontSize: 16,
-    marginLeft: 13
+    marginLeft: 14
   },
+  // 112
   lineOrRight: {
-    width: 112,
+    width: width - 301,
     height: 2,
     backgroundColor: "rgba(255,255,255,1)",
     marginLeft: 14,
     marginTop: 9
   },
   lineOrContainer: {
+    backgroundColor: "rgba(255,0,0,0)",
+    width: width - 128,
     height: 17,
     flexDirection: "row",
     marginTop: 8,
-    marginLeft: (width/2) - 142.5,
-    marginRight: (width/2) - 142.5
+    marginLeft: 64,
   },
   buttonSignUp: {
     width: 280,

@@ -5,7 +5,7 @@
 // TODO username validation currently pops up unreadable text instead of an alert
 // TODO on android clicking outside alert message doesn't dismiss it
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useContext} from 'react';
+import { useContext, useState } from "react";
 import {Controller, useForm} from 'react-hook-form';
 import {
   Text,
@@ -34,27 +34,57 @@ const LoginForm = () => {
       password: '',
     },
   });
+
+  const LoginAlertCheck = (loginCredentials) =>{
+
+  };
+
   const logIn = async (loginCredentials) => {
-    try {
-      const userData = await postLogin(loginCredentials);
-      await AsyncStorage.setItem('userToken', userData.token);
-      setUser(userData.user);
-      console.log('here is userdata', userData);
-      // splitting the application tag from the username
-      const usernameSplit = await userData.user.username.split('#');
-      console.log('usernamesplit', usernameSplit);
-      const usernameAppTag = usernameSplit[0];
-      if (usernameAppTag === 'buddy') {
-        setIsLoggedIn(true);
-      }
-    } catch (error) {
-      console.log('Login - logIn', error);
-      Alert.alert(
-        'Try again',
-        'E-mail or password wrong',
-        [{ text: "OK", onPress: () => console.log("OK Pressed") }],
-      );
+    const emailArr = loginCredentials.username.split('#');
+    let showAlert;
+    let alertTitle;
+    let alertMessage;
+    if (emailArr[1].length < 1) {
+      alertTitle = 'E-mail';
+      alertMessage = 'E-mail is required!';
+      showAlert = true;
+    } else if (emailArr[1].length < 3) {
+      alertTitle = 'E-mail';
+      alertMessage = 'E-mail must be atleas 3 characters!';
+      showAlert = true;
+    } else if (loginCredentials.password < 1) {
+      alertTitle = 'Password';
+      alertMessage = 'Password is required!';
+      showAlert = true;
     }
+    if (showAlert === true) {
+      Alert.alert(
+        alertTitle,
+        alertMessage,
+        [{ text: "OK", onPress: () => console.log("OK Pressed") }],)
+    } else {
+      try {
+        const userData = await postLogin(loginCredentials);
+        await AsyncStorage.setItem('userToken', userData.token);
+        setUser(userData.user);
+        console.log('here is userdata', userData);
+        // splitting the application tag from the username
+        const usernameSplit = await userData.user.username.split('#');
+        console.log('usernamesplit', usernameSplit);
+        const usernameAppTag = usernameSplit[0];
+        if (usernameAppTag === 'buddy') {
+          setIsLoggedIn(true);
+        }
+      } catch (error) {
+        console.log('Login - logIn', error);
+        Alert.alert(
+          'Try again',
+          'E-mail or password wrong',
+          [{ text: "OK", onPress: () => console.log("OK Pressed") }],
+        );
+      }
+    }
+
   };
 
   return (
@@ -62,8 +92,8 @@ const LoginForm = () => {
       <Controller
         control={control}
         rules={{
-          minLength: 3,
-          required: true,
+          // minLength: 3,
+          // required: true,
         }}
         render={({field: {onChange, onBlur, value}}) => (
           <View style={styles.fieldBoxUsername}>
@@ -73,15 +103,14 @@ const LoginForm = () => {
               value={value}
               autoCapitalize="none"
               placeholder="e-mail"
-              required
               style={styles.usernameInput}
             />
           </View>
         )}
         name="username"
       />
-      {errors.username?.type === 'required' && <Text>This is required.</Text>}
-      {errors.username?.type === 'minLength' && <Text>Min 3 chars!</Text>}
+      {/* {errors.username?.type === 'required' && <Text>This is required.</Text>} */}
+      {/* {errors.username?.type === 'minLength' && <Text>Min 3 chars!</Text>} */}
 
       <Controller
         control={control}
@@ -120,7 +149,7 @@ const LoginForm = () => {
 };
 const styles = StyleSheet.create({
   fieldBoxUsername: {
-    width: 285,
+    width: width - 128,
     height: 61,
     backgroundColor: 'rgba(255,255,255,1)',
     borderWidth: 2,
@@ -128,18 +157,19 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     borderStyle: 'solid',
     marginTop: 32,
-    marginLeft: width / 2 - 142.5
+    marginLeft: 64
   },
   usernameInput: {
+    flex: 1,
+    textAlignVertical: 'center',
     color: '#121212',
-    height: 30,
-    width: 260,
+    backgroundColor: 'rgba(255,0,0,0)',
     fontSize: 16,
-    marginTop: 15,
-    marginLeft: 13
+    marginLeft: 12,
+    marginRight: 12
   },
   fieldBoxPassword: {
-    width: 285,
+    width: width - 128,
     height: 61,
     backgroundColor: 'rgba(255,255,255,1)',
     borderWidth: 2,
@@ -147,21 +177,21 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     borderStyle: 'solid',
     marginTop: 16,
-    marginLeft: width / 2 - 142.5
+    marginLeft: 64
   },
   passwordInput: {
+    flex: 1,
+    textAlignVertical: 'center',
     color: '#121212',
-    height: 30,
-    width: 260,
-    lineHeight: 14,
+    backgroundColor: 'rgba(255,0,0,0)',
     fontSize: 16,
-    marginTop: 15,
-    marginLeft: 12
+    marginLeft: 12,
+    marginRight: 12
   },
   buttonSignIn: {
     position: "absolute",
     bottom: 0,
-    width: 285,
+    width: width - 128,
     height: 61,
     backgroundColor: 'rgba(0,0,0,0.65)',
     borderWidth: 2,
@@ -169,15 +199,18 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     borderStyle: 'solid',
     marginBottom: 64,
-    marginLeft: width / 2 - 142.5
+    marginLeft: 64,
+    alignContent: 'center',
+
   },
   signInText: {
+    flex: 1,
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    backgroundColor: 'rgba(255,0,0,0)',
     color: 'rgba(255,255,255,1)',
-    height: 25,
-    width: 70,
     fontSize: 20,
-    marginTop: 14,
-    marginLeft: 103
+    marginTop: 0
   },
 });
 
