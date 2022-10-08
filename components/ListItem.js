@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     marginLeft: 32,
     width: width - 64,
-    backgroundColor: "rgba(165, 171, 232,1)",
+    backgroundColor: "rgba(165, 171, 232,0.13)",
     borderRadius: 8,
   },
   image: {

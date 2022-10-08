@@ -258,7 +258,7 @@ const styles = StyleSheet.create({
   fullNameBorder: {
     width: (width) - 32,
     height: 2,
-    backgroundColor: "rgba(165,171,232,1)",
+    backgroundColor: "rgba(165,171,232,0.5)",
     marginTop: 16,
     marginLeft: 16,
   },
@@ -273,7 +273,7 @@ const styles = StyleSheet.create({
   bioBorder: {
     width: (width) - 32,
     height: 2,
-    backgroundColor: "rgba(165,171,232,1)",
+    backgroundColor: "rgba(165,171,232,0.5)",
     marginTop: 17,
     marginLeft: 16
   },
@@ -308,7 +308,7 @@ const styles = StyleSheet.create({
   locationBorder: {
     width: (width) - 32,
     height: 2,
-    backgroundColor: "rgba(165,171,232,1)",
+    backgroundColor: "rgba(165,171,232,0.5)",
     marginTop: 15,
     marginLeft: 16
   },
@@ -343,7 +343,7 @@ const styles = StyleSheet.create({
   ageBorder: {
     width: (width) - 32,
     height: 2,
-    backgroundColor: "rgba(165,171,232,1)",
+    backgroundColor: "rgba(165,171,232,0.5)",
     marginTop: 15,
     marginLeft: 16
   },
@@ -357,7 +357,7 @@ const styles = StyleSheet.create({
     width: 103,
     height: 24,
     position: "absolute",
-    backgroundColor: "rgba(165,171,232,1)",
+    backgroundColor: "rgba(165,171,232,0.5)",
     borderRadius: 20
   },
   pastEventsText: {
@@ -396,7 +396,7 @@ const styles = StyleSheet.create({
   pastEventsBorder: {
     width: (width) - 32,
     height: 2,
-    backgroundColor: "rgba(165,171,232,1)",
+    backgroundColor: "rgba(165,171,232,0.5)",
     marginTop: 15,
     marginLeft: 16
   },
