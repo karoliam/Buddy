@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
   topNavigationBorder: {
     width: width - 32,
     height: 2,
-    backgroundColor: "rgba(165,171,232,1)",
+    backgroundColor: "rgba(165,171,232,0.5)",
     marginTop: 3,
     alignSelf: "center"
   },

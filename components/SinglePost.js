@@ -8,7 +8,7 @@ import {mediaUrl} from '../utils/variables';
 import {Button, Image} from '@rneui/themed';
 import {useRoute} from '@react-navigation/native';
 import {useUser} from '../hooks/ApiHooks';
-import {useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {MainContext} from '../context/MainContext';
 import PropTypes from 'prop-types';
@@ -85,6 +85,20 @@ const SinglePost = ({navigation, route}) => {
       </View>
       <View style={styles.postTopRow}>
         <Text style={styles.posterNameText}>{userFullName}</Text>
+        <View style={styles.chatButtonStack}>
+          <TouchableOpacity
+            style={styles.chatButton}
+          >
+            <Text style={styles.chatButtonText}>Chat</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.attendButtonStack}>
+          <TouchableOpacity
+            style={styles.attendButton}
+          >
+            <Text style={styles.attendButtonText}>Attend</Text>
+          </TouchableOpacity>
+        </View>
       </View>
       <View style={styles.postTextRow}>
         <View style={styles.userAvatarContainer}>
@@ -136,6 +150,58 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     fontSize: 20,
+  },
+  chatButton: {
+    width: 60,
+    height: 32,
+    position: 'absolute',
+    alignContent: 'center',
+    backgroundColor: 'rgba(255,255,255,1)',
+    borderWidth: 2,
+    borderColor: 'rgba(165,171,232,0.5)',
+    borderRadius: 14,
+    borderStyle: 'solid',
+  },
+  chatButtonText: {
+    backgroundColor: 'rgba(0,0,255,0)',
+    top: 3,
+    color: 'rgba(83,134,234,1)',
+    fontSize: 16,
+    textAlign: 'center',
+  },
+  chatButtonStack: {
+    position: 'absolute',
+    right: 88,
+    backgroundColor: 'rgba(255,0,0,0)',
+    width: 60,
+    height: 32,
+    marginLeft: 16
+  },
+  attendButton: {
+    width: 80,
+    height: 32,
+    position: 'absolute',
+    alignContent: 'center',
+    backgroundColor: 'rgba(255,255,255,1)',
+    borderWidth: 2,
+    borderColor: 'rgba(165,171,232,0.5)',
+    borderRadius: 14,
+    borderStyle: 'solid',
+  },
+  attendButtonText: {
+    backgroundColor: 'rgba(0,0,255,0)',
+    top: 3,
+    color: 'rgba(83,134,234,1)',
+    fontSize: 16,
+    textAlign: 'center',
+  },
+  attendButtonStack: {
+    position: 'absolute',
+    right: 0,
+    backgroundColor: 'rgba(255,0,0,0)',
+    width: 80,
+    height: 32,
+    marginLeft: 16
   },
   postTopRow: {
     flexDirection: "row",
