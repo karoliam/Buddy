@@ -18,8 +18,8 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
-  Dimensions,
-} from 'react-native';
+  Dimensions, Alert
+} from "react-native";
 import {useForm, Controller} from 'react-hook-form';
 import {useLogin, useUser} from '../hooks/ApiHooks';
 import {appId} from '../utils/variables';
@@ -44,40 +44,77 @@ const RegisterForm = () => {
     getValues,
     formState: {errors},
   } = useForm({
-    defaultValues: {email: '', password: '', full_name: ''},
+    defaultValues: {email: '', password: '', full_name: '', confirmPassword: ''},
     mode: 'onBlur',
   });
 
   const onSubmit = async (data) => {
-    setFullName(data.full_name);
-    const registerCredentials = {
-      full_name: data.full_name,
-      username: appId + data.email,
-      password: data.password,
-      email: data.email,
-    };
-    const loginCredentials = {
-      username: appId + data.email,
-      password: data.password,
-    };
-
-    try {
-      console.log(registerCredentials);
+    console.log("tämmöstä koodii: ", data);
+    let showAlert;
+    let alertTitle;
+    let alertMessage;
+    if (data.full_name < 1) {
+      alertTitle = 'Full name';
+      alertMessage = 'Name is required!';
+      showAlert = true;
+    } else if (data.email.length < 1) {
+      alertTitle = 'E-mail';
+      alertMessage = 'E-mail is required!';
+      showAlert = true;
+    } else if (!data.email.match(/^[a-z0-9.]{1,128}@[a-z0-9.]{5,128}/i)) {
+      alertTitle = 'E-mail';
+      alertMessage = 'Must be valid E-mail!';
+      showAlert = true;
+    } else if (data.password.length < 1) {
+      alertTitle = 'Password';
+      alertMessage = 'Password is required!';
+      showAlert = true;
+    } else if (data.password.length < 5) {
+      alertTitle = 'Password';
+      alertMessage = 'Password min length is 5 characters!';
+      showAlert = true;
+    } else if (data.password !== data.confirmPassword) {
+      alertTitle = 'Password';
+      alertMessage = 'Passwords do not match!';
+      showAlert = true;
+    }
+    if (showAlert === true) {
+      Alert.alert(
+        `${alertTitle}`,
+        `${alertMessage}`,
+        [{ text: "OK", onPress: () => console.log("OK Pressed") }],
+        { cancelable: true })
+    } else {
       setFullName(data.full_name);
-      const userData = await postUser(registerCredentials);
-      if (userData) {
-        const userLoginData = await postLogin(loginCredentials);
-        await AsyncStorage.setItem('userToken', userLoginData.token);
-        //await AsyncStorage.setItem('userId', userLoginData.user_id);
-        if ((await AsyncStorage.getItem('userToken')) != null) {
-          // navigation.navigate('RegisterChecker', {name: 'RegisterChecker'}); // TODO fix navigation to userDataForm
-          setUser(userLoginData.user);
-          console.log('RegisterForm onSubmit ', userLoginData.user);
-          setShowRegisterUserDataForm(!showRegisterUserDataForm);
+      const registerCredentials = {
+        full_name: data.full_name,
+        username: appId + data.email,
+        password: data.password,
+        email: data.email,
+      };
+      const loginCredentials = {
+        username: appId + data.email,
+        password: data.password,
+      };
+
+      try {
+        console.log(registerCredentials);
+        setFullName(data.full_name);
+        const userData = await postUser(registerCredentials);
+        if (userData) {
+          const userLoginData = await postLogin(loginCredentials);
+          await AsyncStorage.setItem('userToken', userLoginData.token);
+          //await AsyncStorage.setItem('userId', userLoginData.user_id);
+          if ((await AsyncStorage.getItem('userToken')) != null) {
+            // navigation.navigate('RegisterChecker', {name: 'RegisterChecker'}); // TODO fix navigation to userDataForm
+            setUser(userLoginData.user);
+            console.log('RegisterForm onSubmit ', userLoginData.user);
+            setShowRegisterUserDataForm(!showRegisterUserDataForm);
+          }
         }
+      } catch (error) {
+        console.log('RegisterForm onSubmit ' + error);
       }
-    } catch (error) {
-      console.log('RegisterForm onSubmit ' + error);
     }
   };
 
@@ -95,9 +132,9 @@ const RegisterForm = () => {
               value={value}
               placeholder="Full name"
               autoCapitalize="none"
-              errorMessage={
-                errors.full_name && <Text>{errors.full_name.message}</Text>
-              }
+              // errorMessage={
+              //   errors.full_name && <Text>{errors.full_name.message}</Text>
+              // }
             />
           </View>
         )}
@@ -106,11 +143,11 @@ const RegisterForm = () => {
       <Controller
         control={control}
         rules={{
-          required: {value: true, message: 'This is required.'},
-          pattern: {
-            value: /^[a-z0-9.]{1,128}@[a-z0-9.]{5,128}/i,
-            message: 'Must be valid email.',
-          },
+          // required: {value: true, message: 'This is required.'},
+          // pattern: {
+          //   value: /^[a-z0-9.]{1,128}@[a-z0-9.]{5,128}/i,
+          //   message: 'Must be valid email.',
+          // },
         }}
         render={({field: {onChange, onBlur, value}}) => (
           <View style={styles.emailInputBox}>
@@ -121,7 +158,7 @@ const RegisterForm = () => {
               value={value}
               placeholder="Email"
               autoCapitalize="none"
-              errorMessage={errors.email && <Text>{errors.email.message}</Text>}
+              // errorMessage={errors.email && <Text>{errors.email.message}</Text>}
             />
           </View>
         )}
@@ -131,8 +168,8 @@ const RegisterForm = () => {
       <Controller
         control={control}
         rules={{
-          required: {value: true, message: 'Required'},
-          minLength: {value: 5, message: 'Min length 5 chars.'},
+          // required: {value: true, message: 'Required'},
+          // minLength: {value: 5, message: 'Min length 5 chars.'},
         }}
         render={({field: {onChange, onBlur, value}}) => (
           <View style={styles.passwordInputBox}>
@@ -143,9 +180,9 @@ const RegisterForm = () => {
               value={value}
               secureTextEntry={true}
               placeholder="Password"
-              errorMessage={
-                errors.password && <Text>{errors.password.message}</Text>
-              }
+              // errorMessage={
+              //   errors.password && <Text>{errors.password.message}</Text>
+              // }
             />
           </View>
         )}
@@ -155,13 +192,13 @@ const RegisterForm = () => {
       <Controller
         control={control}
         rules={{
-          validate: (value) => {
-            if (value === getValues('password')) {
-              return true;
-            } else {
-              return 'Does not match to password.';
-            }
-          },
+          // validate: (value) => {
+          //   if (value === getValues('password')) {
+          //     return true;
+          //   } else {
+          //     return 'Does not match to password.';
+          //   }
+          // },
         }}
         render={({field: {onChange, onBlur, value}}) => (
           <View style={styles.passwordCheckInputBox}>
@@ -172,11 +209,11 @@ const RegisterForm = () => {
               value={value}
               secureTextEntry={true}
               placeholder="Confirm password"
-              errorMessage={
-                errors.confirmPassword && (
-                  <Text>{errors.confirmPassword.message}</Text>
-                )
-              }
+              // errorMessage={
+              //   errors.confirmPassword && (
+              //     <Text>{errors.confirmPassword.message}</Text>
+              //   )
+              // }
             />
           </View>
         )}
@@ -194,7 +231,7 @@ const RegisterForm = () => {
 
 const styles = StyleSheet.create({
   fullNameInputBox: {
-    width: 285,
+    width: width - 128,
     height: 61,
     backgroundColor: 'rgba(255,255,255,1)',
     borderWidth: 2,
@@ -202,19 +239,19 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     borderStyle: 'solid',
     marginTop: 8,
-    marginLeft: width / 2 - 142.5,
+    marginLeft: 64
   },
   fullNameInputField: {
+    flex: 1,
+    textAlignVertical: 'center',
     color: '#121212',
-    height: 30,
-    width: 260,
-    lineHeight: 14,
+    backgroundColor: 'rgba(255,0,0,0)',
     fontSize: 16,
-    marginTop: 15,
     marginLeft: 12,
+    marginRight: 12
   },
   emailInputBox: {
-    width: 285,
+    width: width - 128,
     height: 61,
     backgroundColor: 'rgba(255,255,255,1)',
     borderWidth: 2,
@@ -222,19 +259,19 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     borderStyle: 'solid',
     marginTop: 16,
-    marginLeft: width / 2 - 142.5,
+    marginLeft: 64
   },
   emailInputField: {
+    flex: 1,
+    textAlignVertical: 'center',
     color: '#121212',
-    height: 30,
-    width: 260,
-    lineHeight: 14,
+    backgroundColor: 'rgba(255,0,0,0)',
     fontSize: 16,
-    marginTop: 15,
     marginLeft: 12,
+    marginRight: 12
   },
   passwordInputBox: {
-    width: 285,
+    width: width - 128,
     height: 61,
     backgroundColor: 'rgba(255,255,255,1)',
     borderWidth: 2,
@@ -242,19 +279,19 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     borderStyle: 'solid',
     marginTop: 16,
-    marginLeft: width / 2 - 142.5,
+    marginLeft: 64
   },
   passwordInputField: {
+    flex: 1,
+    textAlignVertical: 'center',
     color: '#121212',
-    height: 30,
-    width: 260,
-    lineHeight: 14,
+    backgroundColor: 'rgba(255,0,0,0)',
     fontSize: 16,
-    marginTop: 15,
     marginLeft: 12,
+    marginRight: 12
   },
   passwordCheckInputBox: {
-    width: 285,
+    width: width - 128,
     height: 61,
     backgroundColor: 'rgba(255,255,255,1)',
     borderWidth: 2,
@@ -262,37 +299,37 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     borderStyle: 'solid',
     marginTop: 16,
-    marginLeft: width / 2 - 142.5,
+    marginLeft: 64
   },
   passwordCheckInputField: {
+    flex: 1,
+    textAlignVertical: 'center',
     color: '#121212',
-    height: 30,
-    width: 260,
-    lineHeight: 14,
+    backgroundColor: 'rgba(255,0,0,0)',
     fontSize: 16,
-    marginTop: 15,
     marginLeft: 12,
+    marginRight: 12
   },
   buttonSignUp: {
-    position: 'absolute',
-    bottom: 0,
-    width: 285,
+    width: width - 128,
     height: 61,
     backgroundColor: 'rgba(0,0,0,0.65)',
     borderWidth: 2,
     borderColor: 'rgba(255,255,255,1)',
     borderRadius: 14,
     borderStyle: 'solid',
-    marginBottom: 32,
-    marginLeft: width / 2 - 142.5,
+    marginTop: 16,
+    marginLeft: 64
   },
   signUpButtonText: {
+    flex: 1,
+    textAlign: 'center',
+    textAlignVertical: 'center',
     color: 'rgba(255,255,255,1)',
-    height: 25,
-    width: 70,
+    backgroundColor: 'rgba(255,0,0,0)',
     fontSize: 20,
-    marginTop: 14,
-    marginLeft: 103,
+    marginLeft: 12,
+    marginRight: 12
   },
 });
 

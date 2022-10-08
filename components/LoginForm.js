@@ -59,9 +59,10 @@ const LoginForm = () => {
     }
     if (showAlert === true) {
       Alert.alert(
-        alertTitle,
-        alertMessage,
-        [{ text: "OK", onPress: () => console.log("OK Pressed") }],)
+        `${alertTitle}`,
+        `${alertMessage}`,
+        [{ text: "OK", onPress: () => console.log("OK Pressed") }],
+        { cancelable: true })
     } else {
       try {
         const userData = await postLogin(loginCredentials);
