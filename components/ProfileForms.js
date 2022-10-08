@@ -131,10 +131,10 @@ const ProfileForms = () => {
           <Text style={styles.fullName}>no</Text>
         )}
         <TouchableOpacity style={styles.nightMode}>
-          <FontAwesomeIcon icon="fa-solid fa-moon" size={32}/>
+          <FontAwesomeIcon icon="fa-solid fa-moon" size={32} color={'#A5ABE8'}/>
         </TouchableOpacity>
         <TouchableOpacity style={styles.editProfile} onPress={editProfile}>
-          <FontAwesomeIcon icon="fa-solid fa-pen" size={32}/>
+          <FontAwesomeIcon icon="fa-solid fa-pen" size={32} color={'#A5ABE8'}/>
         </TouchableOpacity>
       </View>
       <View style={styles.fullNameBorder}></View>
@@ -177,8 +177,9 @@ const ProfileForms = () => {
           <FontAwesomeIcon icon="fa-solid fa-calendar" size={32} color={'#B0B0B0'}/>
         </View>
         <View style={styles.pastEventsButtonStack}>
-          <TouchableOpacity style={styles.pastEventsButton}></TouchableOpacity>
-          <Text style={styles.pastEventsText}>Past Events</Text>
+          <TouchableOpacity style={styles.pastEventsButton}>
+            <Text style={styles.pastEventsText}>Past Events</Text>
+          </TouchableOpacity>
         </View>
         <Text style={styles.pastEventsCount}>25</Text>
       </View>
@@ -208,7 +209,7 @@ const styles = StyleSheet.create({
   backgroundImage: {
     top: 0,
     left: 0,
-    width: '100%',
+    width: width,
     height: 226,
   },
   profilePictureHolder: {
@@ -225,30 +226,32 @@ const styles = StyleSheet.create({
     borderRadius: 100
   },
   backgroundImageStack: {
-    width: '100%',
-    height: '31.65%'
+    width: width,
+    height: 0.31 * height
   },
   fullName: {
+    flex: 1,
+    textAlign: 'left',
+    backgroundColor: 'rgba(0,255,255,0)',
     color: "#121212",
-    height: 30,
-    width: 156,
     fontSize: 20,
     marginTop: 2,
     marginLeft: 8
   },
   nightMode: {
     position: 'absolute',
-    right: 72,
+    right: 56,
     width: 32,
     height: 32
   },
   editProfile: {
     position: 'absolute',
-    right: 16,
+    right: 0,
     width: 32,
     height: 32
   },
   fullNameRow: {
+    backgroundColor: 'rgba(0,255,255,0)',
     height: 32,
     flexDirection: "row",
     marginTop: 6,
@@ -263,9 +266,11 @@ const styles = StyleSheet.create({
     marginLeft: 16,
   },
   bioText: {
+    textAlign: 'left',
+    backgroundColor: 'rgba(0,255,255,0)',
     color: "#121212",
     height: 65,
-    width: 343,
+    width: width - 32,
     fontSize: 16,
     marginTop: 16,
     marginLeft: 16
@@ -278,27 +283,31 @@ const styles = StyleSheet.create({
     marginLeft: 16
   },
   locationIcon: {
+    backgroundColor: 'rgba(0,255,255,0)',
     width: 32,
     height: 32,
-    marginTop: 8
+    marginTop: 4
   },
   locationText: {
+    flex: 1,
+    textAlign: 'left',
+    backgroundColor: 'rgba(0,255,255,0)',
     color: "rgba(155,151,151,1)",
-    height: 20,
-    width: 58,
     fontSize: 12
   },
   userLocation: {
+    flex: 1,
+    textAlign: 'left',
+    backgroundColor: 'rgba(0,255,255,0)',
     color: "rgba(97,97,97,1)",
-    height: 20,
-    width: 58,
     fontSize: 16
   },
   locationTextColumn: {
-    width: 58,
+    backgroundColor: 'rgba(0,255,255,0)',
     marginLeft: 8
   },
   locationIconRow: {
+    backgroundColor: 'rgba(0,255,255,0)',
     height: 40,
     flexDirection: "row",
     marginTop: 16,
@@ -313,27 +322,31 @@ const styles = StyleSheet.create({
     marginLeft: 16
   },
   ageIcon: {
+    backgroundColor: 'rgba(0,255,255,0)',
     width: 32,
     height: 32,
-    marginTop: 7
+    marginTop: 4
   },
   ageText: {
+    flex: 1,
+    textAlign: 'left',
+    backgroundColor: 'rgba(0,255,255,0)',
     color: "rgba(155,151,151,1)",
-    height: 20,
-    width: 58,
     fontSize: 12
   },
   userAge: {
+    flex: 1,
+    textAlign: 'left',
+    backgroundColor: 'rgba(0,255,255,0)',
     color: "rgba(97,97,97,1)",
-    height: 20,
-    width: 58,
     fontSize: 16
   },
   ageTextColumn: {
-    width: 58,
+    backgroundColor: 'rgba(0,255,255,0)',
     marginLeft: 8
   },
   ageIconRow: {
+    backgroundColor: 'rgba(0,255,255,0)',
     height: 40,
     flexDirection: "row",
     marginTop: 16,
@@ -348,45 +361,44 @@ const styles = StyleSheet.create({
     marginLeft: 16
   },
   pastEventsIcon: {
+    backgroundColor: 'rgba(0,255,255,0)',
     width: 32,
     height: 32
   },
   pastEventsButton: {
-    top: 0,
+    top: 4,
     left: 7,
     width: 103,
     height: 24,
-    position: "absolute",
     backgroundColor: "rgba(165,171,232,0.5)",
     borderRadius: 20
   },
   pastEventsText: {
-    top: 2,
-    left: 0,
-    position: "absolute",
+    flex: 1,
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    backgroundColor: 'rgba(0,255,255,0)',
     color: "rgba(0,0,0,1)",
-    height: 24,
-    width: 118,
     fontSize: 16,
-    textAlign: "center"
   },
   pastEventsButtonStack: {
+    alignContent: 'center',
+    backgroundColor: 'rgba(0,255,255,0)',
     width: 118,
-    height: 26,
+    height: 32,
     marginLeft: 11,
-    marginTop: 4
   },
   pastEventsCount: {
-    position: 'absolute',
+    flex: 1,
     textAlign: 'right',
+    textAlignVertical: 'center',
     right: 16,
+    backgroundColor: 'rgba(0,255,255,0)',
     color: "rgba(97,97,97,1)",
-    height: 20,
-    width: 43,
     fontSize: 16,
-    marginTop: 4,
   },
   pastEventsIconRow: {
+    backgroundColor: 'rgba(0,255,255,0)',
     height: 32,
     flexDirection: "row",
     marginTop: 17,
@@ -401,6 +413,8 @@ const styles = StyleSheet.create({
     marginLeft: 16
   },
   logoutIcon: {
+    backgroundColor: 'rgba(0,255,255,0)',
+    marginTop: 3,
     width: 32,
     height: 32
   },
@@ -414,21 +428,21 @@ const styles = StyleSheet.create({
     borderRadius: 14
   },
   logoutText: {
-    top: 8,
-    left: 11,
-    position: "absolute",
-    color: "rgba(0,0,0,1)",
-    height: 30,
-    width: 82,
+    flex: 1,
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    backgroundColor: 'rgba(0,255,255,0)',
+    color: "rgba(255,255,255,1)",
     fontSize: 16,
-    textAlign: "center"
   },
   logoutButtonStack: {
+    backgroundColor: 'rgba(0,255,255,0)',
     width: 103,
     height: 38,
     marginLeft: 18
   },
   logoutIconRow: {
+    backgroundColor: 'rgba(0,255,255,0)',
     height: 38,
     flexDirection: "row",
     marginTop: 16,
