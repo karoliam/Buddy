@@ -21,10 +21,8 @@ const FilteredListItem = async ({navigation, route}) => {
   const filtering = async () => {
     try {
       const files = await getFilesByTag(item);
-      const allFilteredData = files.map(async (filteredItem) => {
-        return await doFetch(apiUrl + 'media/' + filteredItem.file_id);
-      });
-      setFilteredFiles(await Promise.all(allFilteredData));
+      const allFilteredFilesArray = files.map((item) => item.description);
+      setFilteredFiles(allFilteredFilesArray);
     } catch (error) {
       console.log('filtering', error);
     }
@@ -33,7 +31,7 @@ const FilteredListItem = async ({navigation, route}) => {
     filtering();
   }, [update]);
 
-  console.log('filtered files TOSSA', filteredFiles);
+  console.log('descriptionit on tossa', filteredFiles);
 
   return (
     <TouchableOpacity

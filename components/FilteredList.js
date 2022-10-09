@@ -10,7 +10,7 @@ const FilteredList = ({navigation, route}) => {
   const {update, filteredFiles} = useContext(MainContext);
   return (
     <View>
-    <TagList navigation={navigation} route={route}></TagList>
+    {/* <TagList navigation={navigation} route={route}></TagList> */}
 
     <FlatList
       data={filteredFiles}
