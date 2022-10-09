@@ -20,7 +20,7 @@ import {applicationTag} from '../utils/variables';
 import PropTypes from 'prop-types';
 import SelectList from 'react-native-dropdown-select-list';
 import cityNames from '../utils/cityNames';
-let {width} = Dimensions.get('window');
+let {width, height} = Dimensions.get('window');
 
 const CreatePostForm = ({navigation}) => {
   const [mediafile, setMediafile] = useState(null);
