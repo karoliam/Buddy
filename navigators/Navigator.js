@@ -10,6 +10,7 @@ import {MainContext} from '../context/MainContext';
 import Single from '../views/Single';
 import EditPost from '../views/EditPost';
 import TagView from '../views/TagView';
+import FilteredContent from '../views/FilteredContent';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -40,6 +41,8 @@ const StackScreen = () => {
           <Stack.Screen name="Single" component={Single} />
           <Stack.Screen name="EditPost" component={EditPost} />
           <Stack.Screen name="TagView" component={TagView} />
+          <Stack.Screen name="FilteredContent" component={FilteredContent} />
+
 
         </>
       ) : (

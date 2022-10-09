@@ -1,13 +1,18 @@
-import {useEffect, useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
+import {MainContext} from '../context/MainContext';
 import {doFetch} from '../utils/http';
 import {apiUrl, applicationTag} from '../utils/variables';
 
-const useMedia = (update) => {
+const useMedia = (update, filterOn=false, tagItem) => {
   const [mediaArray, setMediaArray] = useState([]);
+  // const {tagItem} = useContext(MainContext);
   const loadMedia = async () => {
     try {
       const json = await useTag().getFilesByTag(applicationTag);
       console.log(json);
+      // if (filterOn) {
+      //   json = json.filter((file) => file.tag === tagItem);
+      // }
       json.reverse();
       const allMediaData = json.map(async (mediaItem) => {
         return await doFetch(apiUrl + 'media/' + mediaItem.file_id);
@@ -69,6 +74,7 @@ const useMedia = (update) => {
 };
 
 const useTag = () => {
+
   const getFilesByTag = async (tag) => {
     return await doFetch(apiUrl + 'tags/' + tag);
   };
@@ -105,8 +111,31 @@ const useTag = () => {
     }
   };
 
+
   return {getFilesByTag, postTag, getAllTags};
 };
+
+// const loadTags = (update, filterTag) => {
+//   const showTags = async () => {
+//     const [tagArray, setTagArray] = useState([]);
+//     try {
+//       const json = await useTag().getFilesByTag(filterTag);
+//       console.log(json);
+//       json.reverse();
+//       const allTagData = json.map(async (tagItem) => {
+//         return await doFetch(apiUrl + 'media/' + tagItem.file_id);
+//       });
+//       setTagArray(await Promise.all(allTagData));
+//     } catch (error) {
+//       console.log('tag fetch failed', error);
+//     }
+//   };
+//   useEffect(() => {
+//     loadTags();
+//   }, [update]);
+
+//   return {showTags};
+// };
 
 const userMedia = () => {
   const userProfilePostData = async (profileID) => {

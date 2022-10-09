@@ -23,7 +23,8 @@ const MainProvider = (props) => {
   const [profileDId, setProfileDId] = useState(0);
   const [listOfTags, setListOfTags] = useState();
   const [city, setCity] = useState('');
-  const [filterOn, setFilterOn] =  useState(false);
+  const [tagItem, setTagItem] = useState('');
+  // const [filterOn, setFilterOn] =  useState(false);
 
   return (
     <MainContext.Provider
@@ -62,8 +63,10 @@ const MainProvider = (props) => {
         setProfileDId,
         city,
         setCity,
-        filterOn,
-        setFilterOn
+        // filterOn,
+        // setFilterOn
+        tagItem,
+        setTagItem
       }}
     >
       {props.children}

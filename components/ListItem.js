@@ -8,44 +8,20 @@ import {
   Image,
   Dimensions,
 } from 'react-native';
-import {useTag} from '../hooks/ApiHooks';
+import {loadTags, useTag} from '../hooks/ApiHooks';
 import {useContext, useEffect, useState} from 'react';
 import {MainContext} from '../context/MainContext';
 
-const ListItem = ({singleMedia, navigation, route}) => {
+const ListItem = async ({singleMedia, navigation, route, filterOn}) => {
   // console.log('tässä singlemedia', singleMedia);
   // console.log('tossa ois description', singleMedia.description);
   const data = JSON.parse(singleMedia.description);
   const {location, when, writePost} = data;
-  const {getFilesByTag} = useTag();
+  // const {setTagItem} = useContext(MainContext);
   const item = route.params;
-  const [filteredFiles, setFilteredFiles] = useState({});
-  const {filterOn} = useContext(MainContext);
+  // setTagItem(item);
+  // setFilterTagName(item);
 
-  console.log('filtered files', filteredFiles);
-  const getByTag = async () => {
-    if (item !== null) {
-      try {
-        const filesByTag = await getFilesByTag('buddytag' + item);
-        //console.log('files HERE', filesByTag);
-        // setFilteredFiles(filesByTag);
-        //console.log('filesbytag', filteredFiles);
-      } catch (error) {
-        console.log('getByTag error', error);
-      }
-    }
-  };
-  const filtering = (files) => {
-    const filterDesc = files.map((item) => item.description);
-    console.log('filtered', filterDesc);
-    const filterFilename = files.map((item) => item.filename);
-    console.log('filenames', filterFilename);
-  }
-  // const descriptionJSON = JSON.parse(filteredDescription);
-  // const filteredWhen = filteredDescription.map((item) => item.when);
-  //onsole.log('tuosa',filteredDescription);
-  getByTag();
-  //console.log('here is data', JSON.parse(singleMedia));
   return (
     <TouchableOpacity
       style={styles.touchable}
@@ -95,6 +71,7 @@ ListItem.propTypes = {
   singleMedia: PropTypes.object,
   navigation: PropTypes.object,
   route: PropTypes.object,
+  filterOn: PropTypes.bool,
 };
 
 export default ListItem;

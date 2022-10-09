@@ -6,14 +6,12 @@ import {useContext, useState} from 'react';
 import {MainContext} from '../context/MainContext';
 
 const TagViewList = ({navigation, route}) => {
-  const {listOfTags,setListOfTags, filterOn, setFilterOn, update, setUpdate} = useContext(MainContext);
+  const {listOfTags, update, setUpdate, tagItem, setTagItem} = useContext(MainContext);
 
 
   const onClick = (item) => {
-    navigation.navigate('Home', item);
-    setFilterOn(true);
+    navigation.navigate('FilteredContent', item);
     setUpdate(!update);
-    console.log('filter on', filterOn);
   }
 
   return (
