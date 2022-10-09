@@ -16,8 +16,10 @@ import {Image} from '@rneui/themed';
 import {userMedia, useTag} from '../hooks/ApiHooks';
 import {mediaUrl} from '../utils/variables';
 import {setStatusBarNetworkActivityIndicatorVisible} from 'expo-status-bar';
+import PropTypes from 'prop-types';
 
-const ProfileForms = () => {
+
+const ProfileForms = ({navigation}) => {
   const {
     user,
     setUser,
@@ -137,6 +139,12 @@ const ProfileForms = () => {
       )}
       <Button title={'Logout'} onPress={logout} />
       <Button title={'Edit profile'} onPress={editProfile} />
+      <Button
+          title="Own posts"
+          onPress={() => {
+            navigation.navigate('MyFiles');
+          }}
+        />
     </SafeAreaView>
   );
 };
@@ -149,5 +157,8 @@ const styles = StyleSheet.create({
     paddingTop: 40,
   },
 });
+ProfileForms.propTypes = {
+  navigation: PropTypes.object,
+};
 
 export default ProfileForms;
