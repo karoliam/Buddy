@@ -334,7 +334,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,255,255,1)'
   },
   backgroundImage: {
-    backgroundColor: 'rgba(0,255,0,0.1)',
+    backgroundColor: 'rgba(0,255,0,0)',
     top: 0,
     left: 0,
     width: width,
@@ -353,7 +353,7 @@ const styles = StyleSheet.create({
     right: 16
   },
   profilePictureHolder: {
-    backgroundColor: 'rgba(0,255,0,0.1)',
+    backgroundColor: 'rgba(0,255,0,0)',
     top: 151,
     left: 32,
     width: 100,
@@ -371,7 +371,7 @@ const styles = StyleSheet.create({
     top: -16
   },
   backgroundImageStack: {
-    backgroundColor: 'rgba(0,255,0,0.1)',
+    backgroundColor: 'rgba(0,255,0,0)',
     width: width,
     height: 0.31 * height
   },
@@ -380,7 +380,7 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     textAlignVertical: 'center',
     color: '#121212',
-    backgroundColor: 'rgba(0,255,0,0.1)',
+    backgroundColor: 'rgba(0,255,0,0)',
     fontSize: 26,
     marginTop: 16,
     marginLeft: 64
@@ -390,7 +390,7 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     textAlignVertical: 'center',
     color: '#9B9797',
-    backgroundColor: 'rgba(0,255,0,0.1)',
+    backgroundColor: 'rgba(0,255,0,0)',
     fontSize: 14,
     marginTop: 8,
     marginLeft: 72
@@ -410,7 +410,7 @@ const styles = StyleSheet.create({
     flex: 1,
     textAlignVertical: 'center',
     color: '#121212',
-    backgroundColor: 'rgba(0,255,0,0.1)',
+    backgroundColor: 'rgba(0,255,0,0)',
     fontSize: 20,
     marginLeft: 12,
     marginRight: 12
@@ -420,7 +420,7 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     textAlignVertical: 'center',
     color: '#9B9797',
-    backgroundColor: 'rgba(0,255,0,0.1)',
+    backgroundColor: 'rgba(0,255,0,0)',
     fontSize: 14,
     marginTop: 8,
     marginLeft: 72
@@ -440,7 +440,7 @@ const styles = StyleSheet.create({
     flex: 1,
     textAlignVertical: 'top',
     color: '#121212',
-    backgroundColor: 'rgba(255,0,0,0.1)',
+    backgroundColor: 'rgba(255,0,0,0)',
     fontSize: 16,
     marginTop: 8,
     marginBottom: 8,
@@ -452,7 +452,7 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     textAlignVertical: 'center',
     color: '#9B9797',
-    backgroundColor: 'rgba(0,255,0,0.1)',
+    backgroundColor: 'rgba(0,255,0,0)',
     fontSize: 14,
     marginTop: 8,
     marginLeft: 72
@@ -494,7 +494,7 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     textAlignVertical: 'center',
     color: '#9B9797',
-    backgroundColor: 'rgba(0,255,0,0.1)',
+    backgroundColor: 'rgba(0,255,0,0)',
     fontSize: 14,
     marginTop: 8,
     marginLeft: 72
@@ -514,7 +514,7 @@ const styles = StyleSheet.create({
     flex: 1,
     textAlignVertical: 'center',
     color: '#121212',
-    backgroundColor: 'rgba(0,255,0,0.1)',
+    backgroundColor: 'rgba(0,255,0,0)',
     fontSize: 16,
     marginLeft: 12,
     marginRight: 12
