@@ -185,7 +185,7 @@ const EditProfileForms = () => {
 
   return (
     <>
-      <SafeAreaView style={styles.container}>
+      <ScrollView style={styles.container}>
         <View style={styles.backgroundImageStack}>
           <TouchableOpacity style={styles.backgroundImageStack} onPress={selectBackgroundImage}>
             <Image
@@ -201,6 +201,9 @@ const EditProfileForms = () => {
               }
               style={styles.backgroundImage}
             ></Image>
+            <View style={styles.backGroundIconHolder}>
+              <FontAwesomeIcon icon="fa-solid fa-camera" size={32} color={'#A5ABE8'}/>
+            </View>
           </TouchableOpacity>
           <TouchableOpacity style={styles.profilePictureHolder} onPress={selectProfilePicture}>
             <Image
@@ -216,9 +219,14 @@ const EditProfileForms = () => {
               }
               style={styles.profilePicture}
             />
+            <View style={styles.profilePictureIconHolder}>
+              <FontAwesomeIcon icon="fa-solid fa-camera" size={32}  color={'#A5ABE8'}/>
+            </View>
           </TouchableOpacity>
         </View>
-        <View style={styles.fullNameRow}>
+        <Text style={styles.editProfileText}>Edit profile</Text>
+        <Text style={styles.fullNameHeader}>Full Name</Text>
+        <View style={styles.fieldBoxFullName}>
           <Controller
             control={control}
             rules={{}}
@@ -229,7 +237,6 @@ const EditProfileForms = () => {
                 onChangeText={onChange}
                 value={value}
                 placeholder="Full name"
-                style={styles.yourAgeTextInput}
                 autoCapitalize="none"
                 errorMessage={
                   errors.full_name && <Text>{errors.full_name.message}</Text>
@@ -239,29 +246,28 @@ const EditProfileForms = () => {
             name="full_name"
           />
         </View>
-        <View style={styles.fullNameBorder}></View>
-        <Controller
-          control={control}
-          rules={{}}
-          render={({field: {onChange, onBlur, value}}) => (
-            <TextInput
-              style={styles.bioText}
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-              placeholder="bio"
-              autoCapitalize="none"
-              errorMessage={errors.bio && <Text>{errors.bio.message}</Text>}
-            />
-          )}
-          name="bio"
-        />
-        <View style={styles.bioBorder}></View>
-        <View style={styles.locationIconRow}>
-          <View style={styles.locationIcon}>
-            <FontAwesomeIcon icon="fa-solid fa-location-dot" size={32} color={'#B0B0B0'}/>
-          </View>
+        <Text style={styles.bioHeader}>About You</Text>
+        <View style={styles.fieldBoxBio}>
           <Controller
+            control={control}
+            rules={{}}
+            render={({field: {onChange, onBlur, value}}) => (
+              <TextInput
+                style={styles.bioText}
+                onBlur={onBlur}
+                multiline={true}
+                onChangeText={onChange}
+                value={value}
+                placeholder="bio"
+                autoCapitalize="none"
+                errorMessage={errors.bio && <Text>{errors.bio.message}</Text>}
+              />
+            )}
+            name="bio"
+          />
+        </View>
+        <Text style={styles.locationHeader}>Location</Text>
+        <Controller
             control={control}
             render={({field: {onChange, onBlur, value}}) => (
               <SelectList
@@ -274,43 +280,50 @@ const EditProfileForms = () => {
                 placeholder="Location"
                 boxStyles={styles.locationBox}
                 dropdownStyles={styles.locationBoxDropDown}
+                inputStyles={styles.locationText}
+                dropdownTextStyles={styles.locationText}
               />
             )}
             name="location"
           />
+        <Text style={styles.ageHeader}>Your Age</Text>
+        <View style={styles.fieldBoxAge}>
+          <Controller
+            control={control}
+            rules={{}}
+            render={({field: {onChange, onBlur, value}}) => (
+                <TextInput
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                  placeholder="Your age"
+                  style={styles.ageText}
+                  autoCapitalize="none"
+                  errorMessage={errors.age && <Text>{errors.age.message}</Text>}
+                />
+            )}
+            name="age"
+          />
         </View>
-        <View style={styles.locationBorder}></View>
-        <View style={styles.ageIconRow}>
-          <View style={styles.ageIcon}>
-            <FontAwesomeIcon icon="fa-solid fa-clock" size={32} color={'#B0B0B0'}/>
+        <View style={styles.updateButtonStackRow}>
+          <View style={styles.updateButtonStack}>
+            <TouchableOpacity
+              style={styles.updateButton}
+              onPress={handleSubmit(saveData)}
+            >
+              <Text style={styles.updateText}>Update Profile</Text>
+            </TouchableOpacity>
           </View>
-          <View style={styles.ageTextColumn}>
-            <Text style={styles.ageText}>Age</Text>
-              <Controller
-              control={control}
-              rules={{}}
-              render={({field: {onChange, onBlur, value}}) => (
-                <View>
-                  <TextInput
-                    onBlur={onBlur}
-                    onChangeText={onChange}
-                    value={value}
-                    placeholder="Your age"
-                    style={styles.userAge}
-                    autoCapitalize="none"
-                    errorMessage={errors.age && <Text>{errors.age.message}</Text>}
-                  />
-                </View>
-              )}
-              name="age"
-              />
+          <View style={styles.returnButtonStack}>
+            <TouchableOpacity
+              style={styles.returnButton}
+              onPress={returnToProfile}
+            >
+              <Text style={styles.returnText}>Return</Text>
+            </TouchableOpacity>
           </View>
         </View>
-        <View style={styles.ageBorder}></View>
-
-      </SafeAreaView>
-      <Button title="Update profile" onPress={handleSubmit(saveData)}></Button>
-      <Button title="Return" onPress={returnToProfile}></Button>
+      </ScrollView>
     </>
   );
 };
@@ -321,12 +334,26 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,255,255,1)'
   },
   backgroundImage: {
+    backgroundColor: 'rgba(0,255,0,0.1)',
     top: 0,
     left: 0,
-    width: '100%',
+    width: width,
     height: 226,
   },
+  backGroundIconHolder: {
+    alignItems: 'center',
+    position: "absolute",
+    alignContent: 'center',
+    backgroundColor: 'rgba(255,255,255,1)',
+    padding: 8,
+    height: 50,
+    width: 50,
+    borderRadius: 100,
+    bottom: 6,
+    right: 16
+  },
   profilePictureHolder: {
+    backgroundColor: 'rgba(0,255,0,0.1)',
     top: 151,
     left: 32,
     width: 100,
@@ -339,234 +366,211 @@ const styles = StyleSheet.create({
     height: 100,
     borderRadius: 100
   },
+  profilePictureIconHolder: {
+    left: 80,
+    top: -16
+  },
   backgroundImageStack: {
-    width: '100%',
-    height: '31.65%'
+    backgroundColor: 'rgba(0,255,0,0.1)',
+    width: width,
+    height: 0.31 * height
   },
-  fullName: {
-    color: "#121212",
-    height: 30,
-    width: 156,
-    fontSize: 20,
-    marginTop: 2,
-    marginLeft: 8
-  },
-  nightMode: {
-    position: 'absolute',
-    right: 72,
-    width: 32,
-    height: 32
-  },
-  editProfile: {
-    position: 'absolute',
-    right: 16,
-    width: 32,
-    height: 32
-  },
-  fullNameRow: {
-    height: 32,
-    flexDirection: "row",
+  editProfileText: {
+    flex: 1,
+    textAlign: 'left',
+    textAlignVertical: 'center',
+    color: '#121212',
+    backgroundColor: 'rgba(0,255,0,0.1)',
+    fontSize: 26,
     marginTop: 16,
-    marginLeft: 16,
-    marginRight: 16
+    marginLeft: 64
   },
-  fullNameBorder: {
-    width: (width) - 32,
-    height: 2,
-    backgroundColor: "rgba(165,171,232,1)",
-    marginTop: 16,
-    marginLeft: 16,
+  fullNameHeader: {
+    flex: 1,
+    textAlign: 'left',
+    textAlignVertical: 'center',
+    color: '#9B9797',
+    backgroundColor: 'rgba(0,255,0,0.1)',
+    fontSize: 14,
+    marginTop: 8,
+    marginLeft: 72
   },
-  bioText: {
-    color: "#121212",
-    height: 65,
-    width: 343,
-    fontSize: 16,
-    marginTop: 16,
-    marginLeft: 16
-  },
-  bioBorder: {
-    width: (width) - 32,
-    height: 2,
-    backgroundColor: "rgba(165,171,232,1)",
-    marginTop: 17,
-    marginLeft: 16
-  },
-  locationIcon: {
-    width: 32,
-    height: 32,
-    marginTop: 8
-  },
-  locationText: {
-    color: "rgba(155,151,151,1)",
-    height: 20,
-    width: 58,
-    fontSize: 12
-  },
-  userLocation: {
-    color: "rgba(97,97,97,1)",
-    height: 20,
-    width: 58,
-    fontSize: 16
-  },
-  locationBox: {
-    width: 285,
+  fieldBoxFullName: {
+    width: width - 128,
     height: 61,
     backgroundColor: 'rgba(255,255,255,1)',
     borderWidth: 2,
-    borderColor: 'rgba(165,171,232,1)',
+    borderColor: 'rgba(165,171,232,0.5)',
     borderRadius: 14,
     borderStyle: 'solid',
+    marginTop: 2,
+    marginLeft: 64
+  },
+  fullName: {
+    flex: 1,
+    textAlignVertical: 'center',
+    color: '#121212',
+    backgroundColor: 'rgba(0,255,0,0.1)',
+    fontSize: 20,
+    marginLeft: 12,
+    marginRight: 12
+  },
+  bioHeader: {
+    flex: 1,
+    textAlign: 'left',
+    textAlignVertical: 'center',
+    color: '#9B9797',
+    backgroundColor: 'rgba(0,255,0,0.1)',
+    fontSize: 14,
+    marginTop: 8,
+    marginLeft: 72
+  },
+  fieldBoxBio: {
+    width: width - 128,
+    height: 183,
+    backgroundColor: 'rgba(255,255,255,1)',
+    borderWidth: 2,
+    borderColor: 'rgba(165,171,232,0.5)',
+    borderRadius: 14,
+    borderStyle: 'solid',
+    marginTop: 2,
+    marginLeft: 64
+  },
+  bioText: {
+    flex: 1,
+    textAlignVertical: 'top',
+    color: '#121212',
+    backgroundColor: 'rgba(255,0,0,0.1)',
+    fontSize: 16,
+    marginTop: 8,
+    marginBottom: 8,
+    marginLeft: 12,
+    marginRight: 12
+  },
+  locationHeader: {
+    flex: 1,
+    textAlign: 'left',
+    textAlignVertical: 'center',
+    color: '#9B9797',
+    backgroundColor: 'rgba(0,255,0,0.1)',
+    fontSize: 14,
+    marginTop: 8,
+    marginLeft: 72
+  },
+  locationBox: {
+    width: width - 128,
+    height: 61,
+    backgroundColor: 'rgba(255,255,255,1)',
+    borderWidth: 2,
+    borderColor: 'rgba(165,171,232,0.5)',
+    borderRadius: 14,
+    borderStyle: 'solid',
+    marginTop: 2,
+    marginLeft: 64
   },
   locationBoxDropDown: {
-    width: 285,
+    width: width - 128,
     height: 244,
     backgroundColor: 'rgba(255,255,255,1)',
     borderWidth: 2,
-    borderColor: 'rgba(165,171,232,1)',
+    borderColor: 'rgba(165,171,232,0.5)',
+    borderRadius: 14,
+    borderStyle: 'solid',
+    marginTop: 16,
+    marginLeft: 64
+  },
+  locationText: {
+    flex: 1,
+    marginLeft: -8,
+    textAlign: 'left',
+    textAlignVertical: 'center',
+    color: '#121212',
+    backgroundColor: 'rgba(255,0,0,0)',
+    fontSize: 16,
+    marginRight: 12
+  },
+  ageHeader: {
+    flex: 1,
+    textAlign: 'left',
+    textAlignVertical: 'center',
+    color: '#9B9797',
+    backgroundColor: 'rgba(0,255,0,0.1)',
+    fontSize: 14,
+    marginTop: 8,
+    marginLeft: 72
+  },
+  fieldBoxAge: {
+    width: width - 128,
+    height: 61,
+    backgroundColor: 'rgba(255,255,255,1)',
+    borderWidth: 2,
+    borderColor: 'rgba(165,171,232,0.5)',
+    borderRadius: 14,
+    borderStyle: 'solid',
+    marginTop: 2,
+    marginLeft: 64
+  },
+  ageText: {
+    flex: 1,
+    textAlignVertical: 'center',
+    color: '#121212',
+    backgroundColor: 'rgba(0,255,0,0.1)',
+    fontSize: 16,
+    marginLeft: 12,
+    marginRight: 12
+  },
+  updateButton: {
+    width: width - 238,
+    height: 36,
+    backgroundColor: 'rgba(255,255,255,1)',
+    borderWidth: 2,
+    borderColor: 'rgba(165,171,232,0.5)',
     borderRadius: 14,
     borderStyle: 'solid',
   },
-  locationTextColumn: {
-    width: 58,
-    marginLeft: 8
-  },
-  locationIconRow: {
-    height: 40,
-    flexDirection: "row",
-    marginTop: 16,
-    marginLeft: 16,
-    marginRight: 16
-  },
-  locationBorder: {
-    width: (width) - 32,
-    height: 2,
-    backgroundColor: "rgba(165,171,232,1)",
-    marginTop: 15,
-    marginLeft: 16
-  },
-  ageIcon: {
-    width: 32,
-    height: 32,
-    marginTop: 7
-  },
-  ageText: {
-    color: "rgba(155,151,151,1)",
-    height: 20,
-    width: 58,
-    fontSize: 12
-  },
-  userAge: {
-    color: "rgba(97,97,97,1)",
-    height: 20,
-    width: 58,
-    fontSize: 16
-  },
-  ageTextColumn: {
-    width: 58,
-    marginLeft: 8
-  },
-  ageIconRow: {
-    height: 40,
-    flexDirection: "row",
-    marginTop: 16,
-    marginLeft: 16,
-    marginRight: 16
-  },
-  ageBorder: {
-    width: (width) - 32,
-    height: 2,
-    backgroundColor: "rgba(165,171,232,1)",
-    marginTop: 15,
-    marginLeft: 16
-  },
-  pastEventsIcon: {
-    width: 32,
-    height: 32
-  },
-  pastEventsButton: {
-    top: 0,
-    left: 7,
-    width: 103,
-    height: 24,
-    position: "absolute",
-    backgroundColor: "rgba(165,171,232,1)",
-    borderRadius: 20
-  },
-  pastEventsText: {
-    top: 2,
-    left: 0,
-    position: "absolute",
-    color: "rgba(0,0,0,1)",
-    height: 24,
-    width: 118,
+  updateText: {
+    flex: 1,
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    color: 'rgba(83,134,234,1)',
+    backgroundColor: 'rgba(255,0,0,0)',
     fontSize: 16,
-    textAlign: "center"
+    marginLeft: 12,
+    marginRight: 12
   },
-  pastEventsButtonStack: {
-    width: 118,
-    height: 26,
-    marginLeft: 11,
-    marginTop: 4
+  updateButtonStack: {
+    width: width - 238,
+    height: 40,
   },
-  pastEventsCount: {
-    position: 'absolute',
-    textAlign: 'right',
-    right: 16,
-    color: "rgba(97,97,97,1)",
-    height: 20,
-    width: 43,
-    fontSize: 16,
-    marginTop: 4,
-  },
-  pastEventsIconRow: {
-    height: 32,
-    flexDirection: "row",
-    marginTop: 17,
-    marginLeft: 16,
-    marginRight: 16
-  },
-  pastEventsBorder: {
-    width: (width) - 32,
-    height: 2,
-    backgroundColor: "rgba(165,171,232,1)",
-    marginTop: 15,
-    marginLeft: 16
-  },
-  logoutIcon: {
-    width: 32,
-    height: 32
-  },
-  logoutButton: {
-    top: 0,
-    left: 0,
-    width: 103,
+  returnButton: {
+    width: width - 311,
     height: 36,
-    position: "absolute",
-    backgroundColor: "rgba(255,0,0,1)",
-    borderRadius: 14
+    backgroundColor: 'rgba(165,171,232,0.5)',
+    borderRadius: 14,
   },
-  logoutText: {
-    top: 8,
-    left: 11,
-    position: "absolute",
-    color: "rgba(0,0,0,1)",
-    height: 30,
-    width: 82,
+  returnText: {
+    flex: 1,
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    color: 'rgba(0,0,0,1)',
+    backgroundColor: 'rgba(255,0,0,0)',
     fontSize: 16,
-    textAlign: "center"
+    marginLeft: 12,
+    marginRight: 12
   },
-  logoutButtonStack: {
-    width: 103,
-    height: 38,
-    marginLeft: 18
+  returnButtonStack: {
+    width: width - 311,
+    height: 40,
+    marginLeft: 10,
   },
-  logoutIconRow: {
-    height: 38,
-    flexDirection: "row",
+  updateButtonStackRow: {
+    width: width - 128,
+    backgroundColor: 'rgba(255,0,0,0)',
+    height: 36,
+    flexDirection: 'row',
     marginTop: 16,
-    marginLeft: 16,
-    marginRight: 206
+    marginLeft: 64,
+    marginBottom: 32
   },
 });
 
