@@ -8,19 +8,14 @@ import {
   Image,
   Dimensions,
 } from 'react-native';
-import {loadTags, useTag} from '../hooks/ApiHooks';
-import {useContext, useEffect, useState} from 'react';
-import {MainContext} from '../context/MainContext';
 
-const ListItem = async ({singleMedia, navigation, route, filterOn}) => {
-  // console.log('tässä singlemedia', singleMedia);
-  // console.log('tossa ois description', singleMedia.description);
+
+const ListItem = async ({singleMedia, navigation, route}) => {
+
   const data = JSON.parse(singleMedia.description);
   const {location, when, writePost} = data;
-  // const {setTagItem} = useContext(MainContext);
   const item = route.params;
-  // setTagItem(item);
-  // setFilterTagName(item);
+
 
   return (
     <TouchableOpacity

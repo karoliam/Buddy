@@ -11,7 +11,7 @@ const List = ({navigation, route, filterOn}) => {
   const {update, tagItem} = useContext(MainContext);
   const item = route.params;
   const {mediaArray} = useMedia(update, filterOn, item);
-  console.log('tagitem', item)
+  console.log('media array', mediaArray);
 
   return (
     <View>

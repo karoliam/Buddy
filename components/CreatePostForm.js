@@ -85,8 +85,8 @@ const CreatePostForm = ({navigation}) => {
       writePost: data.writePost,
     };
 
-    // const formJSON = JSON.stringify(formObject);
-    formData.append('description', formObject);
+    const formJSON = JSON.stringify(formObject);
+    formData.append('description', formJSON);
     // console.log('here is data', data);
     if (mediafile == null) {
       formData.append('title', 'feedPostTxt');
