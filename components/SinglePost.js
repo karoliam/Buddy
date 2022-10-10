@@ -1,10 +1,16 @@
-import {Text, ScrollView, ActivityIndicator} from 'react-native';
+import {
+  Text,
+  ScrollView,
+  ActivityIndicator,
+  TouchableOpacity,
+} from 'react-native';
 import {mediaUrl} from '../utils/variables';
 import {Image} from '@rneui/themed';
 import {useRoute} from '@react-navigation/native';
 import {useUser} from '../hooks/ApiHooks';
-import {useState} from 'react';
+import {useContext, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {MainContext} from '../context/MainContext';
 
 const SinglePost = () => {
   const route = useRoute();
@@ -12,6 +18,11 @@ const SinglePost = () => {
   const [userFullName, setUserFullName] = useState('');
   const descriptionObject = JSON.parse(description);
   const {getUserById} = useUser();
+  const {
+    setUserIdForProfilePage,
+    setShowAnotherUserProfile,
+    showAnotherUserProfile,
+  } = useContext(MainContext);
   // console.log('token here', descriptionObject.token);
 
   const getFullName = async () => {
@@ -26,6 +37,11 @@ const SinglePost = () => {
     }
   };
   getFullName(descriptionObject.token);
+
+  const checkUser = () => {
+    setUserIdForProfilePage(user_id);
+    setShowAnotherUserProfile(!showAnotherUserProfile);
+  };
   return (
     <ScrollView>
       <Image
@@ -33,7 +49,12 @@ const SinglePost = () => {
         PlaceholderContent={<ActivityIndicator />}
         style={{width: 300, height: 300}}
       />
-      <Text>{userFullName}</Text>
+      <TouchableOpacity
+        style={{margin: 20, backgroundColor: 'lightblue', padding: 20}}
+        onPress={checkUser}
+      >
+        <Text>{userFullName}</Text>
+      </TouchableOpacity>
       <Text>{descriptionObject.when}</Text>
       <Text>{descriptionObject.location}</Text>
       <Text>{descriptionObject.writePost}</Text>

@@ -33,9 +33,7 @@ const StackScreen = () => {
             component={TabScreen}
             options={{headerShown: false}}
           />
-            <Stack.Screen
-            name="Single"
-            component={Single} />
+          <Stack.Screen name="Single" component={Single} />
         </>
       ) : (
         <Stack.Screen name="Login" component={Login} />

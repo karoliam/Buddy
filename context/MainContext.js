@@ -8,12 +8,14 @@ const MainProvider = (props) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState({});
   const [update, setUpdate] = useState(true);
+  const [updateProfile, setUpdateProfile] = useState(true);
   const [fullName, setFullName] = useState('');
   const [image, setImage] = useState(null);
   const [profileData, setProfileData] = useState({});
   const [showRegisterUserDataForm, setShowRegisterUserDataForm] =
     useState(false);
   const [showEditProfile, setShowEditProfile] = useState(false);
+  const [showAnotherUserProfile, setShowAnotherUserProfile] = useState(false);
   const [avatar, setAvatar] = useState(null);
   const [profileBackground, setProfileBackgorund] = useState('');
   const [profileDescriptionData, setProfileDescriptionData] = useState({});
@@ -21,6 +23,7 @@ const MainProvider = (props) => {
   const [profileBId, setProfileBId] = useState(0);
   const [profileDId, setProfileDId] = useState(0);
   const [city, setCity] = useState('');
+  const [userIdForProfilePage, setUserIdForProfilePage] = useState(0);
 
   return (
     <MainContext.Provider
@@ -31,6 +34,8 @@ const MainProvider = (props) => {
         setUser,
         update,
         setUpdate,
+        updateProfile,
+        setUpdateProfile,
         fullName,
         setFullName,
         image,
@@ -55,6 +60,10 @@ const MainProvider = (props) => {
         setProfileDId,
         city,
         setCity,
+        userIdForProfilePage,
+        setUserIdForProfilePage,
+        showAnotherUserProfile,
+        setShowAnotherUserProfile,
       }}
     >
       {props.children}

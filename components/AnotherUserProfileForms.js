@@ -1,5 +1,5 @@
 /**
- * jostakin syystä ei nyt halua näyttää tietoa sen jälkeen kun katsoi toisa käyttäjää
+ * swaippauksella takas ei vaihdu showAnotherProfile
  */
 
 import React, {useContext, useEffect, useState} from 'react';
@@ -11,25 +11,26 @@ import {userMedia, useTag} from '../hooks/ApiHooks';
 import {mediaUrl} from '../utils/variables';
 import {setStatusBarNetworkActivityIndicatorVisible} from 'expo-status-bar';
 
-const ProfileForms = () => {
+const AnotherUserProfileForms = () => {
   const {
-    user,
-    setUser,
-    setIsLoggedIn,
-    setProfileData,
-    setShowEditProfile,
-    updateProfile,
     avatar,
     setAvatar,
     setProfilePId,
+    setProfileData,
+    updateProfile,
+    setUpdateProfile,
     profileBackground,
     setProfileBackgorund,
     setProfileBId,
     profileDescriptionData,
     setProfileDescriptionData,
+    setUser,
     setProfileDId,
     userIdForProfilePage,
+    setShowAnotherUserProfile,
+    showAnotherUserProfile,
   } = useContext(MainContext);
+  const {userProfilePostData} = userMedia();
   const {getFilesByTag} = useTag();
   const getProfileData = async (profileID) => {
     try {
@@ -44,8 +45,10 @@ const ProfileForms = () => {
         'buddyprofile_data' + profileID
       );
 
-      setProfileDescriptionData(JSON.parse(profileDataTag[0].description));
-      setProfileDId(profileDataTag[0].file_id);
+      if (profileDataTag[0].description != undefined) {
+        setProfileDescriptionData(JSON.parse(profileDataTag[0].description));
+        setProfileDId(profileDataTag[0].file_id);
+      }
 
       const profileBackTag = await getFilesByTag(
         'buddyprofile_background' + profileID
@@ -58,23 +61,21 @@ const ProfileForms = () => {
       console.log('Profile.js getProfileData ' + error);
     }
   };
-
   useEffect(() => {
-    getProfileData(user.user_id);
-  }, [updateProfile]);
+    getProfileData(userIdForProfilePage);
+  }, [userIdForProfilePage]);
 
   //getProfileData(user.user_id);
-  const logout = async () => {
-    await AsyncStorage.clear();
-    setProfileData({});
-    setAvatar(null),
-      setUser({}),
-      setProfileBackgorund(null),
-      setIsLoggedIn(false);
+  const returnToSingle = () => {
+    clearProfile;
+    setUpdateProfile(!updateProfile);
+    setShowAnotherUserProfile(!showAnotherUserProfile);
   };
-
-  const editProfile = () => {
-    setShowEditProfile(true);
+  const clearProfile = () => {
+    setProfileData({});
+    setProfileDescriptionData({});
+    setAvatar(null);
+    setProfileBackgorund(null);
   };
 
   return (
@@ -126,8 +127,7 @@ const ProfileForms = () => {
       ) : (
         <Text>no</Text>
       )}
-      <Button title={'Logout'} onPress={logout} />
-      <Button title={'Edit profile'} onPress={editProfile} />
+      <Button title={'Back'} onPress={returnToSingle} />
     </SafeAreaView>
   );
 };
@@ -141,4 +141,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProfileForms;
+export default AnotherUserProfileForms;
