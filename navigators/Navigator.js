@@ -10,6 +10,8 @@ import {MainContext} from '../context/MainContext';
 import Single from '../views/Single';
 import EditPost from '../views/EditPost';
 import MyFiles from '../views/MyFiles';
+import ChatView from '../views/ChatView';
+import OwnChats from '../views/OwnChats';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -20,6 +22,9 @@ const TabScreen = () => {
       <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="Create post" component={CreatePost} />
       <Tab.Screen name="Profile" component={Profile} />
+      <Tab.Screen name="OwnChats" component={OwnChats} />
+
+
     </Tab.Navigator>
   );
 };
@@ -38,6 +43,8 @@ const StackScreen = () => {
           <Stack.Screen name="Single" component={Single} />
           <Stack.Screen name="EditPost" component={EditPost} />
           <Stack.Screen name="MyFiles" component={MyFiles} />
+          <Stack.Screen name="ChatView" component={ChatView} />
+
 
         </>
       ) : (
