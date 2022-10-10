@@ -6,19 +6,24 @@ import {
   View,
   TouchableOpacity,
   Image,
-  Dimensions,
-} from 'react-native';
-import { useEffect, useState } from "react";
+  Dimensions, ScrollView
+} from "react-native";
+import { useContext, useEffect, useState } from "react";
 import {useTag} from '../hooks/ApiHooks';
+import { MainContext } from "../context/MainContext";
+import List from "./List";
+import PostTagList from "./PostTagList";
 const {height, width} = Dimensions.get('window');
 
 const ListItem = ({singleMedia, navigation}) => {
+  const {postFileId, setPostFileId} = useContext(MainContext);
   // console.log('tässä singlemedia', singleMedia);
   // console.log('tossa ois description', singleMedia.description);
   const {getFilesByTag, getTagsByFileId} = useTag();
   const [posterAvatar, setPosterAvatar] = useState('');
   const [posterName, setPosterName] = useState('');
-  console.log('sinkku media: ', singleMedia.user_id)
+  console.log('sinkku media: ', singleMedia.file_id)
+  setPostFileId(singleMedia.file_id);
   const getProfileData = async (user_id) => {
     try {
       const profilePicTag = await getFilesByTag(applicationTag + 'profile_pic' + user_id);
@@ -41,20 +46,25 @@ const ListItem = ({singleMedia, navigation}) => {
   };
 
   const getPostTagsData = async (file_id) => {
-    console.log('sinkku media file_id: ', file_id);
-    const postTagsArray = await getTagsByFileId(file_id);
-    console.log('sinkku media tagArray: ', postTagsArray);
-    const postFilteringTags = [];
-    for (const postTagsArrayKey in postTagsArray) {
-      if (postTagsArray[postTagsArrayKey].tag.includes(applicationTag + 'post_tag')) {
-        console.log('tag content: ', postTagsArray[postTagsArrayKey]);
-        postFilteringTags.push(postTagsArray[postTagsArrayKey]);
+    try {
+      console.log('sinkku media file_id & context id: ', {postFileId});
+      const postTagsArray = await getTagsByFileId(file_id);
+      console.log('sinkku media tagArray: ', postTagsArray);
+      const postFilteringTags = [];
+      for (const postTagsArrayKey in postTagsArray) {
+        if (postTagsArray[postTagsArrayKey].tag.includes(applicationTag + 'post_tag')) {
+          console.log('tag content: ', postTagsArray[postTagsArrayKey]);
+          postFilteringTags.push(postTagsArray[postTagsArrayKey]);
+        }
       }
+      console.log('postFilteringTagsContent: ', postFilteringTags);
+      singleMedia.filter_tags = postFilteringTags;
+      console.log('adding to media: ', singleMedia);
+    } catch (error) {
+    console.log('List.js getProfileData ' + error);
     }
-    console.log('postFilteringTagsContent: ', postFilteringTags);
-    singleMedia.filter_tags = postFilteringTags;
-    console.log('adding to media: ', singleMedia);
   };
+  // const passToPostTagList = {singleMedia};
 
   useEffect(() => {
     getProfileData(singleMedia.user_id);
@@ -90,7 +100,10 @@ const ListItem = ({singleMedia, navigation}) => {
             uri: posterAvatar,
             }}/>
         </View>
-        <Text style={styles.posterNameText}>{posterName}</Text>
+        <View style={styles.tagsScroll}>
+          <PostTagList singleMedia={singleMedia}></PostTagList>
+        </View>
+        {/* <Text style={styles.posterNameText}>{posterName}</Text> */}
       </View>
       <View style={styles.postTimeLocationRow}>
         <Text style={styles.whenText}>When</Text>
@@ -123,6 +136,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 8,
   },
   userAvatarContainer: {
+    marginRight: 8,
     left: 16,
     top: 8,
     width: 52,
@@ -143,15 +157,22 @@ const styles = StyleSheet.create({
   },
   postTopRow: {
     flexDirection: "row",
-    backgroundColor: "rgba(0, 255, 0,0.1)",
+    backgroundColor: "rgba(0, 255, 0,0)",
     width: width - 64,
     height: 64,
+  },
+  tagsScroll: {
+    flex: 1,
+    marginLeft: 16,
+    flexDirection: 'row',
+    backgroundColor: "rgba(255, 0, 255,0)",
+
   },
   postTimeLocationRow: {
     width: width - 64,
     height: 32,
     flexDirection: "row",
-    backgroundColor: "rgba(0, 0, 255,0.1)",
+    backgroundColor: "rgba(0, 0, 255,0)",
   },
   whenText: {
     marginLeft: 16,
@@ -182,7 +203,7 @@ const styles = StyleSheet.create({
     width: width - 64,
     paddingLeft: 16,
     paddingRight: 16,
-    backgroundColor: "rgba(0, 255, 0,0.1)",
+    backgroundColor: "rgba(0, 255, 0,0)",
 
   },
 });
