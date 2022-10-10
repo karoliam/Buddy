@@ -51,9 +51,9 @@ const EditProfileForms = () => {
   const [tempProfAvatar, setTempProfAvatar] = useState(null);
   const [avatarMediatype, setAvatarMediatype] = useState(null);
   const [backgroundMediatype, setBackgroundMediatype] = useState(null);
-  const {postMedia} = useMedia();
+  const {postMedia, deleteMedia} = useMedia();
   const {postTag} = useTag();
-  const {deleteMediaById} = userMedia();
+  const {deleteMediaById, userProfilePostData} = userMedia();
   const {deleteUserByPut} = useUser();
 
   const {
@@ -201,7 +201,7 @@ const EditProfileForms = () => {
   };
   const confirmedDelete = async () => {
     const token = await AsyncStorage.getItem('userToken');
-
+    deleteUserMedia(token);
     const newUser = {
       username: user.username.slice(6),
     };
@@ -220,6 +220,17 @@ const EditProfileForms = () => {
       }
     } catch (error) {
       console.log('EditProfileForms confirmDelete ', error.message);
+    }
+  };
+  const deleteUserMedia = async (token) => {
+    try {
+      const r = await userProfilePostData(user.user_id);
+      r.forEach(async (file) => {
+        const deletedMedia = await deleteMedia(token, file.file_id);
+        console.log(deletedMedia);
+      });
+    } catch (error) {
+      console.log(error);
     }
   };
   const handleSelect = (e) => {

@@ -19,7 +19,6 @@ import * as ImagePicker from 'expo-image-picker';
 import {useMedia, userMedia, useTag} from '../hooks/ApiHooks';
 import {MainContext} from '../context/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {single_pixel} from '../images';
 let {width} = Dimensions.get('window');
 import SelectList from 'react-native-dropdown-select-list';
 import cityNames from '../utils/cityNames';
@@ -81,7 +80,6 @@ const RegisterUserDataForm = () => {
     }
 
     //user data upload media
-    console.log('pixel uri', pixelUri);
     const profileData = new FormData();
     profileData.append('title', 'profile_data');
     profileData.append('file', {
@@ -110,7 +108,7 @@ const RegisterUserDataForm = () => {
       const delData = await deleteMediaById(token, profileDId);
 
       const pData = await postMedia(token, profileData);
-
+      console.log(pData);
       const profileDataTag = {
         file_id: pData.file_id,
         tag: 'buddyprofile_Data' + user.user_id,
