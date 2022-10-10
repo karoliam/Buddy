@@ -21,6 +21,7 @@ import SelectList from 'react-native-dropdown-select-list';
 import cityNames from '../utils/cityNames';
 import {Card} from '@rneui/themed';
 
+import {kissalinkki} from '../utils/variables';
 const EditProfileForms = () => {
   const {
     isLoggedIn,
@@ -108,7 +109,7 @@ const EditProfileForms = () => {
     const profileData = new FormData();
     profileData.append('title', 'profile_data');
     profileData.append('file', {
-      uri: 'https://placekitten.com/100',
+      uri: kissalinkki,
       name: 'placekitten',
       type: 'image/jpeg',
     });
