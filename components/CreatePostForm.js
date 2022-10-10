@@ -10,7 +10,12 @@ import {
   Text,
   Image,
   TextInput,
-  Alert, View, TouchableOpacity, Dimensions
+  Alert,
+  View,
+  TouchableOpacity,
+  Dimensions,
+  ScrollView,
+  Touchable,
 } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 import {MainContext} from '../context/MainContext';
@@ -26,11 +31,13 @@ const CreatePostForm = ({navigation}) => {
   const [mediafile, setMediafile] = useState(null);
   const [mediaType, setMediaType] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  // const [showMoreTags, setShowMoreTags] = useState(false);
   const [city, setCity] = useState('');
   const {postMedia} = useMedia();
   const {user, update, setUpdate} = useContext(MainContext);
   const {postTag} = useTag();
   const data = cityNames;
+  const [showMoreTags, setShowMoreTags] = useState(false);
 
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -58,13 +65,20 @@ const CreatePostForm = ({navigation}) => {
       when: '',
       writePost: '',
       title: 'feedPost',
+      tag_1: '',
+      tag_2: '',
+      tag_3: '',
     },
   });
+  const openMoreTags = (data) => {
+    setShowMoreTags(!showMoreTags);
+    console.log('showmore tags', showMoreTags);
+  };
 
   const onSubmit = async (data) => {
     const formData = new FormData();
     const token = await AsyncStorage.getItem('userToken');
-
+    console.log(data);
     const formObject = {
       location: city,
       when: data.when,
@@ -73,25 +87,52 @@ const CreatePostForm = ({navigation}) => {
 
     const formJSON = JSON.stringify(formObject);
     formData.append('description', formJSON);
-    formData.append('title', 'feedPost');
     // console.log('here is data', data);
-
-    const filename = mediafile.split('/').pop();
-    let extension = filename.split('.').pop();
-    extension = extension === 'jpg' ? 'jpeg' : extension;
-    // console.log('filename', extension);
-    formData.append('file', {
-      uri: mediafile,
-      name: filename,
-      type: mediaType + '/' + extension,
-    });
+    if (mediafile == null) {
+      formData.append('title', 'feedPostTxt');
+      formData.append('file', {
+        uri: 'https://placekitten.com/100',
+        name: 'placekitten',
+        type: 'image/jpeg',
+      });
+    } else {
+      formData.append('title', 'feedPost');
+      const filename = mediafile.split('/').pop();
+      let extension = filename.split('.').pop();
+      extension = extension === 'jpg' ? 'jpeg' : extension;
+      // console.log('filename', extension);
+      formData.append('file', {
+        uri: mediafile,
+        name: filename,
+        type: mediaType + '/' + extension,
+      });
+    }
     setIsLoading(true);
     try {
       const mediaResponse = await postMedia(token, formData);
       console.log('result', mediaResponse);
+      // apptag
       const tag = {file_id: mediaResponse.file_id, tag: applicationTag};
       const tagResponse = await postTag(token, tag);
-      console.log(tagResponse);
+      console.log('ollaa tääl', (data.tag_1.trim().length > 0));
+      if (data.tag_1.trim().length > 0) {
+        console.log('tag1 ', applicationTag + 'post_tag' + data.tag_1)
+        const fTag1 = {file_id: mediaResponse.file_id, tag: applicationTag + 'post_tag' + data.tag_1};
+        const fTagResponse1 = await postTag(token, fTag1);
+        console.log('CreatePostForm: onSubmit tagResponse', fTagResponse1);
+      }
+      if (data.tag_2.trim().length > 0) {
+        console.log('tag2 ', applicationTag + 'post_tag' + data.tag_2)
+        const fTag2 = {file_id: mediaResponse.file_id, tag: applicationTag + 'post_tag' + data.tag_2};
+        const fTagResponse2 = await postTag(token, fTag2);
+        console.log('CreatePostForm: onSubmit tagResponse', fTagResponse2);
+      }
+      if (data.tag_3.trim().length > 0) {
+        console.log('tag3 ', applicationTag + 'post_tag' + data.tag_3)
+        const fTag3 = {file_id: mediaResponse.file_id, tag:  applicationTag + 'post_tag' + data.tag_3};
+        const fTagResponse3 = await postTag(token, fTag3);
+        console.log('CreatePostForm: onSubmit tagResponse', fTagResponse3);
+      }
       Alert.alert(mediaResponse.message, '', [
         {
           text: 'OK',
@@ -122,6 +163,9 @@ const CreatePostForm = ({navigation}) => {
     setValue('location', '');
     setValue('when', '');
     setValue('writePost', '');
+    setValue('tag_1', '');
+    setValue('tag_2', '');
+    setValue('tag_3', '');
   };
 
   const handleSelect = (e) => {
@@ -156,6 +200,81 @@ const CreatePostForm = ({navigation}) => {
       />
       <Controller
         control={control}
+        rules={{
+          // minLength: 3,
+          // required: true,
+        }}
+        render={({field: {onChange, onBlur, value}}) => (
+          <View style={styles.whenBox}>
+            <TextInput
+              style={styles.whenBoxTextInput}
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+              placeholder="Add your tag"
+              required
+            />
+          </View>
+        )}
+        name="tag_1"
+      />
+      <TouchableOpacity
+        style={{
+          marginLeft: 54,
+          marginTop: 8,
+          backgroundColor: 'rgba(165,171,232,1)',
+          width: 120,
+          borderRadius: 8,
+          height: 30,
+          justifyContent: 'center'
+        }}
+        onPress={() => setShowMoreTags(!showMoreTags)}>
+        <Text style={{alignSelf: 'center', }}>+ Add more tags</Text>
+      </TouchableOpacity>
+      {showMoreTags ? <><Controller
+        control={control}
+        rules={{
+          // minLength: 3,
+          // required: true,
+        }}
+        render={({field: {onChange, onBlur, value}}) => (
+          <View style={styles.whenBox}>
+            <TextInput
+              style={styles.whenBoxTextInput}
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+              placeholder="tag 2"
+              required
+            />
+          </View>
+        )}
+        name="tag_2"
+      />
+        <Controller
+          control={control}
+          rules={{
+            // minLength: 3,
+            // required: true,
+          }}
+          render={({field: {onChange, onBlur, value}}) => (
+            <View style={styles.whenBox}>
+              <TextInput
+                style={styles.whenBoxTextInput}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                placeholder="tag 3"
+                required
+              />
+            </View>
+          )}
+          name="tag_3"
+        /></> : <></>
+
+      }
+      <Controller
+        control={control}
         render={({field: {onChange, onBlur, value}}) => (
           // <View style={styles.locationBox}>
             <SelectList
@@ -176,8 +295,8 @@ const CreatePostForm = ({navigation}) => {
       <Controller
         control={control}
         rules={{
-          minLength: 3,
-          required: true,
+          // minLength: 3,
+          // required: true,
         }}
         render={({field: {onChange, onBlur, value}}) => (
           <View style={styles.whenBox}>
