@@ -15,10 +15,10 @@ const {height, width} = Dimensions.get('window');
 const ListItem = ({singleMedia, navigation}) => {
   // console.log('tässä singlemedia', singleMedia);
   // console.log('tossa ois description', singleMedia.description);
-  const {getFilesByTag} = useTag();
+  const {getFilesByTag, getTagsByFileId} = useTag();
   const [posterAvatar, setPosterAvatar] = useState('');
   const [posterName, setPosterName] = useState('');
-  console.log('sinkku media: ', singleMedia)
+  console.log('sinkku media: ', singleMedia.user_id)
   const getProfileData = async (user_id) => {
     try {
       const profilePicTag = await getFilesByTag(applicationTag + 'profile_pic' + user_id);
@@ -40,8 +40,25 @@ const ListItem = ({singleMedia, navigation}) => {
     }
   };
 
+  const getPostTagsData = async (file_id) => {
+    console.log('sinkku media file_id: ', file_id);
+    const postTagsArray = await getTagsByFileId(file_id);
+    console.log('sinkku media tagArray: ', postTagsArray);
+    const postFilteringTags = [];
+    for (const postTagsArrayKey in postTagsArray) {
+      if (postTagsArray[postTagsArrayKey].tag.includes(applicationTag + 'post_tag')) {
+        console.log('tag content: ', postTagsArray[postTagsArrayKey]);
+        postFilteringTags.push(postTagsArray[postTagsArrayKey]);
+      }
+    }
+    console.log('postFilteringTagsContent: ', postFilteringTags);
+    singleMedia.filter_tags = postFilteringTags;
+    console.log('adding to media: ', singleMedia);
+  };
+
   useEffect(() => {
     getProfileData(singleMedia.user_id);
+    getPostTagsData(singleMedia.file_id);
   }, []);
 
   const data = JSON.parse(singleMedia.description);
@@ -126,7 +143,7 @@ const styles = StyleSheet.create({
   },
   postTopRow: {
     flexDirection: "row",
-    backgroundColor: "rgba(0, 255, 0,0)",
+    backgroundColor: "rgba(0, 255, 0,0.1)",
     width: width - 64,
     height: 64,
   },
@@ -134,7 +151,7 @@ const styles = StyleSheet.create({
     width: width - 64,
     height: 32,
     flexDirection: "row",
-    backgroundColor: "rgba(0, 0, 255,0)",
+    backgroundColor: "rgba(0, 0, 255,0.1)",
   },
   whenText: {
     marginLeft: 16,
@@ -165,7 +182,7 @@ const styles = StyleSheet.create({
     width: width - 64,
     paddingLeft: 16,
     paddingRight: 16,
-    backgroundColor: "rgba(0, 255, 0,0)",
+    backgroundColor: "rgba(0, 255, 0,0.1)",
 
   },
 });

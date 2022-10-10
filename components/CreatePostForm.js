@@ -31,7 +31,6 @@ const CreatePostForm = ({navigation}) => {
   const [mediafile, setMediafile] = useState(null);
   const [mediaType, setMediaType] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  // const [showMoreTags, setShowMoreTags] = useState(false);
   const [city, setCity] = useState('');
   const {postMedia} = useMedia();
   const {user, update, setUpdate} = useContext(MainContext);

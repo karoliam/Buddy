@@ -60,6 +60,10 @@ const useTag = () => {
     return await doFetch(apiUrl + 'tags/' + tag);
   };
 
+  const getTagsByFileId = async (id) => {
+    return await doFetch(apiUrl + 'tags/file/' + id);
+  };
+
   const postTag = async (token, tag) => {
     const options = {
       method: 'POST',
@@ -76,7 +80,7 @@ const useTag = () => {
     }
   };
 
-  return {getFilesByTag, postTag};
+  return {getFilesByTag, getTagsByFileId, postTag};
 };
 
 const userMedia = () => {
