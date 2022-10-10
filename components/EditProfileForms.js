@@ -7,10 +7,11 @@ import {
   Button,
   TextInput,
   ImagePickerIOS,
+  Alert,
 } from 'react-native';
 import {MainContext} from '../context/MainContext';
 import {Image, Input} from '@rneui/themed';
-import {useMedia, userMedia, useTag} from '../hooks/ApiHooks';
+import {useMedia, userMedia, useTag, useUser} from '../hooks/ApiHooks';
 import {TouchableOpacity} from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -18,8 +19,12 @@ import {Controller, useForm} from 'react-hook-form';
 import {single_pixel} from '../images';
 import SelectList from 'react-native-dropdown-select-list';
 import cityNames from '../utils/cityNames';
+import {Card} from '@rneui/themed';
+
 const EditProfileForms = () => {
   const {
+    isLoggedIn,
+    setIsLoggedIn,
     user,
     setUser,
     avatar,
@@ -34,8 +39,12 @@ const EditProfileForms = () => {
     profilePId,
     profileBId,
     profileDId,
+    setFullName,
     city,
+    setUpdate,
+    update,
     setCity,
+    setProfileData,
   } = useContext(MainContext);
   const [tempProfBack, setTempProfBack] = useState(null);
   const [tempProfAvatar, setTempProfAvatar] = useState(null);
@@ -44,6 +53,7 @@ const EditProfileForms = () => {
   const {postMedia} = useMedia();
   const {postTag} = useTag();
   const {deleteMediaById} = userMedia();
+  const {deleteUserByPut} = useUser();
 
   const {
     control,
@@ -95,7 +105,6 @@ const EditProfileForms = () => {
 
   const updateserData = async (data) => {
     const token = await AsyncStorage.getItem('userToken');
-    const pixelUri = Image.resolveAssetSource(single_pixel).uri;
     const profileData = new FormData();
     profileData.append('title', 'profile_data');
     profileData.append('file', {
@@ -140,6 +149,14 @@ const EditProfileForms = () => {
 
     if (token) {
       try {
+        const delData = await deleteMediaById(token, profileDId);
+        const profileDataUpdate = await postMedia(token, profileData);
+        setProfileDId(profileDataUpdate.file_id);
+        const profileDataTag = {
+          file_id: profileDataUpdate.file_id,
+          tag: 'buddyprofile_Data' + user.user_id,
+        };
+        const DTag = await postTag(token, profileDataTag);
         if (profilePic != null) {
           const delPic = await deleteMediaById(token, profilePId);
           const profilePicUpdate = await postMedia(token, profilePic);
@@ -160,19 +177,49 @@ const EditProfileForms = () => {
           };
           const BTag = await postTag(token, profileBackTag);
         }
-        const delData = await deleteMediaById(token, profileDId);
-        const profileDataUpdate = await postMedia(token, profileData);
-        setProfileDId(profileDataUpdate.file_id);
-        const profileDataTag = {
-          file_id: profileDataUpdate.file_id,
-          tag: 'buddyprofile_Data' + user.user_id,
-        };
-        const DTag = await postTag(token, profileDataTag);
       } catch (error) {
         console.log('EditProfileForms.js upDateData', error);
       }
     }
     setShowEditProfile(false);
+  };
+
+  const deleteProfile = () => {
+    Alert.alert(
+      'Caution!!',
+      'You are currently deleting your account, are you shure you want to do that?',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        {text: 'Delete', onPress: () => confirmedDelete()},
+      ]
+    );
+  };
+  const confirmedDelete = async () => {
+    const token = await AsyncStorage.getItem('userToken');
+
+    const newUser = {
+      username: user.username.slice(6),
+    };
+    try {
+      const userUpdates = await deleteUserByPut(token, newUser);
+      if (userUpdates) {
+        await AsyncStorage.clear();
+        setFullName('');
+        setShowEditProfile(false);
+        setProfileData({});
+        setAvatar(null);
+        setUser({});
+        setProfileBackgorund(null);
+        setIsLoggedIn(false);
+        setUpdate(!update);
+      }
+    } catch (error) {
+      console.log('EditProfileForms confirmDelete ', error.message);
+    }
   };
   const handleSelect = (e) => {
     console.log(cityNames[e].value);
@@ -293,6 +340,12 @@ const EditProfileForms = () => {
       </SafeAreaView>
       <Button title="Update profile" onPress={handleSubmit(saveData)}></Button>
       <Button title="Retrun" onPress={returnToProfile}></Button>
+      <Card.Divider />
+      <Button
+        title="Delete Profile"
+        color={'red'}
+        onPress={deleteProfile}
+      ></Button>
     </>
   );
 };

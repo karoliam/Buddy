@@ -18,7 +18,6 @@ import {mediaUrl} from '../utils/variables';
 import {setStatusBarNetworkActivityIndicatorVisible} from 'expo-status-bar';
 import PropTypes from 'prop-types';
 
-
 const ProfileForms = ({navigation}) => {
   const {
     user,
@@ -27,7 +26,7 @@ const ProfileForms = ({navigation}) => {
     profileData,
     setProfileData,
     setShowEditProfile,
-
+    update,
     avatar,
     setAvatar,
     setProfilePId,
@@ -41,6 +40,7 @@ const ProfileForms = ({navigation}) => {
   const {userProfilePostData} = userMedia();
   const {getFilesByTag} = useTag();
   const getProfileData = async (profileID) => {
+    console.log(profileID);
     try {
       //const profileDescrData = await userProfilePostData(profileID);
       //setProfileData(profileDescrData);
@@ -55,6 +55,7 @@ const ProfileForms = ({navigation}) => {
 
       if (profileDataTag[0].description != undefined) {
         setProfileDescriptionData(JSON.parse(profileDataTag[0].description));
+        console.log('profileDescriptionData');
         setProfileDId(profileDataTag[0].file_id);
       }
 
@@ -140,11 +141,11 @@ const ProfileForms = ({navigation}) => {
       <Button title={'Logout'} onPress={logout} />
       <Button title={'Edit profile'} onPress={editProfile} />
       <Button
-          title="Own posts"
-          onPress={() => {
-            navigation.navigate('MyFiles');
-          }}
-        />
+        title="Own posts"
+        onPress={() => {
+          navigation.navigate('MyFiles');
+        }}
+      />
     </SafeAreaView>
   );
 };
