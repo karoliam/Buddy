@@ -7,12 +7,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useRoute} from '@react-navigation/native';
 import {Controller, useForm} from 'react-hook-form';
 import {Button, Image} from '@rneui/themed';
-import {mediaUrl} from '../utils/variables';
+import {kissalinkki, mediaUrl} from '../utils/variables';
 
 const CommentField = () => {
   const {postComment, getCommentByFileId} = useComments();
   const route = useRoute();
-  const {update,setUpdate} = useContext(MainContext);
+  const {update, setUpdate} = useContext(MainContext);
   const {file_id} = route.params;
   const [userComments, setUserComments] = useState();
   const {getUserById} = useUser();
@@ -60,7 +60,7 @@ const CommentField = () => {
   };
 
   const resetCommentInput = () => {
-    setValue('comment', '')
+    setValue('comment', '');
   };
 
   const fetchComments = async () => {
@@ -92,8 +92,13 @@ const CommentField = () => {
 
         const userDescription = JSON.parse(userProfileData);
         const userFullname = {user_name: userDescription.full_name};
-        commentArray[commentArrayKey].user_name = userFullname.user_name;
-        commentArray[commentArrayKey].profile_pic = userProfilePic;
+        if (userFullname != null) {
+          commentArray[commentArrayKey].user_name = userFullname.user_name;
+          commentArray[commentArrayKey].profile_pic = userProfilePic;
+        } else {
+          commentArray[commentArrayKey].user_name = 'deleted user';
+          commentArray[commentArrayKey].profile_pic = kissalinkki;
+        }
         console.log('userProfileData', userProfileData);
         console.log('userDescription', userDescription);
         console.log('tyypin kuva', userProfilePic);
