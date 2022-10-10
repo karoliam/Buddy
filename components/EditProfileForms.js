@@ -18,6 +18,7 @@ import {Controller, useForm} from 'react-hook-form';
 import {single_pixel} from '../images';
 import SelectList from 'react-native-dropdown-select-list';
 import cityNames from '../utils/cityNames';
+import {kissalinkki} from '../utils/variables';
 const EditProfileForms = () => {
   const {
     user,
@@ -95,11 +96,10 @@ const EditProfileForms = () => {
 
   const updateserData = async (data) => {
     const token = await AsyncStorage.getItem('userToken');
-    const pixelUri = Image.resolveAssetSource(single_pixel).uri;
     const profileData = new FormData();
     profileData.append('title', 'profile_data');
     profileData.append('file', {
-      uri: 'https://placekitten.com/100',
+      uri: kissalinkki,
       name: 'placekitten',
       type: 'image/jpeg',
     });
