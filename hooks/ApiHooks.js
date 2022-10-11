@@ -80,7 +80,23 @@ const useTag = () => {
     }
   };
 
-  return {getFilesByTag, getTagsByFileId, postTag};
+  const getAllTags = async (token) => {
+    const options = {
+      method: 'GET',
+      headers: {
+        'x-access-token': token,
+      }
+    };
+    try {
+      const response = await fetch(apiUrl + 'tags/',options);
+      const listOfTags = await response.json();
+      return listOfTags;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+
+  return {getFilesByTag, getTagsByFileId, postTag, getAllTags};
 };
 
 const userMedia = () => {
