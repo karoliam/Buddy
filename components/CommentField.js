@@ -92,13 +92,9 @@ const CommentField = () => {
 
         const userDescription = JSON.parse(userProfileData);
         const userFullname = {user_name: userDescription.full_name};
-        if (userFullname != null) {
-          commentArray[commentArrayKey].user_name = userFullname.user_name;
-          commentArray[commentArrayKey].profile_pic = userProfilePic;
-        } else {
-          commentArray[commentArrayKey].user_name = 'deleted user';
-          commentArray[commentArrayKey].profile_pic = kissalinkki;
-        }
+        commentArray[commentArrayKey].user_name = userFullname.user_name;
+        commentArray[commentArrayKey].profile_pic = userProfilePic;
+
         console.log('userProfileData', userProfileData);
         console.log('userDescription', userDescription);
         console.log('tyypin kuva', userProfilePic);
