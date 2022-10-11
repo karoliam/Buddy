@@ -14,6 +14,7 @@ const MainProvider = (props) => {
   const [profileData, setProfileData] = useState({});
   const [showRegisterUserDataForm, setShowRegisterUserDataForm] =
     useState(false);
+  const [showEditPost, setShowEditPost] = useState(false);
   const [showEditProfile, setShowEditProfile] = useState(false);
   const [showAnotherUserProfile, setShowAnotherUserProfile] = useState(false);
   const [avatar, setAvatar] = useState(null);
@@ -48,6 +49,8 @@ const MainProvider = (props) => {
         setShowRegisterUserDataForm,
         showEditProfile,
         setShowEditProfile,
+        showEditPost,
+        setShowEditPost,
         profileBackground,
         setProfileBackgorund,
         profileDescriptionData,

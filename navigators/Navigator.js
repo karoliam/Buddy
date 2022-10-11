@@ -8,6 +8,8 @@ import Login from '../views/Login';
 import CreatePost from '../views/CreatePost';
 import {MainContext} from '../context/MainContext';
 import Single from '../views/Single';
+import EditPost from '../views/EditPost';
+import MyFiles from '../views/MyFiles';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -34,6 +36,8 @@ const StackScreen = () => {
             options={{headerShown: false}}
           />
           <Stack.Screen name="Single" component={Single} />
+          <Stack.Screen name="EditPost" component={EditPost} />
+          <Stack.Screen name="MyFiles" component={MyFiles} />
         </>
       ) : (
         <Stack.Screen name="Login" component={Login} />

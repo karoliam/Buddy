@@ -1,13 +1,19 @@
-import {useEffect, useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
+import {MainContext} from '../context/MainContext';
 import {doFetch} from '../utils/http';
 import {apiUrl, applicationTag} from '../utils/variables';
 
-const useMedia = (update) => {
+const useMedia = (update, myFilesOnly = false) => {
   const [mediaArray, setMediaArray] = useState([]);
+  const {user} = useContext(MainContext);
+
   const loadMedia = async () => {
     try {
-      const json = await useTag().getFilesByTag(applicationTag);
+      let json = await useTag().getFilesByTag(applicationTag);
       console.log(json);
+      if (myFilesOnly) {
+        json = json.filter((file) => file.user_id === user.user_id);
+      }
       json.reverse();
       const allMediaData = json.map(async (mediaItem) => {
         return await doFetch(apiUrl + 'media/' + mediaItem.file_id);
@@ -36,7 +42,36 @@ const useMedia = (update) => {
       throw new Error(error.message);
     }
   };
-  return {mediaArray, postMedia, loadMedia};
+  const putMedia = async (token, data, fileId) => {
+    console.log('putmedia', data);
+    const options = {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-access-token': token,
+      },
+      body: data,
+    };
+    try {
+      return await doFetch(apiUrl + 'media/' + fileId, options);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+  const deleteMedia = async (token, fileId) => {
+    const options = {
+      method: 'DELETE',
+      headers: {
+        'x-access-token': token,
+      },
+    };
+    try {
+      return await doFetch(apiUrl + 'media/' + fileId, options);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+  return {mediaArray, postMedia, loadMedia, putMedia, deleteMedia};
 };
 
 const useTag = () => {
@@ -155,8 +190,21 @@ const useUser = () => {
       throw new Error(error.message);
     }
   };
+  const deleteUserByPut = async (token, newUsername) => {
+    try {
+      const options = {
+        method: 'PUT',
+        headers: {'x-access-token': token, 'Content-Type': 'application/json'},
+        body: JSON.stringify(newUsername),
+      };
+      const userUpdate = await doFetch(apiUrl + 'users', options);
+      return userUpdate;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
 
-  return {getUserByToken, postUser, getUserById};
+  return {getUserByToken, postUser, getUserById, deleteUserByPut};
 };
 const useComments = (update) => {
   const postComment = async (token, data) => {
@@ -180,7 +228,10 @@ const useComments = (update) => {
       const options = {
         method: 'GET',
       };
-      const response = await fetch(apiUrl + 'comments/file/' + file_id, options);
+      const response = await fetch(
+        apiUrl + 'comments/file/' + file_id,
+        options
+      );
       const commentData = await response.json();
       if (response.ok) {
         return commentData;

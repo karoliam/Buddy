@@ -10,8 +10,9 @@ import {Image} from '@rneui/themed';
 import {userMedia, useTag} from '../hooks/ApiHooks';
 import {mediaUrl} from '../utils/variables';
 import {setStatusBarNetworkActivityIndicatorVisible} from 'expo-status-bar';
+import PropTypes from 'prop-types';
 
-const ProfileForms = () => {
+const ProfileForms = ({navigation}) => {
   const {
     user,
     setUser,
@@ -32,20 +33,24 @@ const ProfileForms = () => {
   } = useContext(MainContext);
   const {getFilesByTag} = useTag();
   const getProfileData = async (profileID) => {
+    console.log(profileID);
     try {
       //const profileDescrData = await userProfilePostData(profileID);
       //setProfileData(profileDescrData);
+      const profileDataTag = await getFilesByTag(
+        'buddyprofile_data' + profileID
+      );
+
+      if (profileDataTag[0].description != undefined) {
+        setProfileDescriptionData(JSON.parse(profileDataTag[0].description));
+        console.log('profileDescriptionData');
+        setProfileDId(profileDataTag[0].file_id);
+      }
       const profilePicTag = await getFilesByTag('buddyprofile_pic' + profileID);
       if (profilePicTag[0].filename != undefined) {
         setAvatar(mediaUrl + profilePicTag[0].filename);
         setProfilePId(profilePicTag[0].file_id);
       }
-      const profileDataTag = await getFilesByTag(
-        'buddyprofile_data' + profileID
-      );
-
-      setProfileDescriptionData(JSON.parse(profileDataTag[0].description));
-      setProfileDId(profileDataTag[0].file_id);
 
       const profileBackTag = await getFilesByTag(
         'buddyprofile_background' + profileID
@@ -128,6 +133,12 @@ const ProfileForms = () => {
       )}
       <Button title={'Logout'} onPress={logout} />
       <Button title={'Edit profile'} onPress={editProfile} />
+      <Button
+        title="Own posts"
+        onPress={() => {
+          navigation.navigate('MyFiles');
+        }}
+      />
     </SafeAreaView>
   );
 };
@@ -140,5 +151,8 @@ const styles = StyleSheet.create({
     paddingTop: 40,
   },
 });
+ProfileForms.propTypes = {
+  navigation: PropTypes.object,
+};
 
 export default ProfileForms;
