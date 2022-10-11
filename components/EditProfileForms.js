@@ -199,6 +199,7 @@ const EditProfileForms = () => {
       ]
     );
   };
+
   const confirmedDelete = async () => {
     const token = await AsyncStorage.getItem('userToken');
     deleteUserMedia(token);
