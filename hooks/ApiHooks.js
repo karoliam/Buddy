@@ -19,6 +19,8 @@ const useMedia = (update, myFilesOnly = false) => {
         return await doFetch(apiUrl + 'media/' + mediaItem.file_id);
       });
       setMediaArray(await Promise.all(allMediaData));
+      // const mediaFiltered = mediaArray.filter((item) => item.title === 'feedPost' || item.title === 'feedPostTxt');
+      // setMediaArray(mediaFiltered);
     } catch (error) {
       console.log('media fetch failed', error);
     }

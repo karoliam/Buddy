@@ -1,6 +1,7 @@
 const apiUrl = 'https://media.mw.metropolia.fi/wbma/';
 const mediaUrl = 'https://media.mw.metropolia.fi/wbma/uploads/';
-const applicationTag = 'kissakoirajotain';
+const applicationTag = 'kissakoirajotain88';
 // TODO ? const applicationTag = 'kissakoirajotain';
 const appId = 'buddy#';
-export {apiUrl, mediaUrl, appId, applicationTag};
+const appChatTag = 'buddyChat';
+export {apiUrl, mediaUrl, appId, applicationTag, appChatTag};

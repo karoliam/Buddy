@@ -4,17 +4,15 @@ import {
   ActivityIndicator,
   TouchableOpacity,
 } from 'react-native';
-import {applicationTag, mediaUrl} from '../utils/variables';
 import {Button, Image} from '@rneui/themed';
-import {useRoute} from '@react-navigation/native';
 import {useMedia, useTag, useUser} from '../hooks/ApiHooks';
 import {useContext, useEffect, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {MainContext} from '../context/MainContext';
 import PropTypes from 'prop-types';
+import {appChatTag, mediaUrl} from '../utils/variables';
 
 const SinglePost = ({navigation, route}) => {
-  // const route = useRoute();
   const {filename, title, description, user_id, file_id} = route.params;
   const [userFullName, setUserFullName] = useState('');
   const [userEmail, setUserEmail] = useState('');
@@ -64,21 +62,30 @@ const SinglePost = ({navigation, route}) => {
       name: 'placekitten',
       type: 'image/jpeg',
     });
+    const formObject = {
+      location: 'default',
+      when: 'default',
+      writePost: 'default',
+    };
+
+    const formJSON = JSON.stringify(formObject);
+    formData.append('description', formJSON);
+
     const currentIdString = user.user_id.toString();
     const otherIdString = user_id.toString();
-    const idConcat = currentIdString.concat(otherIdString);
-    console.log('id concat', idConcat);
+    const userChatTag = 'senderId:' + currentIdString + '#' + 'receiverId:' + otherIdString;
+    console.log('userChat tag', userChatTag);
 
     formData.append('title', 'chatFile');
-    formData.append('description', idConcat);
+
         try {
       const chatMediaResponse = await postMedia(token, formData);
-      const appTag = {file_id: chatMediaResponse.file_id, tag: applicationTag};
+      const appTag = {file_id: chatMediaResponse.file_id, tag: appChatTag};
       const appTagResponse = await postTag(token, appTag);
-      const chatTag = {file_id: chatMediaResponse.file_id, tag: idConcat};
+      const chatTag = {file_id: chatMediaResponse.file_id, tag: userChatTag};
       const chatTagResponse = await postTag(token, chatTag);
       console.log('chat media response', chatMediaResponse);
-      navigation.navigate('ChatView', idConcat);
+      navigation.navigate('ChatView', userChatTag);
     } catch (error) {
       console.log('creating chat file error', error);
     }

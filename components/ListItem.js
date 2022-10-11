@@ -8,13 +8,21 @@ import {
   Image,
   Dimensions,
 } from 'react-native';
+import {useState} from 'react';
 
 const ListItem = ({singleMedia, navigation}) => {
   // console.log('tässä singlemedia', singleMedia);
   // console.log('tossa ois description', singleMedia.description);
+  const singleMediaArray = [singleMedia];
   const data = JSON.parse(singleMedia.description);
   const {location, when, writePost} = data;
-  console.log('tilte',singleMedia.title);
+  console.log('singlemedia array', singleMediaArray);
+  // for (const key in singleMedia){
+
+  //   console.log(`${key}: ${singleMedia[key]}`);
+  // }
+  // const filtered = singleMedia.filter(item => item.title === 'feedPost' || item.title === 'feedPostTxt');
+  // console.log('filtered', filtered);
   //console.log('here is data', JSON.parse(singleMedia));
   return (
     <TouchableOpacity
@@ -33,12 +41,12 @@ const ListItem = ({singleMedia, navigation}) => {
       ) : (
         <Text></Text>
       )}
-
       <View>
         <Text>{when}</Text>
         <Text>{location}</Text>
         <Text>{writePost}</Text>
       </View>
+      <Text></Text>
     </TouchableOpacity>
   );
 };
