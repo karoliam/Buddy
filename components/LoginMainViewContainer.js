@@ -1,6 +1,6 @@
 /**
  * Tähän Containeriin nestataan LoginForm.js ja RegisterForm.js
-*/
+ */
 import React, {useState} from 'react';
 import {
   Dimensions,
@@ -29,60 +29,60 @@ const LoginMainViewContainer = () => {
   const loginText22 = 'Login';
 
   return (
-      <ImageBackground
-        source={require("../assets/buddyAlt.png")}
-        resizeMode="cover"
-        style={styles.backGroundImage}
-        imageStyle={styles.backGroundImage_imageStyle}
+    <ImageBackground
+      source={require("../assets/buddyAlt.png")}
+      resizeMode="cover"
+      style={styles.backGroundImage}
+      imageStyle={styles.backGroundImage_imageStyle}
+    >
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={{flex: 1}}
       >
-        <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        <TouchableOpacity
+          onPress={Keyboard.dismiss}
+          activeOpacity={1}
           style={{flex: 1}}
         >
-          <TouchableOpacity
-            onPress={Keyboard.dismiss}
-            activeOpacity={1}
-            style={{flex: 1}}
-          >
-            <View style={styles.logoBackgroundStack}>
-              <View
-                source={require("../assets/blackBox.jpg")}
-                style={styles.logoBackground}>
-                <Image
-                  source={require("../assets/buddyLogoNoBack.png")}
-                  resizeMode="contain"
-                  style={styles.imageLogoBuddy}
-                />
+          <View style={styles.logoBackgroundStack}>
+            <View
+              source={require("../assets/blackBox.jpg")}
+              style={styles.logoBackground}>
+              <Image
+                source={require("../assets/buddyLogoNoBack.png")}
+                resizeMode="contain"
+                style={styles.imageLogoBuddy}
+              />
+            </View>
+          </View>
+          <View style={styles.loginFormContainer}>
+            {showRegForm ? <RegisterForm /> : <LoginForm />}
+          </View>
+          <View style={styles.bottomLineAndSwitchContainer}>
+            <View style={styles.lineOrContainer}>
+              <View style={styles.lineOrLeft}></View>
+              <Text style={styles.lineOrText}>OR</Text>
+              <View style={styles.lineOrRight}></View>
+            </View>
+            <TouchableOpacity
+              style={styles.buttonSignUp}
+              onPress={() => {
+                setShowRegForm(!showRegForm);
+                setShowLoginText(!showLoginText);
+                setShowLoginText2(!showLoginText2);
+              }}
+            >
+              <View style={styles.signUpTextContainer}>
+                <Text style={styles.dontHaveText}>
+                  {showLoginText ? loginText12 : loginText11}
+                </Text>
+                <Text style={styles.signUpText}>{showLoginText ? loginText22 : loginText21}</Text>
               </View>
-            </View>
-            <View style={styles.loginFormContainer}>
-              {showRegForm ? <RegisterForm /> : <LoginForm />}
-            </View>
-            <View style={styles.bottomLineAndSwitchContainer}>
-              <View style={styles.lineOrContainer}>
-                <View style={styles.lineOrLeft}></View>
-                <Text style={styles.lineOrText}>OR</Text>
-                <View style={styles.lineOrRight}></View>
-              </View>
-              <TouchableOpacity
-                style={styles.buttonSignUp}
-                onPress={() => {
-                  setShowRegForm(!showRegForm);
-                  setShowLoginText(!showLoginText);
-                  setShowLoginText2(!showLoginText2);
-                }}
-              >
-                <View style={styles.signUpTextContainer}>
-                  <Text style={styles.dontHaveText}>
-                    {showLoginText ? loginText12 : loginText11}
-                  </Text>
-                  <Text style={styles.signUpText}>{showLoginText ? loginText22 : loginText21}</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-          </TouchableOpacity>
-        </KeyboardAvoidingView>
-      </ImageBackground>
+            </TouchableOpacity>
+          </View>
+        </TouchableOpacity>
+      </KeyboardAvoidingView>
+    </ImageBackground>
   );
 };
 

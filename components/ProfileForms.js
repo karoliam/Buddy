@@ -48,6 +48,7 @@ const ProfileForms = ({navigation}) => {
     setProfileDId,
     updateProfile,
     userIdForProfilePage,
+    update,
   } = useContext(MainContext);
   const {userProfilePostData} = userMedia();
   const {getFilesByTag} = useTag();
@@ -55,7 +56,10 @@ const ProfileForms = ({navigation}) => {
     try {
       //const profileDescrData = await userProfilePostData(profileID);
       //setProfileData(profileDescrData);
-      const profilePicTag = await getFilesByTag(applicationTag + 'profile_pic' + profileID);
+      const profilePicTag = await getFilesByTag(
+        applicationTag + 'profile_pic' + profileID
+      );
+
       if (profilePicTag[0].filename !== undefined) {
         setAvatar(mediaUrl + profilePicTag[0].filename);
         setProfilePId(profilePicTag[0].file_id);

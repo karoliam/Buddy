@@ -15,21 +15,30 @@ import {
 import {Image} from '@rneui/base';
 import {Controller, useForm} from 'react-hook-form';
 import * as ImagePicker from 'expo-image-picker';
-import {useMedia, useTag} from '../hooks/ApiHooks';
+import {useMedia, userMedia, useTag} from '../hooks/ApiHooks';
 import {MainContext} from '../context/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {single_pixel} from '../images';
 let {width} = Dimensions.get('window');
 import SelectList from 'react-native-dropdown-select-list';
 import cityNames from '../utils/cityNames';
-import { applicationTag } from "../utils/variables";
+import { applicationTag, kissalinkki } from "../utils/variables";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 
 const RegisterUserDataForm = () => {
-  const {setShowRegisterUserDataForm} = useContext(MainContext);
-  const {fullName, image, setImage, setIsLoggedIn, user, city, setCity} =
-    useContext(MainContext);
+  const {
+    setShowRegisterUserDataForm,
+    fullName,
+    image,
+    setImage,
+    setIsLoggedIn,
+    user,
+    city,
+    setCity,
+    profileDid,
+  } = useContext(MainContext);
   const {postMedia} = useMedia();
+  const {deleteMediaById} = userMedia();
   const {postTag} = useTag();
   const [mediatype, setMediatype] = useState(null);
 
@@ -72,13 +81,11 @@ const RegisterUserDataForm = () => {
     }
 
     //user data upload media
-    const pixelUri = Image.resolveAssetSource(single_pixel).uri;
-    console.log('pixel uri', pixelUri);
     const profileData = new FormData();
     profileData.append('title', 'profile_data');
     profileData.append('file', {
-      uri: 'https://placekitten.com/100',
-      name: 'placekitten',
+      uri: kissalinkki,
+      name: 'single_pixel.jpeg',
       type: 'image/jpeg',
     });
     const profileDataDescription = {
@@ -100,16 +107,18 @@ const RegisterUserDataForm = () => {
         const pocTag = await postTag(token, profilePicTag);
         console.log(pocTag);
       }
+      const delData = await deleteMediaById(token, profileDId);
+
       const pData = await postMedia(token, profileData);
       const profileDataTag = {
         file_id: pData.file_id,
         tag: applicationTag + 'profile_Data' + user.user_id,
       };
       const dataTag = await postTag(token, profileDataTag);
-        setIsLoggedIn(true);
-        setShowRegisterUserDataForm(false);
-        // navigation.navigate('Tabs');  // TODO navi to loginstate
-        setImage(null);
+      setIsLoggedIn(true);
+      setShowRegisterUserDataForm(false);
+      // navigation.navigate('Tabs');  // TODO navi to loginstate
+      setImage(null);
     } catch (error) {
       console.log('RegisterUserDAtaForm upload-onsubmit', error);
     }
@@ -162,19 +171,19 @@ const RegisterUserDataForm = () => {
       <Controller
         control={control}
         render={({field: {onChange, onBlur, value}}) => (
-            <SelectList
-              setSelected={handleSelect}
-              data={cityNames}
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-              search={false}
-              placeholder="Location"
-              boxStyles={styles.locationBox}
-              dropdownStyles={styles.locationBoxDropDown}
-              inputStyles={styles.locationBoxTextInput}
-              dropdownTextStyles={styles.locationBoxTextInput}
-            />
+          <SelectList
+            setSelected={handleSelect}
+            data={cityNames}
+            onBlur={onBlur}
+            onChangeText={onChange}
+            value={value}
+            search={false}
+            placeholder="Location"
+            boxStyles={styles.locationBox}
+            dropdownStyles={styles.locationBoxDropDown}
+            inputStyles={styles.locationBoxTextInput}
+            dropdownTextStyles={styles.locationBoxTextInput}
+          />
         )}
         name="location"
       />

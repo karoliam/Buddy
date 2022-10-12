@@ -48,8 +48,8 @@ const useMedia = (update, myFilesOnly = false) => {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-         'x-access-token': token
-        },
+        'x-access-token': token,
+      },
       body: data,
     };
     try {
@@ -62,8 +62,8 @@ const useMedia = (update, myFilesOnly = false) => {
     const options = {
       method: 'DELETE',
       headers: {
-        'x-access-token': token
-      }
+        'x-access-token': token,
+      },
     };
     try {
       return await doFetch(apiUrl + 'media/' + fileId, options);
@@ -190,8 +190,21 @@ const useUser = () => {
       throw new Error(error.message);
     }
   };
+  const deleteUserByPut = async (token, newUsername) => {
+    try {
+      const options = {
+        method: 'PUT',
+        headers: {'x-access-token': token, 'Content-Type': 'application/json'},
+        body: JSON.stringify(newUsername),
+      };
+      const userUpdate = await doFetch(apiUrl + 'users', options);
+      return userUpdate;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
 
-  return {getUserByToken, postUser, getUserById};
+  return {getUserByToken, postUser, getUserById, deleteUserByPut};
 };
 const useComments = (update) => {
   const postComment = async (token, data) => {
