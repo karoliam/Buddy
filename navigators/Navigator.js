@@ -38,7 +38,6 @@ const StackScreen = () => {
           <Stack.Screen name="Single" component={Single} />
           <Stack.Screen name="EditPost" component={EditPost} />
           <Stack.Screen name="MyFiles" component={MyFiles} />
-
         </>
       ) : (
         <Stack.Screen name="Login" component={Login} />

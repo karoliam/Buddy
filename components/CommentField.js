@@ -12,7 +12,7 @@ import {mediaUrl} from '../utils/variables';
 const CommentField = () => {
   const {postComment, getCommentByFileId} = useComments();
   const route = useRoute();
-  const {update,setUpdate} = useContext(MainContext);
+  const {update, setUpdate} = useContext(MainContext);
   const {file_id} = route.params;
   const [userComments, setUserComments] = useState();
   const {getUserById} = useUser();
@@ -60,7 +60,7 @@ const CommentField = () => {
   };
 
   const resetCommentInput = () => {
-    setValue('comment', '')
+    setValue('comment', '');
   };
 
   const fetchComments = async () => {
@@ -94,6 +94,7 @@ const CommentField = () => {
         const userFullname = {user_name: userDescription.full_name};
         commentArray[commentArrayKey].user_name = userFullname.user_name;
         commentArray[commentArrayKey].profile_pic = userProfilePic;
+        console.log(userProfileData);
         console.log('userProfileData', userProfileData);
         console.log('userDescription', userDescription);
         console.log('tyypin kuva', userProfilePic);

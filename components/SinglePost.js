@@ -13,13 +13,19 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {MainContext} from '../context/MainContext';
 import PropTypes from 'prop-types';
 
-const SinglePost = ({navigation, route}) => {
-  // const route = useRoute();
+const SinglePost = ({navigation}) => {
+  const route = useRoute();
   const {filename, title, description, user_id, file_id} = route.params;
   const [userFullName, setUserFullName] = useState('');
   const descriptionObject = JSON.parse(description);
   const {getUserById} = useUser();
-  const {user, showEditPost, setShowEditPost, update, setUpdate} = useContext(MainContext);
+  const {
+    setUserIdForProfilePage,
+    setShowAnotherUserProfile,
+    showAnotherUserProfile,
+  } = useContext(MainContext);
+  const {user, showEditPost, setShowEditPost, update, setUpdate} =
+    useContext(MainContext);
 
   const paramsObject = {
     filename: filename,
@@ -49,14 +55,16 @@ const SinglePost = ({navigation, route}) => {
     } else {
       setShowEditPost(true);
     }
-  }
-
+  };
 
   useEffect(() => {
-    showEditPostFunction()
+    showEditPostFunction();
   }, [update]);
 
-
+  const checkUser = () => {
+    setUserIdForProfilePage(user_id);
+    setShowAnotherUserProfile(!showAnotherUserProfile);
+  };
   return (
     <ScrollView>
       <Image
@@ -75,7 +83,12 @@ const SinglePost = ({navigation, route}) => {
       ) : (
         <Text></Text>
       )}
-      <Text>{userFullName}</Text>
+      <TouchableOpacity
+        style={{margin: 20, backgroundColor: 'lightblue', padding: 20}}
+        onPress={checkUser}
+      >
+        <Text>{userFullName}</Text>
+      </TouchableOpacity>
       <Text>{descriptionObject.when}</Text>
       <Text>{descriptionObject.location}</Text>
       <Text>{descriptionObject.writePost}</Text>

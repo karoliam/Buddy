@@ -1,5 +1,5 @@
 /**
- * jostakin syystä ei nyt halua näyttää tietoa sen jälkeen kun katsoi toisa käyttäjää
+ * swaippauksella takas ei vaihdu showAnotherProfile
  */
 
 import React, {useContext, useEffect, useState} from 'react';
@@ -10,46 +10,44 @@ import {Image} from '@rneui/themed';
 import {userMedia, useTag} from '../hooks/ApiHooks';
 import {mediaUrl} from '../utils/variables';
 import {setStatusBarNetworkActivityIndicatorVisible} from 'expo-status-bar';
-import PropTypes from 'prop-types';
 
-const ProfileForms = ({navigation}) => {
+const AnotherUserProfileForms = () => {
   const {
-    user,
-    setUser,
-    setIsLoggedIn,
-    setProfileData,
-    setShowEditProfile,
-    updateProfile,
     avatar,
     setAvatar,
     setProfilePId,
+    setProfileData,
+    updateProfile,
+    setUpdateProfile,
     profileBackground,
     setProfileBackgorund,
     setProfileBId,
     profileDescriptionData,
     setProfileDescriptionData,
+    setUser,
     setProfileDId,
     userIdForProfilePage,
+    setShowAnotherUserProfile,
+    showAnotherUserProfile,
   } = useContext(MainContext);
+  const {userProfilePostData} = userMedia();
   const {getFilesByTag} = useTag();
   const getProfileData = async (profileID) => {
-    console.log(profileID);
     try {
       //const profileDescrData = await userProfilePostData(profileID);
       //setProfileData(profileDescrData);
+      const profilePicTag = await getFilesByTag('buddyprofile_pic' + profileID);
+      if (profilePicTag[0].filename != undefined) {
+        setAvatar(mediaUrl + profilePicTag[0].filename);
+        setProfilePId(profilePicTag[0].file_id);
+      }
       const profileDataTag = await getFilesByTag(
         'buddyprofile_data' + profileID
       );
 
       if (profileDataTag[0].description != undefined) {
         setProfileDescriptionData(JSON.parse(profileDataTag[0].description));
-        console.log('profileDescriptionData');
         setProfileDId(profileDataTag[0].file_id);
-      }
-      const profilePicTag = await getFilesByTag('buddyprofile_pic' + profileID);
-      if (profilePicTag[0].filename != undefined) {
-        setAvatar(mediaUrl + profilePicTag[0].filename);
-        setProfilePId(profilePicTag[0].file_id);
       }
 
       const profileBackTag = await getFilesByTag(
@@ -63,23 +61,21 @@ const ProfileForms = ({navigation}) => {
       console.log('Profile.js getProfileData ' + error);
     }
   };
-
   useEffect(() => {
-    getProfileData(user.user_id);
-  }, [updateProfile]);
+    getProfileData(userIdForProfilePage);
+  }, [userIdForProfilePage]);
 
   //getProfileData(user.user_id);
-  const logout = async () => {
-    await AsyncStorage.clear();
-    setProfileData({});
-    setAvatar(null),
-      setUser({}),
-      setProfileBackgorund(null),
-      setIsLoggedIn(false);
+  const returnToSingle = () => {
+    clearProfile;
+    setUpdateProfile(!updateProfile);
+    setShowAnotherUserProfile(!showAnotherUserProfile);
   };
-
-  const editProfile = () => {
-    setShowEditProfile(true);
+  const clearProfile = () => {
+    setProfileData({});
+    setProfileDescriptionData({});
+    setAvatar(null);
+    setProfileBackgorund(null);
   };
 
   return (
@@ -131,14 +127,7 @@ const ProfileForms = ({navigation}) => {
       ) : (
         <Text>no</Text>
       )}
-      <Button title={'Logout'} onPress={logout} />
-      <Button title={'Edit profile'} onPress={editProfile} />
-      <Button
-        title="Own posts"
-        onPress={() => {
-          navigation.navigate('MyFiles');
-        }}
-      />
+      <Button title={'Back'} onPress={returnToSingle} />
     </SafeAreaView>
   );
 };
@@ -151,8 +140,5 @@ const styles = StyleSheet.create({
     paddingTop: 40,
   },
 });
-ProfileForms.propTypes = {
-  navigation: PropTypes.object,
-};
 
-export default ProfileForms;
+export default AnotherUserProfileForms;
