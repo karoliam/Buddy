@@ -19,7 +19,6 @@ const Single = (props) => {
       <SafeAreaView style={styles.droidSafeArea}>
         <ScrollView>
           <SinglePost navigation={navigation} route={route}></SinglePost>
-          <CommentField navigation={navigation} route={route}></CommentField>
         </ScrollView>
       </SafeAreaView>
       )}
