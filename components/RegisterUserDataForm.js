@@ -107,7 +107,7 @@ const RegisterUserDataForm = () => {
         const pocTag = await postTag(token, profilePicTag);
         console.log(pocTag);
       }
-      const delData = await deleteMediaById(token, profileDId);
+      const delData = await deleteMediaById(token, profileDid);
 
       const pData = await postMedia(token, profileData);
       const profileDataTag = {
