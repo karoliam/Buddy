@@ -25,7 +25,11 @@ import SelectList from 'react-native-dropdown-select-list';
 import cityNames from '../utils/cityNames';
 
 const RegisterUserDataForm = () => {
-  const {setShowRegisterUserDataForm} = useContext(MainContext);
+  const {
+    setShowRegisterUserDataForm,
+    updateChatProfiles,
+    setUpdateChatProfiles,
+  } = useContext(MainContext);
   const {fullName, image, setImage, setIsLoggedIn, user, city, setCity} =
     useContext(MainContext);
   const {postMedia} = useMedia();
@@ -105,10 +109,11 @@ const RegisterUserDataForm = () => {
         tag: 'buddyprofile_Data' + user.user_id,
       };
       const dataTag = await postTag(token, profileDataTag);
-        setIsLoggedIn(true);
-        setShowRegisterUserDataForm(false);
-        // navigation.navigate('Tabs');  // TODO navi to loginstate
-        setImage(null);
+      setUpdateChatProfiles(updateChatProfiles);
+      setIsLoggedIn(true);
+      setShowRegisterUserDataForm(false);
+      // navigation.navigate('Tabs');  // TODO navi to loginstate
+      setImage(null);
     } catch (error) {
       console.log('RegisterUserDAtaForm upload-onsubmit', error);
     }

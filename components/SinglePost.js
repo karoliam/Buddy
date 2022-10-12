@@ -20,8 +20,15 @@ const SinglePost = ({navigation, route}) => {
   const {getUserById} = useUser();
   const {postTag} = useTag();
   const {postMedia} = useMedia();
-  const {user, showEditPost, setShowEditPost, update, setUpdate} =
-    useContext(MainContext);
+  const {
+    user,
+    showEditPost,
+    setShowEditPost,
+    update,
+    setUpdate,
+    updateChatProfiles,
+    setUpdateChatProfiles,
+  } = useContext(MainContext);
 
   const paramsObject = {
     filename: filename,
@@ -73,25 +80,21 @@ const SinglePost = ({navigation, route}) => {
     const formJSON = JSON.stringify(formObject);
     formData.append('description', formJSON);
     */
-
+    console.log(user);
     const currentIdString = user.user_id.toString();
     const otherIdString = user_id.toString();
-    const userChatTag =
-      'senderId:' + currentIdString + '#' + 'receiverId:' + otherIdString;
-    console.log('userChat tag', userChatTag);
+    const usersIdChatTitle = currentIdString + '#' + otherIdString;
 
-    formData.append('title', appChatPostTitle);
+    formData.append('title', usersIdChatTitle);
 
     try {
       const chatMediaResponse = await postMedia(token, formData);
       const appTag = {file_id: chatMediaResponse.file_id, tag: appChatTag};
       const appTagResponse = await postTag(token, appTag);
       console.log('mediaresponese chat', chatMediaResponse);
-      const chatTag = {file_id: chatMediaResponse.file_id, tag: userChatTag};
-      const chatTagResponse = await postTag(token, chatTag);
-      console.log('chat media response', chatTagResponse);
+      setUpdateChatProfiles(!updateChatProfiles);
       const chatParamsObject = {
-        userChatTag: userChatTag,
+        usersIdChatTitle: usersIdChatTitle,
         chatMediaResponse: chatMediaResponse,
       };
       navigation.navigate('ChatView', chatParamsObject);

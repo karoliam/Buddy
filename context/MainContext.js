@@ -8,6 +8,7 @@ const MainProvider = (props) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState({});
   const [update, setUpdate] = useState(true);
+  const [updateChatProfiles, setUpdateChatProfiles] = useState(true);
   const [fullName, setFullName] = useState('');
   const [image, setImage] = useState(null);
   const [profileData, setProfileData] = useState({});
@@ -22,10 +23,14 @@ const MainProvider = (props) => {
   const [profileBId, setProfileBId] = useState(0);
   const [profileDId, setProfileDId] = useState(0);
   const [city, setCity] = useState('');
-
+  //2544 a
+  //2545 b
+  //2546 c
   return (
     <MainContext.Provider
       value={{
+        updateChatProfiles,
+        setUpdateChatProfiles,
         isLoggedIn,
         setIsLoggedIn,
         user,

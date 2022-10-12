@@ -22,7 +22,8 @@ import PropTypes from 'prop-types';
 let {width} = Dimensions.get('window');
 
 const LoginForm = () => {
-  const {setIsLoggedIn, setUser} = useContext(MainContext);
+  const {setIsLoggedIn, setUser, updateChatProfiles, setUpdateChatProfiles} =
+    useContext(MainContext);
   const {postLogin} = useLogin();
   const {
     control,
@@ -49,11 +50,9 @@ const LoginForm = () => {
       }
     } catch (error) {
       console.log('Login - logIn', error);
-      Alert.alert(
-        'Try again',
-        'E-mail or password wrong',
-        [{ text: "OK", onPress: () => console.log("OK Pressed") }],
-      );
+      Alert.alert('Try again', 'E-mail or password wrong', [
+        {text: 'OK', onPress: () => console.log('OK Pressed')},
+      ]);
     }
   };
 
@@ -128,7 +127,7 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     borderStyle: 'solid',
     marginTop: 32,
-    marginLeft: width / 2 - 142.5
+    marginLeft: width / 2 - 142.5,
   },
   usernameInput: {
     color: '#121212',
@@ -136,7 +135,7 @@ const styles = StyleSheet.create({
     width: 260,
     fontSize: 16,
     marginTop: 15,
-    marginLeft: 13
+    marginLeft: 13,
   },
   fieldBoxPassword: {
     width: 285,
@@ -147,7 +146,7 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     borderStyle: 'solid',
     marginTop: 16,
-    marginLeft: width / 2 - 142.5
+    marginLeft: width / 2 - 142.5,
   },
   passwordInput: {
     color: '#121212',
@@ -156,10 +155,10 @@ const styles = StyleSheet.create({
     lineHeight: 14,
     fontSize: 16,
     marginTop: 15,
-    marginLeft: 12
+    marginLeft: 12,
   },
   buttonSignIn: {
-    position: "absolute",
+    position: 'absolute',
     bottom: 0,
     width: 285,
     height: 61,
@@ -169,7 +168,7 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     borderStyle: 'solid',
     marginBottom: 64,
-    marginLeft: width / 2 - 142.5
+    marginLeft: width / 2 - 142.5,
   },
   signInText: {
     color: 'rgba(255,255,255,1)',
@@ -177,7 +176,7 @@ const styles = StyleSheet.create({
     width: 70,
     fontSize: 20,
     marginTop: 14,
-    marginLeft: 103
+    marginLeft: 103,
   },
 });
 
