@@ -10,8 +10,9 @@ import {
   TouchableOpacity,
   StyleSheet,
   TextInput,
-  Dimensions, ScrollView
-} from "react-native";
+  Dimensions,
+  ScrollView,
+} from 'react-native';
 import {Image} from '@rneui/base';
 import {Controller, useForm} from 'react-hook-form';
 import * as ImagePicker from 'expo-image-picker';
@@ -22,8 +23,8 @@ import {single_pixel} from '../images';
 let {width} = Dimensions.get('window');
 import SelectList from 'react-native-dropdown-select-list';
 import cityNames from '../utils/cityNames';
-import { applicationTag, kissalinkki } from "../utils/variables";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import {applicationTag, kissalinkki} from '../utils/variables';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 
 const RegisterUserDataForm = () => {
   const {
@@ -119,6 +120,7 @@ const RegisterUserDataForm = () => {
       };
       const dataTag = await postTag(token, profileDataTag);
       console.log(dataTag);
+      setCity('');
       setUpdateProfile(!updateProfile);
       setIsLoggedIn(true);
       setShowRegisterUserDataForm(false);
@@ -144,13 +146,13 @@ const RegisterUserDataForm = () => {
               image ? {uri: image.uri} : require('../assets/adaptive-icon.png')
             }
             style={styles.addPicturePreview}
-          >
-          </Image>
+          ></Image>
           <View style={styles.addPictureIcon}>
             <FontAwesomeIcon
               icon="fa-solid fa-camera"
               size={32}
-              color={'#5E5E5E'}/>
+              color={'#5E5E5E'}
+            />
           </View>
         </TouchableOpacity>
       </View>
@@ -245,7 +247,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: 'center',
     marginTop: 88,
-
   },
   addPictureButton: {
     width: 100,
@@ -288,7 +289,7 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     borderStyle: 'solid',
     marginTop: 14,
-    marginLeft: 64
+    marginLeft: 64,
   },
   yourAgeTextInput: {
     flex: 1,
@@ -297,7 +298,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,0,0,0)',
     fontSize: 16,
     marginLeft: 12,
-    marginRight: 12
+    marginRight: 12,
   },
   locationBox: {
     width: width - 128,
@@ -308,7 +309,7 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     borderStyle: 'solid',
     marginTop: 16,
-    marginLeft: 64
+    marginLeft: 64,
   },
   locationBoxDropDown: {
     width: width - 128,
@@ -319,7 +320,7 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     borderStyle: 'solid',
     marginTop: 16,
-    marginLeft: 64
+    marginLeft: 64,
   },
   locationBoxTextInput: {
     flex: 1,
@@ -329,7 +330,7 @@ const styles = StyleSheet.create({
     color: '#121212',
     backgroundColor: 'rgba(255,0,0,0)',
     fontSize: 16,
-    marginRight: 12
+    marginRight: 12,
   },
   bioBox: {
     width: width - 128,
@@ -340,7 +341,7 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     borderStyle: 'solid',
     marginTop: 16,
-    marginLeft: 64
+    marginLeft: 64,
   },
   bioText: {
     flex: 1,
@@ -351,7 +352,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
     marginBottom: 8,
     marginLeft: 12,
-    marginRight: 12
+    marginRight: 12,
   },
   doLaterButton: {
     width: width - 238,
@@ -370,7 +371,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,0,0,0)',
     fontSize: 16,
     marginLeft: 12,
-    marginRight: 12
+    marginRight: 12,
   },
   doLaterButtonStack: {
     width: width - 238,
@@ -390,7 +391,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,0,0,0)',
     fontSize: 16,
     marginLeft: 12,
-    marginRight: 12
+    marginRight: 12,
   },
   goButtonStack: {
     width: width - 311,
