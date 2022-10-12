@@ -1,18 +1,31 @@
-import {useEffect, useState} from 'react';
+import { useContext, useEffect, useState } from "react";
 import {doFetch} from '../utils/http';
 import {apiUrl, applicationTag} from '../utils/variables';
+import { MainContext } from "../context/MainContext";
+
 
 const useMedia = (update) => {
   const [mediaArray, setMediaArray] = useState([]);
+  const {filterTags, setFilterTags} = useContext(MainContext);
   const loadMedia = async () => {
     try {
-      const json = await useTag().getFilesByTag(applicationTag);
-      console.log(json);
-      json.reverse();
-      const allMediaData = json.map(async (mediaItem) => {
-        return await doFetch(apiUrl + 'media/' + mediaItem.file_id);
-      });
-      setMediaArray(await Promise.all(allMediaData));
+      if (filterTags !== null) {
+        const json = await useTag().getFilesByTag(filterTags);
+        console.log(json);
+        json.reverse();
+        const allMediaData = json.map(async (mediaItem) => {
+          return await doFetch(apiUrl + 'media/' + mediaItem.file_id);
+        });
+        setMediaArray(await Promise.all(allMediaData));
+      } else {
+        const json = await useTag().getFilesByTag(applicationTag);
+        console.log(json);
+        json.reverse();
+        const allMediaData = json.map(async (mediaItem) => {
+          return await doFetch(apiUrl + 'media/' + mediaItem.file_id);
+        });
+        setMediaArray(await Promise.all(allMediaData));
+      }
     } catch (error) {
       console.log('media fetch failed', error);
     }
@@ -55,7 +68,7 @@ const useMedia = (update) => {
   return {mediaArray, postMedia, loadMedia, putMedia};
 };
 
-const useTag = () => {
+const useTag = (update) => {
   const getFilesByTag = async (tag) => {
     return await doFetch(apiUrl + 'tags/' + tag);
   };

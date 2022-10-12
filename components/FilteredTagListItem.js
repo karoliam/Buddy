@@ -8,15 +8,45 @@ import {
   Image,
   Dimensions, ScrollView
 } from "react-native";
+import { useContext, useState } from "react";
+import { MainContext } from "../context/MainContext";
+
 
 const {height, width} = Dimensions.get('window');
 
 const FilteredTagListItem = ({singleMedia}) => {
+  const [isActive, setIsActive] = useState(false);
+  const {
+    update,
+    setUpdate,
+    filterTags,
+    setFilterTags,
+    filterLock,
+    setFilterLock,
+  } = useContext(MainContext);
+  const handleClick = () => {
+
+    if (isActive === false && filterLock === false) {
+      setIsActive(true);
+      setFilterTags(singleMedia.key);
+      setFilterLock(true);
+    } else if (isActive === true) {
+      setIsActive(false);
+      setFilterTags(null);
+      setFilterLock(false);
+    }
+    setUpdate(!update);
+  console.log('potaattipataatti', filterTags)
+  };
+
+
   // const tagText = singleMedia.tag.substring((applicationTag+'post_tag').length,singleMedia.tag.length);
   console.log('FilteredTagListItem: ', singleMedia);
   const tagText = singleMedia.value;
   return (
-    <TouchableOpacity style={styles.tagBox}>
+    <TouchableOpacity
+      onPress={handleClick}
+      style={isActive ? styles.tagBoxOn : styles.tagBox }>
       <Text style={styles.tagText}>{tagText}</Text>
     </TouchableOpacity>
   );
@@ -35,6 +65,18 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(165,171,232,0.5)",
     borderRadius: 16
   },
+  tagBoxOn: {
+  marginTop: 2,
+    marginBottom: 2,
+    marginLeft: 4,
+    marginRight: 8,
+    top: 4,
+    left: 7,
+    alignSelf: 'flex-start',
+    padding: 3,
+    backgroundColor: "rgba(165,0,232,0.5)",
+    borderRadius: 16
+},
   tagText: {
     backgroundColor: 'rgba(0,255,255,0)',
     color: "rgba(0,0,0,1)",

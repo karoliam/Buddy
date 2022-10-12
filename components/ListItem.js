@@ -16,7 +16,11 @@ import PostTagList from "./PostTagList";
 const {height, width} = Dimensions.get('window');
 
 const ListItem = ({singleMedia, navigation}) => {
-  const {postFileId, setPostFileId} = useContext(MainContext);
+  const {
+    postFileId,
+    setPostFileId,
+    update,
+    } = useContext(MainContext);
   // console.log('tässä singlemedia', singleMedia);
   // console.log('tossa ois description', singleMedia.description);
   const {getFilesByTag, getTagsByFileId} = useTag();
@@ -29,17 +33,17 @@ const ListItem = ({singleMedia, navigation}) => {
       const profilePicTag = await getFilesByTag(applicationTag + 'profile_pic' + user_id);
       console.log('profilePicTag ', profilePicTag);
       console.log('profilePicTag0 ', mediaUrl + profilePicTag[0].filename);
-      if (profilePicTag[0].filename != undefined) {
+      if (profilePicTag[0].filename !== undefined) {
         setPosterAvatar(mediaUrl + profilePicTag[0].filename);
       }
-      const profileDataTag = await getFilesByTag(
-        applicationTag + 'profile_data' + user_id
-      );
-      console.log('profileDataTag ', profileDataTag);
-      console.log('profileDataTag0 ', (JSON.parse(profileDataTag[0].description).full_name));
-      if (profileDataTag[0].description != undefined) {
-        setPosterName(JSON.parse(profileDataTag[0].description).full_name);
-      }
+      // const profileDataTag = await getFilesByTag(
+      //   applicationTag + 'profile_data' + user_id
+      // );
+      // console.log('profileDataTag ', profileDataTag);
+      // console.log('profileDataTag0 ', (JSON.parse(profileDataTag[0].description).full_name));
+      // if (profileDataTag[0].description !== undefined) {
+      //   setPosterName(JSON.parse(profileDataTag[0].description).full_name);
+      // }
     } catch (error) {
       console.log('List.js getProfileData ' + error);
     }
@@ -101,7 +105,7 @@ const ListItem = ({singleMedia, navigation}) => {
             }}/>
         </View>
         <View style={styles.tagsScroll}>
-          <PostTagList singleMedia={singleMedia}></PostTagList>
+          {/* <PostTagList singleMedia={singleMedia}></PostTagList> */}
         </View>
         {/* <Text style={styles.posterNameText}>{posterName}</Text> */}
       </View>
