@@ -190,6 +190,7 @@ const EditPostForm = ({navigation, route}) => {
             name="when"
           />
         </View>
+        <View style={styles.buttonsContainer}>
         <TouchableOpacity
           style={styles.publishButton}
           loading={isLoading}
@@ -197,9 +198,12 @@ const EditPostForm = ({navigation, route}) => {
         >
           <Text style={styles.publishText}>Update</Text>
         </TouchableOpacity>
-        <Button
-          title='Delete'
-          onPress={handleSubmit(deletePost)}></Button>
+        <TouchableOpacity
+        style={styles.deleteButton}
+        onPress={handleSubmit(deletePost)}>
+          <Text style={styles.publishText}>Delete</Text>
+        </TouchableOpacity>
+        </View>
       </ScrollView>
     </View>
   );
@@ -210,13 +214,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   editPostText: {
-    textAlign: 'left',
+    textAlign: 'center',
     textAlignVertical: 'center',
     color: '#121212',
     backgroundColor: 'rgba(0,255,0,0)',
     fontSize: 26,
     marginTop: 16,
-    marginLeft: 64
   },
   addPictureButton: {
     width: width - 64,
@@ -270,6 +273,8 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     marginTop: 16,
     marginLeft: 32,
+    alignItems: 'baseline'
+
   },
   locationBoxDropDown: {
     width: width - 64,
@@ -313,12 +318,15 @@ const styles = StyleSheet.create({
     marginLeft: 12,
   },
   publishButton: {
-    width: width - 64,
+    borderRadius: 14,
+    marginTop: 32,
+    justifyContent: 'center',
     height: 61,
     backgroundColor: 'rgba(246,203,100,1)',
     borderRadius: 14,
     marginTop: 32,
     marginLeft: 32,
+    width: width - 62
   },
   publishText: {
     color: 'rgba(255,255,255,1)',
@@ -327,10 +335,21 @@ const styles = StyleSheet.create({
     width: width - 64,
     lineHeight: 16,
     fontSize: 24,
-    textAlign: 'center',
+    alignSelf: 'center',
     paddingTop: 8,
-    marginTop: 19,
+    textAlign: 'center'
   },
+  deleteButton: {
+    justifyContent: 'center',
+    height: 61,
+    backgroundColor: '#f66464ff',
+    borderRadius: 14,
+    marginTop: 16,
+    marginLeft: 32,
+    width: width - 62,
+  },
+  buttonsContainer: {
+  }
 });
 
 EditPostForm.propTypes = {
