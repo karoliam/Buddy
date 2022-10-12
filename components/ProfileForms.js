@@ -63,6 +63,8 @@ const ProfileForms = ({navigation}) => {
       if (profilePicTag[0].filename !== undefined) {
         setAvatar(mediaUrl + profilePicTag[0].filename);
         setProfilePId(profilePicTag[0].file_id);
+      } else {
+        setAvatar(null);
       }
       const profileDataTag = await getFilesByTag(
         applicationTag + 'profile_data' + profileID
@@ -83,6 +85,8 @@ const ProfileForms = ({navigation}) => {
       if (profileBackTag[0].filename !== undefined) {
         setProfileBackgorund(mediaUrl + profileBackTag[0].filename);
         setProfileBId(profileBackTag[0].file_id);
+      } else {
+        setProfileBackgorund('');
       }
     } catch (error) {
       console.log('Profile.js getProfileData ' + error);

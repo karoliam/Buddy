@@ -8,7 +8,7 @@ import {MainContext} from '../context/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Image} from '@rneui/themed';
 import {userMedia, useTag} from '../hooks/ApiHooks';
-import {mediaUrl} from '../utils/variables';
+import {applicationTag, mediaUrl} from '../utils/variables';
 import {setStatusBarNetworkActivityIndicatorVisible} from 'expo-status-bar';
 
 const AnotherUserProfileForms = () => {
@@ -19,8 +19,8 @@ const AnotherUserProfileForms = () => {
     setProfileData,
     updateProfile,
     setUpdateProfile,
-    profileBackground,
-    setProfileBackgorund,
+    profileBackgroundAnother,
+    setProfileBackgorundAnother,
     setProfileBId,
     profileDescriptionData,
     setProfileDescriptionData,
@@ -36,13 +36,15 @@ const AnotherUserProfileForms = () => {
     try {
       //const profileDescrData = await userProfilePostData(profileID);
       //setProfileData(profileDescrData);
-      const profilePicTag = await getFilesByTag('buddyprofile_pic' + profileID);
+      const profilePicTag = await getFilesByTag(
+        applicationTag + 'profile_pic' + profileID
+      );
       if (profilePicTag[0].filename != undefined) {
         setAvatar(mediaUrl + profilePicTag[0].filename);
         setProfilePId(profilePicTag[0].file_id);
       }
       const profileDataTag = await getFilesByTag(
-        'buddyprofile_data' + profileID
+        applicationTag + 'profile_data' + profileID
       );
 
       if (profileDataTag[0].description != undefined) {
@@ -51,10 +53,10 @@ const AnotherUserProfileForms = () => {
       }
 
       const profileBackTag = await getFilesByTag(
-        'buddyprofile_background' + profileID
+        applicationTag + 'profile_background' + profileID
       );
       if (profileBackTag[0].filename != undefined) {
-        setProfileBackgorund(mediaUrl + profileBackTag[0].filename);
+        setProfileBackgorundAnother(mediaUrl + profileBackTag[0].filename);
         setProfileBId(profileBackTag[0].file_id);
       }
     } catch (error) {
@@ -67,23 +69,20 @@ const AnotherUserProfileForms = () => {
 
   //getProfileData(user.user_id);
   const returnToSingle = () => {
-    clearProfile;
-    setUpdateProfile(!updateProfile);
-    setShowAnotherUserProfile(!showAnotherUserProfile);
-  };
-  const clearProfile = () => {
     setProfileData({});
     setProfileDescriptionData({});
     setAvatar(null);
-    setProfileBackgorund(null);
+    setProfileBackgorundAnother('');
+    setShowAnotherUserProfile(!showAnotherUserProfile);
+    setUpdateProfile(!updateProfile);
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <Image
         source={
-          profileBackground
-            ? {uri: profileBackground}
+          profileBackgroundAnother
+            ? {uri: profileBackgroundAnother}
             : {
                 //placeholderuri
                 uri: 'https://i.pinimg.com/originals/d8/81/d3/d881d3e05c90688581cdeaae1be7edae.jpg',
