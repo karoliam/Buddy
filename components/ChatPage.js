@@ -23,7 +23,7 @@ const ChatPage = ({navigation, route}) => {
   }, []);
   return (
     <>
-    <ChatCommentField />
+    <ChatCommentField navigation={navigation} route={route} />
     </>
   )
 

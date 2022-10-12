@@ -4,19 +4,19 @@ import {useComments, userMedia, useUser} from '../hooks/ApiHooks';
 import {useContext, useEffect, useState} from 'react';
 import {MainContext} from '../context/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useRoute} from '@react-navigation/native';
 import {Controller, useForm} from 'react-hook-form';
 import {Button, Image} from '@rneui/themed';
 import {mediaUrl} from '../utils/variables';
 
-const ChatCommentField = () => {
+const ChatCommentField = ({route}) => {
   const {postComment, getCommentByFileId} = useComments();
-  const route = useRoute();
   const {update,setUpdate} = useContext(MainContext);
-  const {file_id} = route.params;
+  const {paramsObject, file_id} = route.params;
   const [userComments, setUserComments] = useState();
   const {getUserById} = useUser();
   const {userProfilePostData} = userMedia();
+  console.log('chatmedia', paramsObject);
+
   const {
     control,
     handleSubmit,

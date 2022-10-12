@@ -82,10 +82,12 @@ const SinglePost = ({navigation, route}) => {
       const chatMediaResponse = await postMedia(token, formData);
       const appTag = {file_id: chatMediaResponse.file_id, tag: appChatTag};
       const appTagResponse = await postTag(token, appTag);
+      console.log('mediaresponese chat', chatMediaResponse)
       const chatTag = {file_id: chatMediaResponse.file_id, tag: userChatTag};
       const chatTagResponse = await postTag(token, chatTag);
       console.log('chat media response', chatMediaResponse);
-      navigation.navigate('ChatView', userChatTag);
+      const chatParamsObject = {'userChatTag': userChatTag, 'chatMediaResponse': chatMediaResponse}
+      navigation.navigate('ChatView', chatParamsObject);
     } catch (error) {
       console.log('creating chat file error', error);
     }

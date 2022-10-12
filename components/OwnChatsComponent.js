@@ -46,9 +46,9 @@ const OwnChatsComponent = ({navigation, route}) => {
 
     const otherId = [];
     if(senderId !== user.user_id) {
-      otherId.push(receiverId);
-    } else if (senderId === user.user_id) {
       otherId.push(senderId);
+    } else if (senderId === user.user_id) {
+      otherId.push(receiverId);
     }
     console.log('otheruserid', otherId);
     console.log('ownid',user.user_id);
@@ -94,6 +94,7 @@ const OwnChatsComponent = ({navigation, route}) => {
       <Text>Chats</Text>
       <FlatList
         data={getUserInfo}
+        
         style={{marginLeft: 16, marginBottom: 16}}
         renderItem={({item}) => <TouchableOpacity onPress={() => navigation.navigate('ChatView', chatFile)}><Text>{item}</Text></TouchableOpacity>}
       />
