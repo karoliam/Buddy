@@ -56,7 +56,7 @@ const OwnChatsComponent = ({navigation, route}) => {
       try {
         console.log(id);
         //TODO vaihda toi tägityyli oikeaksi
-        const user = await getFilesByTag('buddyprofile_Data' + id);
+        const user = await getFilesByTag(applicationTag + 'profile_data' + id);
         userList.push(JSON.parse(user[0].description).full_name);
         setGetUserInfo(userList);
       } catch (error) {

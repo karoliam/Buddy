@@ -8,10 +8,10 @@ import {
   Dimensions,
   KeyboardAvoidingView,
 } from 'react-native';
-import {applicationTag, mediaUrl} from '../utils/variables';
+import {applicationTag, mediaUrl, appChatTag} from '../utils/variables';
 import {Button, Image} from '@rneui/themed';
 import {useRoute} from '@react-navigation/native';
-import {useTag, useUser} from '../hooks/ApiHooks';
+import {useMedia, useTag, useUser} from '../hooks/ApiHooks';
 import React, {useContext, useEffect, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {MainContext} from '../context/MainContext';
@@ -21,7 +21,6 @@ import KeyboardAvoidingComponent from './KeyboardAvoidingComponent';
 import CommentField from './CommentField';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 const {height, width} = Dimensions.get('window');
-import {appChatPostTitle, appChatTag, mediaUrl} from '../utils/variables';
 
 const SinglePost = ({navigation, route}) => {
   const {filename, title, description, user_id, file_id} = route.params;
@@ -32,7 +31,7 @@ const SinglePost = ({navigation, route}) => {
   const {getFilesByTag} = useTag();
   const {getUserById} = useUser();
   const {postTag} = useTag();
-  const {postMedia} = useMedia();
+  const {postMedia, searchMedia} = useMedia();
   const {
     user,
 
@@ -120,9 +119,14 @@ const SinglePost = ({navigation, route}) => {
     const usersIdChatTitle = currentIdString + '#' + otherIdString;
 
     formData.append('title', usersIdChatTitle);
-
+    const searchData = {
+      title: usersIdChatTitle,
+    };
     try {
-      const chatMediaResponse = await postMedia(token, formData);
+      const checkChatMedia = await searchMedia(token, searchData);
+      console.log(checkChatMedia);
+      console.log(searchData);
+      /*const chatMediaResponse = await postMedia(token, formData);
       const appTag = {file_id: chatMediaResponse.file_id, tag: appChatTag};
       const appTagResponse = await postTag(token, appTag);
       console.log('mediaresponese chat', chatMediaResponse);
@@ -132,6 +136,7 @@ const SinglePost = ({navigation, route}) => {
         chatMediaResponse: chatMediaResponse,
       };
       navigation.navigate('ChatView', chatParamsObject);
+      */
     } catch (error) {
       console.log('creating chat file error', error);
     }
