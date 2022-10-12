@@ -101,14 +101,14 @@ const styles = StyleSheet.create({
     position: "absolute",
     backgroundColor: "rgba(0,0,0,0.65)",
     marginBottom: 32,
-    marginLeft: 63
+    marginLeft: 63,
+    justifyContent: 'center'
   },
   imageLogoBuddy: {
-    top: -57,
-    left: -9,
     width: width - 107,
     height: width - 211,
     position: "absolute",
+    alignSelf: 'center'
   },
   logoBackgroundStack: {
     height: 0.3 * height

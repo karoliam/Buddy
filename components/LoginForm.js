@@ -199,16 +199,16 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     marginBottom: 64,
     marginLeft: 64,
-    alignContent: 'center',
-
+    alignItems: 'center',
   },
   signInText: {
     flex: 1,
-    textAlign: 'center',
-    textAlignVertical: 'center',
     backgroundColor: 'rgba(255,0,0,0)',
     color: 'rgba(255,255,255,1)',
     fontSize: 20,
+    alignSelf: 'center',
+    marginTop: 15.5
+
   },
 });
 

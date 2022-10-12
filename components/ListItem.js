@@ -8,6 +8,7 @@ import {
   Image,
   Dimensions,
 } from 'react-native';
+import DropShadow from "react-native-drop-shadow";
 import { useEffect, useState } from "react";
 import {useTag} from '../hooks/ApiHooks';
 const {height, width} = Dimensions.get('window');
@@ -120,17 +121,21 @@ const styles = StyleSheet.create({
   },
   posterNameText: {
     position: 'absolute',
-    top: 16,
-    right: 16,
-    fontSize: 20,
+    marginLeft: 74,
+    marginTop: 14,
+    fontSize: 16,
+    color: "rgba(0, 0, 0,0.5)"
   },
   postTopRow: {
     flexDirection: "row",
-    backgroundColor: "rgba(0, 255, 0,0)",
+    backgroundColor: "#00ff0000",
     width: width - 64,
     height: 64,
+    alignItems: 'center',
   },
+
   postTimeLocationRow: {
+    marginTop: 8,
     width: width - 64,
     height: 32,
     flexDirection: "row",
@@ -142,7 +147,8 @@ const styles = StyleSheet.create({
     height: 32,
     textAlign: 'left',
     fontSize: 16,
-    paddingTop: 4
+    paddingTop: 4,
+    fontWeight: 'bold',
   },
   whenTimeText: {
     height: 32,
