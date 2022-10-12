@@ -67,6 +67,7 @@ const ProfileForms = ({navigation}) => {
       const profileDataTag = await getFilesByTag(
         applicationTag + 'profile_data' + profileID
       );
+      console.log('moi', profileDataTag[0].description);
 
       setProfileDescriptionData(JSON.parse(profileDataTag[0].description));
       setProfileDId(profileDataTag[0].file_id);
