@@ -188,7 +188,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 255, 0,0)',
   },
   timeText: {
-    marginRight: 16
+    marginRight: 16,
+    color: 'rgba(0, 0, 0,0.5)'
+
   }
 
 });
