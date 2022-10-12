@@ -19,6 +19,7 @@ const MainProvider = (props) => {
   const [showAnotherUserProfile, setShowAnotherUserProfile] = useState(false);
   const [avatar, setAvatar] = useState(null);
   const [profileBackground, setProfileBackgorund] = useState('');
+  const [profileBackgroundAnother, setProfileBackgorundAnother] = useState('');
   const [profileDescriptionData, setProfileDescriptionData] = useState({});
   const [profilePId, setProfilePId] = useState(0);
   const [profileBId, setProfileBId] = useState(0);
@@ -67,6 +68,8 @@ const MainProvider = (props) => {
         setUserIdForProfilePage,
         showAnotherUserProfile,
         setShowAnotherUserProfile,
+        profileBackgroundAnother,
+        setProfileBackgorundAnother,
       }}
     >
       {props.children}
