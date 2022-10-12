@@ -187,8 +187,9 @@ const ProfileForms = ({navigation}) => {
           <FontAwesomeIcon icon="fa-solid fa-calendar" size={32} color={'#B0B0B0'}/>
         </View>
         <View style={styles.pastEventsButtonStack}>
-          <TouchableOpacity style={styles.pastEventsButton}>
-            <Text style={styles.pastEventsText}>Past Events</Text>
+          <TouchableOpacity style={styles.pastEventsButton} onPress={() => {
+          navigation.navigate('MyFiles')}}>
+            <Text style={styles.pastEventsText}>Own posts</Text>
           </TouchableOpacity>
         </View>
         <Text style={styles.pastEventsCount}>25</Text>
@@ -207,12 +208,6 @@ const ProfileForms = ({navigation}) => {
           </TouchableOpacity>
         </View>
       </View>
-      <Button
-        title="Own posts"
-        onPress={() => {
-          navigation.navigate('MyFiles');
-        }}
-      />
     </SafeAreaView>
   );
 };
