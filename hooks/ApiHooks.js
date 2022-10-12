@@ -35,8 +35,9 @@ const useMedia = (update, myFilesOnly = false) => {
         method: 'POST',
         headers: {
           'x-access-token': token,
+          'Content-Type': 'application/json',
         },
-        body: data,
+        body: JSON.stringify(data),
       };
       return await doFetch(apiUrl + 'media/search', options);
     } catch (error) {

@@ -120,23 +120,22 @@ const SinglePost = ({navigation, route}) => {
 
     formData.append('title', usersIdChatTitle);
     const searchData = {
-      title: usersIdChatTitle,
+      title: 'usersIdChatTitle',
     };
     try {
       const checkChatMedia = await searchMedia(token, searchData);
-      console.log(checkChatMedia);
-      console.log(searchData);
-      /*const chatMediaResponse = await postMedia(token, formData);
-      const appTag = {file_id: chatMediaResponse.file_id, tag: appChatTag};
-      const appTagResponse = await postTag(token, appTag);
-      console.log('mediaresponese chat', chatMediaResponse);
-      setUpdateChatProfiles(!updateChatProfiles);
-      const chatParamsObject = {
-        usersIdChatTitle: usersIdChatTitle,
-        chatMediaResponse: chatMediaResponse,
-      };
-      navigation.navigate('ChatView', chatParamsObject);
-      */
+      if (!checkChatMedia) {
+        const chatMediaResponse = await postMedia(token, formData);
+        const appTag = {file_id: chatMediaResponse.file_id, tag: appChatTag};
+        const appTagResponse = await postTag(token, appTag);
+        console.log('mediaresponese chat', chatMediaResponse);
+        setUpdateChatProfiles(!updateChatProfiles);
+        const chatParamsObject = {
+          usersIdChatTitle: usersIdChatTitle,
+          chatMediaResponse: chatMediaResponse,
+        };
+        navigation.navigate('ChatView', chatParamsObject);
+      }
     } catch (error) {
       console.log('creating chat file error', error);
     }
