@@ -15,6 +15,7 @@ import {useRoute} from '@react-navigation/native';
 import {Controller, useForm} from 'react-hook-form';
 import {Button, Image} from '@rneui/themed';
 import {mediaUrl} from '../utils/variables';
+import moment from "moment";
 const {height, width} = Dimensions.get('window');
 
 const CommentField = () => {
@@ -169,7 +170,7 @@ const CommentField = () => {
               <View>
                 <Text style={styles.userNameText}>{item.user_name}</Text>
                 <Text style={styles.commentText}>{item.comment}</Text>
-                <Text style={styles.timeStampText}>{item.time_added}</Text>
+                <Text style={styles.timeStampText}>{moment(item.time_added).utcOffset('+0300').startOf('minute').fromNow()}</Text>
               </View>
             </View>
 

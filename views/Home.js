@@ -14,6 +14,7 @@ import {useContext} from 'react';
 import {MainContext} from '../context/MainContext';
 import {Image} from '@rneui/themed';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {color} from '@rneui/themed/dist/config';
 let {height, width} = Dimensions.get('window');
 
 const Home = (props) => {
@@ -66,21 +67,13 @@ const styles = StyleSheet.create({
     width: 90,
     height: 59,
   },
-  searchIcon: {
-    position: 'absolute',
-    right: 128,
-    width: 32,
-    height: 32,
-    marginLeft: 87,
-    marginTop: 13,
-  },
   messagesIcon: {
     position: 'absolute',
-    right: 64,
     width: 31,
     height: 31,
-    marginLeft: 29,
     marginTop: 14,
+    alignSelf: 'baseline',
+    marginLeft: '90%'
   },
   profilePicture: {
     position: 'absolute',
@@ -98,6 +91,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
     marginLeft: 20,
     marginRight: 25,
+    //backgroundColor: 'red',
   },
   topNavigationBorder: {
     width: width - 32,

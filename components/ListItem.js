@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import {useEffect, useState} from 'react';
 import {useTag} from '../hooks/ApiHooks';
+import moment from 'moment';
 const {height, width} = Dimensions.get('window');
 LogBox.ignoreLogs(['Warning: ...']);
 LogBox.ignoreAllLogs();
@@ -84,6 +85,8 @@ const ListItem = ({singleMedia, navigation}) => {
           />
         </View>
         <Text style={styles.posterNameText}>{posterName}</Text>
+        <Text style={styles.timeText}>{
+          moment(singleMedia.time_added).utcOffset('+0300').startOf('minute').fromNow()}</Text>
       </View>
       <View style={styles.postTimeLocationRow}>
         <Text style={styles.whenText}>When</Text>
@@ -142,6 +145,7 @@ const styles = StyleSheet.create({
     width: width - 64,
     height: 64,
     alignItems: 'center',
+    justifyContent: 'space-between'
   },
 
   postTimeLocationRow: {
@@ -183,6 +187,10 @@ const styles = StyleSheet.create({
     paddingRight: 16,
     backgroundColor: 'rgba(0, 255, 0,0)',
   },
+  timeText: {
+    marginRight: 16
+  }
+
 });
 
 ListItem.propTypes = {
