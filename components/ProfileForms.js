@@ -26,9 +26,10 @@ import {userMedia, useTag} from '../hooks/ApiHooks';
 import {mediaUrl, applicationTag } from '../utils/variables';
 import {setStatusBarNetworkActivityIndicatorVisible} from 'expo-status-bar';
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import PropTypes from 'prop-types';
 let {height, width} = Dimensions.get('window');
 
-const ProfileForms = () => {
+const ProfileForms = ({navigation}) => {
   const {
     user,
     setUser,
@@ -53,7 +54,7 @@ const ProfileForms = () => {
       //const profileDescrData = await userProfilePostData(profileID);
       //setProfileData(profileDescrData);
       const profilePicTag = await getFilesByTag(applicationTag + 'profile_pic' + profileID);
-      if (profilePicTag[0].filename != undefined) {
+      if (profilePicTag[0].filename !== undefined) {
         setAvatar(mediaUrl + profilePicTag[0].filename);
         setProfilePId(profilePicTag[0].file_id);
       }
@@ -61,7 +62,7 @@ const ProfileForms = () => {
         applicationTag + 'profile_data' + profileID
       );
 
-      if (profileDataTag[0].description != undefined) {
+      if (profileDataTag[0].description !== undefined) {
         setProfileDescriptionData(JSON.parse(profileDataTag[0].description));
         setProfileDId(profileDataTag[0].file_id);
       }
@@ -69,7 +70,7 @@ const ProfileForms = () => {
       const profileBackTag = await getFilesByTag(
         applicationTag + 'profile_background' + profileID
       );
-      if (profileBackTag[0].filename != undefined) {
+      if (profileBackTag[0].filename !== undefined) {
         setProfileBackgorund(mediaUrl + profileBackTag[0].filename);
         setProfileBId(profileBackTag[0].file_id);
       }
@@ -126,7 +127,7 @@ const ProfileForms = () => {
       </View>
       <View style={styles.fullNameRow}>
         {profileDescriptionData.full_name ? (
-        <Text style={styles.fullName}>{profileDescriptionData.full_name}</Text>
+          <Text style={styles.fullName}>{profileDescriptionData.full_name}</Text>
         ) : (
           <Text style={styles.fullName}>no</Text>
         )}
@@ -197,6 +198,12 @@ const ProfileForms = () => {
           </TouchableOpacity>
         </View>
       </View>
+      <Button
+        title="Own posts"
+        onPress={() => {
+          navigation.navigate('MyFiles');
+        }}
+      />
     </SafeAreaView>
   );
 };
@@ -450,5 +457,9 @@ const styles = StyleSheet.create({
     marginRight: 206
   }
 });
+
+ProfileForms.propTypes = {
+  navigation: PropTypes.object,
+};
 
 export default ProfileForms;

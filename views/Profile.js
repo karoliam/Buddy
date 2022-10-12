@@ -11,13 +11,17 @@
 import React, {useContext} from 'react';
 import {View} from 'react-native';
 import EditProfileForms from '../components/EditProfileForms';
+import PropTypes from 'prop-types';
 
 import ProfileForms from '../components/ProfileForms';
 import {MainContext} from '../context/MainContext';
 
-const Profile = () => {
+const Profile = ({navigation}) => {
   const {showEditProfile} = useContext(MainContext);
-  return <>{showEditProfile ? <EditProfileForms /> : <ProfileForms />}</>;
+  return <>{showEditProfile ? <EditProfileForms /> : <ProfileForms navigation={navigation} />}</>;
+};
+Profile.propTypes = {
+  navigation: PropTypes.object,
 };
 
 export default Profile;

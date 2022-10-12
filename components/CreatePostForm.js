@@ -10,7 +10,11 @@ import {
   Text,
   Image,
   TextInput,
-  Alert, View, TouchableOpacity, Dimensions
+  Alert,
+  View,
+  TouchableOpacity,
+  Dimensions,
+  ScrollView,
 } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 import {MainContext} from '../context/MainContext';
@@ -73,18 +77,26 @@ const CreatePostForm = ({navigation}) => {
 
     const formJSON = JSON.stringify(formObject);
     formData.append('description', formJSON);
-    formData.append('title', 'feedPost');
     // console.log('here is data', data);
-
-    const filename = mediafile.split('/').pop();
-    let extension = filename.split('.').pop();
-    extension = extension === 'jpg' ? 'jpeg' : extension;
-    // console.log('filename', extension);
-    formData.append('file', {
-      uri: mediafile,
-      name: filename,
-      type: mediaType + '/' + extension,
-    });
+    if (mediafile == null) {
+      formData.append('title', 'feedPostTxt');
+      formData.append('file', {
+        uri: 'https://placekitten.com/100',
+        name: 'placekitten',
+        type: 'image/jpeg',
+      });
+    } else {
+      formData.append('title', 'feedPost');
+      const filename = mediafile.split('/').pop();
+      let extension = filename.split('.').pop();
+      extension = extension === 'jpg' ? 'jpeg' : extension;
+      // console.log('filename', extension);
+      formData.append('file', {
+        uri: mediafile,
+        name: filename,
+        type: mediaType + '/' + extension,
+      });
+    }
     setIsLoading(true);
     try {
       const mediaResponse = await postMedia(token, formData);
@@ -131,33 +143,34 @@ const CreatePostForm = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.addPictureButton} onPress={pickImage}>
-        <Image
-          source={{uri: mediafile || 'https://placekitten.com/300'}}
-          style={styles.addPictureImage}
-        ></Image>
-      </TouchableOpacity>
-      <Controller
-        control={control}
-        render={({field: {onChange, onBlur, value}}) => (
-          <View style={styles.postTextBox}>
-            <TextInput
-              multiline={true}
-              numberOfLines={7}
-              style={styles.postTextInput}
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-              placeholder="Write your post..."
-            />
-          </View>
-        )}
-        name="writePost"
-      />
-      <Controller
-        control={control}
-        render={({field: {onChange, onBlur, value}}) => (
-          // <View style={styles.locationBox}>
+      <ScrollView>
+        <TouchableOpacity style={styles.addPictureButton} onPress={pickImage}>
+          <Image
+            source={{uri: mediafile || 'https://placekitten.com/300'}}
+            style={styles.addPictureImage}
+          ></Image>
+        </TouchableOpacity>
+        <Controller
+          control={control}
+          render={({field: {onChange, onBlur, value}}) => (
+            <View style={styles.postTextBox}>
+              <TextInput
+                multiline={true}
+                numberOfLines={7}
+                style={styles.postTextInput}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                placeholder="Write your post..."
+              />
+            </View>
+          )}
+          name="writePost"
+        />
+        <Controller
+          control={control}
+          render={({field: {onChange, onBlur, value}}) => (
+            // <View style={styles.locationBox}>
             <SelectList
               setSelected={handleSelect}
               data={data}
@@ -169,39 +182,40 @@ const CreatePostForm = ({navigation}) => {
               boxStyles={styles.locationBox}
               dropdownStyles={styles.locationBoxDropDown}
             />
-          // </View>
-        )}
-        name="location"
-      />
-      <Controller
-        control={control}
-        rules={{
-          minLength: 3,
-          required: true,
-        }}
-        render={({field: {onChange, onBlur, value}}) => (
-          <View style={styles.whenBox}>
-            <TextInput
-              style={styles.whenBoxTextInput}
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-              placeholder="When"
-              required
-            />
-          </View>
-        )}
-        name="when"
-      />
-      {errors.location?.type === 'required' && <Text>This is required.</Text>}
-      {errors.location?.type === 'minLength' && <Text>Min 3 chars!</Text>}
-      <TouchableOpacity
-        style={styles.publishButton}
-        loading={isLoading}
-        onPress={handleSubmit(onSubmit)}
-      >
-        <Text style={styles.publishText}>Publish</Text>
-      </TouchableOpacity>
+            // </View>
+          )}
+          name="location"
+        />
+        <Controller
+          control={control}
+          rules={{
+            minLength: 3,
+            required: true,
+          }}
+          render={({field: {onChange, onBlur, value}}) => (
+            <View style={styles.whenBox}>
+              <TextInput
+                style={styles.whenBoxTextInput}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                placeholder="When"
+                required
+              />
+            </View>
+          )}
+          name="when"
+        />
+        {errors.location?.type === 'required' && <Text>This is required.</Text>}
+        {errors.location?.type === 'minLength' && <Text>Min 3 chars!</Text>}
+        <TouchableOpacity
+          style={styles.publishButton}
+          loading={isLoading}
+          onPress={handleSubmit(onSubmit)}
+        >
+          <Text style={styles.publishText}>Publish</Text>
+        </TouchableOpacity>
+      </ScrollView>
     </View>
   );
 };

@@ -24,7 +24,7 @@ const EditPostForm = ({navigation, route}) => {
   const {filename, title, description, user_id, file_id} = route.params;
   const paramsObject = route.params;
   const [isLoading, setIsLoading] = useState(false);
-  const {putMedia} = useMedia();
+  const {putMedia, deleteMedia} = useMedia();
   const {update, setUpdate} = useContext(MainContext);
   const [city, setCity] = useState('');
   const cityData = cityNames;
@@ -64,7 +64,7 @@ const EditPostForm = ({navigation, route}) => {
     const descriptionString = "description";
     const doubleStringData = JSON.stringify(stringData);
     const finalData = ('{"' + descriptionString + '"' + ':' + doubleStringData + '}');
-      console.log('tuosa', finalData);
+    console.log('tuosa', finalData);
 
     try {
       const token = await AsyncStorage.getItem('userToken');
@@ -75,14 +75,17 @@ const EditPostForm = ({navigation, route}) => {
           text: 'Ok',
           onPress: () => {
             setUpdate(!update);
-             navigation.navigate('Home');
+            navigation.navigate('Home');
           },
         },
       ]);
     } catch (error) {
       console.error('onSubmit modify file failed', error);
-      // TODO: add error user notification
-    } finally {
+      Alert.alert('Editing failed', 'Try again', [
+        {
+          text: 'Ok'
+        }
+      ])    } finally {
       setIsLoading(false);
     }
   };
@@ -91,6 +94,36 @@ const EditPostForm = ({navigation, route}) => {
     console.log(cityData[e].value);
     setCity(cityData[e].value);
   };
+
+  const deletePost = () => {
+    const deleting = async () => {
+      try {
+        const token = await AsyncStorage.getItem('userToken');
+        await deleteMedia(token, paramsObject.file_id);
+      } catch (error) {
+        console.log('deleting error', error);
+      }
+    }
+    Alert.alert('Are you sure?', 'Do you want to delete your post?', [
+      {
+        text: 'Yes, delete',
+        onPress: () => {
+          deleting();
+          Alert.alert('Deleted successfully!', '', [
+            {
+              text: 'Ok',
+              onPress:() => {
+                setUpdate(!update);
+              }
+            }
+          ]);
+          navigation.navigate('Home');
+        },
+      },
+      { text: "Cancel", onPress: () => console.log('cancel pressed') }
+    ]);
+  }
+
 
   useEffect(() => {
 
@@ -164,6 +197,9 @@ const EditPostForm = ({navigation, route}) => {
         >
           <Text style={styles.publishText}>Update</Text>
         </TouchableOpacity>
+        <Button
+          title='Delete'
+          onPress={handleSubmit(deletePost)}></Button>
       </ScrollView>
     </View>
   );

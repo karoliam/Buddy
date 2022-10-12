@@ -9,6 +9,7 @@ import CreatePost from '../views/CreatePost';
 import {MainContext} from '../context/MainContext';
 import Single from '../views/Single';
 import EditPost from '../views/EditPost';
+import MyFiles from '../views/MyFiles';
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 
 const Tab = createBottomTabNavigator();
@@ -61,6 +62,8 @@ const StackScreen = () => {
           />
           <Stack.Screen name="Single" component={Single} />
           <Stack.Screen name="EditPost" component={EditPost} />
+          <Stack.Screen name="MyFiles" component={MyFiles} />
+
         </>
       ) : (
         <Stack.Screen name="Login" component={Login} />
