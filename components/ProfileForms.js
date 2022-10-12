@@ -481,7 +481,7 @@ const styles = StyleSheet.create({
     width: 103,
     height: 40,
     position: "absolute",
-    backgroundColor: "rgba(255,0,0,1)",
+    backgroundColor: '#f66464ff',
     borderRadius: 10,
   },
   logoutText: {

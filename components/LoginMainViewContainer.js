@@ -30,7 +30,7 @@ const LoginMainViewContainer = () => {
 
   return (
     <ImageBackground
-      source={require("../assets/buddyAlt.png")}
+      source={require("../assets/images/buddybackgroundNew.png")}
       resizeMode="cover"
       style={styles.backGroundImage}
       imageStyle={styles.backGroundImage_imageStyle}
@@ -58,6 +58,7 @@ const LoginMainViewContainer = () => {
           <View style={styles.loginFormContainer}>
             {showRegForm ? <RegisterForm /> : <LoginForm />}
           </View>
+          <View style={styles.bottomTextContainer}>
           <View style={styles.bottomLineAndSwitchContainer}>
             <View style={styles.lineOrContainer}>
               <View style={styles.lineOrLeft}></View>
@@ -79,6 +80,7 @@ const LoginMainViewContainer = () => {
                 <Text style={styles.signUpText}>{showLoginText ? loginText22 : loginText21}</Text>
               </View>
             </TouchableOpacity>
+          </View>
           </View>
         </TouchableOpacity>
       </KeyboardAvoidingView>
@@ -138,7 +140,7 @@ const styles = StyleSheet.create({
     height: 2,
     backgroundColor: "rgba(255,255,255,1)",
     marginLeft: 14,
-    marginTop: 9
+    marginTop: 9,
   },
   lineOrContainer: {
     backgroundColor: "rgba(255,0,0,0)",
@@ -146,7 +148,8 @@ const styles = StyleSheet.create({
     height: 17,
     flexDirection: "row",
     marginTop: 8,
-    marginLeft: 64,
+    // marginLeft: 64,
+    alignSelf: 'center'
   },
   buttonSignUp: {
     width: 280,
@@ -161,18 +164,25 @@ const styles = StyleSheet.create({
     color: "rgba(255,255,255,1)",
     height: 30,
     width: 200,
-    fontSize: 16
+    fontSize: 16,
+    right: 16
+
   },
   signUpText: {
     color: "rgba(255,153,0,1)",
     height: 30,
     width: 80,
-    fontSize: 16
+    fontSize: 16,
+    right: 16
   },
   signUpTextContainer: {
     paddingTop: 12,
     flexDirection: "row",
+  },
+  bottomTextContainer: {
+    marginLeft:20
   }
+
 });
 
 LoginMainViewContainer.propTypes = {

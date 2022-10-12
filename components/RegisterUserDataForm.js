@@ -310,6 +310,7 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     marginTop: 16,
     marginLeft: 64,
+    alignItems: 'center'
   },
   locationBoxDropDown: {
     width: width - 128,
@@ -366,12 +367,13 @@ const styles = StyleSheet.create({
   doLaterText: {
     flex: 1,
     textAlign: 'center',
-    textAlignVertical: 'center',
+    // textAlignVertical: 'center',
     color: 'rgba(83,134,234,1)',
     backgroundColor: 'rgba(255,0,0,0)',
     fontSize: 16,
     marginLeft: 12,
     marginRight: 12,
+    marginTop: 5
   },
   doLaterButtonStack: {
     width: width - 238,
@@ -386,12 +388,13 @@ const styles = StyleSheet.create({
   goText: {
     flex: 1,
     textAlign: 'center',
-    textAlignVertical: 'center',
+    // textAlignVertical: 'center',
     color: 'rgba(0,0,0,1)',
     backgroundColor: 'rgba(255,0,0,0)',
     fontSize: 16,
     marginLeft: 12,
     marginRight: 12,
+    marginTop: 8
   },
   goButtonStack: {
     width: width - 311,

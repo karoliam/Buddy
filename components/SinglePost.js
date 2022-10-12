@@ -123,11 +123,6 @@ const SinglePost = ({navigation, route}) => {
                 <Text style={styles.chatButtonText}>Chat</Text>
               </TouchableOpacity>
             </View>
-            <View style={styles.attendButtonStack}>
-              <TouchableOpacity style={styles.attendButton}>
-                <Text style={styles.attendButtonText}>Attend</Text>
-              </TouchableOpacity>
-            </View>
           </View>
           <View style={styles.postTextRow}>
             <TouchableOpacity
@@ -277,7 +272,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,0,0,0)',
     width: 60,
     height: 32,
-    marginLeft: 16,
+    right: 0
   },
   attendButton: {
     width: 80,

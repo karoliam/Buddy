@@ -23,6 +23,7 @@ import SelectList from 'react-native-dropdown-select-list';
 import cityNames from '../utils/cityNames';
 import { applicationTag, kissalinkki } from "../utils/variables";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 let {height, width} = Dimensions.get('window');
 
 const EditProfileForms = () => {
@@ -247,7 +248,7 @@ const EditProfileForms = () => {
 
   return (
     <>
-      <ScrollView style={styles.container}>
+      <KeyboardAwareScrollView style={styles.container}>
         <View style={styles.backgroundImageStack}>
           <TouchableOpacity style={styles.backgroundImageStack} onPress={selectBackgroundImage}>
             <Image
@@ -394,7 +395,7 @@ const EditProfileForms = () => {
               <Text style={styles.deleteText}>Delete profile</Text>
             </TouchableOpacity>
           </View>
-      </ScrollView>
+      </KeyboardAwareScrollView>
     </>
   );
 };

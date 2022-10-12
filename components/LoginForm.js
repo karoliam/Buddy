@@ -101,7 +101,7 @@ const LoginForm = () => {
               onChangeText={onChange}
               value={value}
               autoCapitalize="none"
-              placeholder="e-mail"
+              placeholder="E-mail"
               style={styles.usernameInput}
             />
           </View>
@@ -123,7 +123,7 @@ const LoginForm = () => {
               onChangeText={onChange}
               value={value}
               secureTextEntry={true}
-              placeholder="password"
+              placeholder="Password"
               style={styles.passwordInput}
             />
           </View>
