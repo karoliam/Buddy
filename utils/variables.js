@@ -4,4 +4,5 @@ const applicationTag = 'kissakoirajotain88';
 // TODO ? const applicationTag = 'kissakoirajotain';
 const appId = 'buddy#';
 const appChatTag = 'buddyChat';
-export {apiUrl, mediaUrl, appId, applicationTag, appChatTag};
+const appChatPostTitle = 'chatFile';
+export {apiUrl, mediaUrl, appId, applicationTag, appChatTag, appChatPostTitle};

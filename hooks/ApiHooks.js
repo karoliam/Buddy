@@ -29,6 +29,21 @@ const useMedia = (update, myFilesOnly = false) => {
     loadMedia();
   }, [update]);
 
+  const searchMedia = async (token, data) => {
+    try {
+      const options = {
+        method: 'POST',
+        headers: {
+          'x-access-token': token,
+        },
+        body: data,
+      };
+      return await doFetch(apiUrl + 'media/search', options);
+    } catch (error) {
+      console.log('Apihooks searchMedia ', error.message);
+    }
+  };
+
   const postMedia = async (token, data) => {
     const options = {
       method: 'POST',
@@ -50,8 +65,8 @@ const useMedia = (update, myFilesOnly = false) => {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-         'x-access-token': token
-        },
+        'x-access-token': token,
+      },
       body: data,
     };
     try {
@@ -64,8 +79,8 @@ const useMedia = (update, myFilesOnly = false) => {
     const options = {
       method: 'DELETE',
       headers: {
-        'x-access-token': token
-      }
+        'x-access-token': token,
+      },
     };
     try {
       return await doFetch(apiUrl + 'media/' + fileId, options);
@@ -73,7 +88,7 @@ const useMedia = (update, myFilesOnly = false) => {
       throw new Error(error.message);
     }
   };
-  return {mediaArray, postMedia, loadMedia, putMedia, deleteMedia};
+  return {mediaArray, postMedia, loadMedia, putMedia, deleteMedia, searchMedia};
 };
 
 const useTag = () => {
@@ -101,10 +116,10 @@ const useTag = () => {
       method: 'GET',
       headers: {
         'x-access-token': token,
-      }
+      },
     };
     try {
-      const response = await fetch(apiUrl + 'tags/',options);
+      const response = await fetch(apiUrl + 'tags/', options);
       const listOfTags = await response.json();
       return listOfTags;
     } catch (error) {

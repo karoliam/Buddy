@@ -10,7 +10,7 @@ import {useContext, useEffect, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {MainContext} from '../context/MainContext';
 import PropTypes from 'prop-types';
-import {appChatTag, mediaUrl} from '../utils/variables';
+import {appChatPostTitle, appChatTag, mediaUrl} from '../utils/variables';
 
 const SinglePost = ({navigation, route}) => {
   const {filename, title, description, user_id, file_id} = route.params;
@@ -20,7 +20,8 @@ const SinglePost = ({navigation, route}) => {
   const {getUserById} = useUser();
   const {postTag} = useTag();
   const {postMedia} = useMedia();
-  const {user, showEditPost, setShowEditPost, update, setUpdate} = useContext(MainContext);
+  const {user, showEditPost, setShowEditPost, update, setUpdate} =
+    useContext(MainContext);
 
   const paramsObject = {
     filename: filename,
@@ -52,7 +53,7 @@ const SinglePost = ({navigation, route}) => {
     } else {
       setShowEditPost(true);
     }
-  }
+  };
 
   const createChatFile = async () => {
     const formData = new FormData();
@@ -62,42 +63,46 @@ const SinglePost = ({navigation, route}) => {
       name: 'placekitten',
       type: 'image/jpeg',
     });
+    /*
+    en tiedä miksi näitä tarvittais kun description on optional
     const formObject = {
       location: 'default',
       when: 'default',
       writePost: 'default',
     };
-
     const formJSON = JSON.stringify(formObject);
     formData.append('description', formJSON);
+    */
 
     const currentIdString = user.user_id.toString();
     const otherIdString = user_id.toString();
-    const userChatTag = 'senderId:' + currentIdString + '#' + 'receiverId:' + otherIdString;
+    const userChatTag =
+      'senderId:' + currentIdString + '#' + 'receiverId:' + otherIdString;
     console.log('userChat tag', userChatTag);
 
-    formData.append('title', 'chatFile');
+    formData.append('title', appChatPostTitle);
 
-        try {
+    try {
       const chatMediaResponse = await postMedia(token, formData);
       const appTag = {file_id: chatMediaResponse.file_id, tag: appChatTag};
       const appTagResponse = await postTag(token, appTag);
-      console.log('mediaresponese chat', chatMediaResponse)
+      console.log('mediaresponese chat', chatMediaResponse);
       const chatTag = {file_id: chatMediaResponse.file_id, tag: userChatTag};
       const chatTagResponse = await postTag(token, chatTag);
-      console.log('chat media response', chatMediaResponse);
-      const chatParamsObject = {'userChatTag': userChatTag, 'chatMediaResponse': chatMediaResponse}
+      console.log('chat media response', chatTagResponse);
+      const chatParamsObject = {
+        userChatTag: userChatTag,
+        chatMediaResponse: chatMediaResponse,
+      };
       navigation.navigate('ChatView', chatParamsObject);
     } catch (error) {
       console.log('creating chat file error', error);
     }
-  }
-
+  };
 
   useEffect(() => {
-    showEditPostFunction()
+    showEditPostFunction();
   }, [update]);
-
 
   return (
     <ScrollView>
@@ -117,7 +122,7 @@ const SinglePost = ({navigation, route}) => {
       ) : (
         <Text></Text>
       )}
-      <Button title='Chat' onPress={() => createChatFile()}></Button>
+      <Button title="Chat" onPress={() => createChatFile()}></Button>
       <Text>{userFullName}</Text>
       <Text>{descriptionObject.when}</Text>
       <Text>{descriptionObject.location}</Text>
