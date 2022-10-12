@@ -124,12 +124,12 @@ const RegisterForm = () => {
             // navigation.navigate('RegisterChecker', {name: 'RegisterChecker'}); // TODO fix navigation to userDataForm
             setUser(userLoginData.user);
             setShowRegisterUserDataForm(!showRegisterUserDataForm);
-
+            console.log(userLoginData.user);
             const pData = await postMedia(userLoginData.token, profileData);
             //etsi userid tägiä varten
             const profileDataTag = {
               file_id: pData.file_id,
-              tag: applicationTag + 'profile_Data' + userLoginData.user.user_id,
+              tag: applicationTag + 'profile_data' + userLoginData.user.user_id,
             };
             setProfileDId(pData.file_id);
             const dataTag = await postTag(userLoginData.token, profileDataTag);

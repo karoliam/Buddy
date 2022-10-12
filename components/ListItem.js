@@ -1,4 +1,4 @@
-import { applicationTag, mediaUrl } from "../utils/variables";
+import {applicationTag, kissalinkki, mediaUrl} from '../utils/variables';
 import PropTypes from 'prop-types';
 import {
   StyleSheet,
@@ -7,32 +7,31 @@ import {
   TouchableOpacity,
   Image,
   Dimensions,
+  LogBox,
 } from 'react-native';
-import DropShadow from "react-native-drop-shadow";
-import { useEffect, useState } from "react";
+import {useEffect, useState} from 'react';
 import {useTag} from '../hooks/ApiHooks';
 const {height, width} = Dimensions.get('window');
-
+LogBox.ignoreLogs(['Warning: ...']);
+LogBox.ignoreAllLogs();
 const ListItem = ({singleMedia, navigation}) => {
   // console.log('tässä singlemedia', singleMedia);
   // console.log('tossa ois description', singleMedia.description);
   const {getFilesByTag} = useTag();
   const [posterAvatar, setPosterAvatar] = useState('');
   const [posterName, setPosterName] = useState('');
-  console.log('sinkku media: ', singleMedia)
   const getProfileData = async (user_id) => {
     try {
-      const profilePicTag = await getFilesByTag(applicationTag + 'profile_pic' + user_id);
-      console.log('profilePicTag ', profilePicTag);
-      console.log('profilePicTag0 ', mediaUrl + profilePicTag[0].filename);
+      const profilePicTag = await getFilesByTag(
+        applicationTag + 'profile_pic' + user_id
+      );
+
       if (profilePicTag[0].filename != undefined) {
         setPosterAvatar(mediaUrl + profilePicTag[0].filename);
       }
       const profileDataTag = await getFilesByTag(
         applicationTag + 'profile_data' + user_id
       );
-      console.log('profileDataTag ', profileDataTag);
-      console.log('profileDataTag0 ', (JSON.parse(profileDataTag[0].description).full_name));
       if (profileDataTag[0].description != undefined) {
         setPosterName(JSON.parse(profileDataTag[0].description).full_name);
       }
@@ -47,7 +46,6 @@ const ListItem = ({singleMedia, navigation}) => {
 
   const data = JSON.parse(singleMedia.description);
   const {location, when, writePost} = data;
-  console.log('tilte',singleMedia.title);
   //console.log('here is data', JSON.parse(singleMedia));
   return (
     <TouchableOpacity
@@ -59,9 +57,15 @@ const ListItem = ({singleMedia, navigation}) => {
       {singleMedia.title === 'feedPost' ? (
         <Image
           style={styles.image}
-          source={{
-            uri: mediaUrl + singleMedia.thumbnails.w160,
-          }}
+          source={
+            singleMedia
+              ? {
+                  uri: mediaUrl + singleMedia.thumbnails.w160,
+                }
+              : {
+                  uri: kissalinkki,
+                }
+          }
         />
       ) : (
         <Text></Text>
@@ -70,9 +74,14 @@ const ListItem = ({singleMedia, navigation}) => {
         <View style={styles.userAvatarContainer}>
           <Image
             style={styles.userAvatarImage}
-            source={{
-            uri: posterAvatar,
-            }}/>
+            source={
+              posterAvatar
+                ? {
+                    uri: posterAvatar,
+                  }
+                : {uri: kissalinkki}
+            }
+          />
         </View>
         <Text style={styles.posterNameText}>{posterName}</Text>
       </View>
@@ -82,8 +91,9 @@ const ListItem = ({singleMedia, navigation}) => {
         <Text style={styles.locationText}>{location}</Text>
       </View>
       <View style={styles.postMessageTextBox}>
-        <Text style={styles.postMessageText}
-        numberOfLines={0}>{writePost}</Text>
+        <Text style={styles.postMessageText} numberOfLines={0}>
+          {writePost}
+        </Text>
       </View>
     </TouchableOpacity>
   );
@@ -97,7 +107,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     marginLeft: 32,
     width: width - 64,
-    backgroundColor: "rgba(165, 171, 232,0.13)",
+    backgroundColor: 'rgba(165, 171, 232,0.13)',
     borderRadius: 8,
   },
   image: {
@@ -111,13 +121,13 @@ const styles = StyleSheet.create({
     top: 8,
     width: 52,
     height: 52,
-    backgroundColor: "rgba(0, 255, 0,0.3)",
-    borderRadius: 100
+    backgroundColor: 'rgba(0, 255, 0,0.3)',
+    borderRadius: 100,
   },
   userAvatarImage: {
     width: 52,
     height: 52,
-    borderRadius: 100
+    borderRadius: 100,
   },
   posterNameText: {
     position: 'absolute',
@@ -138,8 +148,8 @@ const styles = StyleSheet.create({
     marginTop: 8,
     width: width - 64,
     height: 32,
-    flexDirection: "row",
-    backgroundColor: "rgba(0, 0, 255,0)",
+    flexDirection: 'row',
+    backgroundColor: 'rgba(0, 0, 255,0)',
   },
   whenText: {
     marginLeft: 16,
@@ -161,7 +171,7 @@ const styles = StyleSheet.create({
     height: 32,
     fontSize: 16,
     paddingTop: 4,
-    color: "rgba(0, 0, 0,0.5)",
+    color: 'rgba(0, 0, 0,0.5)',
   },
   postMessageTextBox: {
     marginTop: 8,
@@ -171,8 +181,7 @@ const styles = StyleSheet.create({
     width: width - 64,
     paddingLeft: 16,
     paddingRight: 16,
-    backgroundColor: "rgba(0, 255, 0,0)",
-
+    backgroundColor: 'rgba(0, 255, 0,0)',
   },
 });
 

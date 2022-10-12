@@ -35,7 +35,9 @@ const RegisterUserDataForm = () => {
     user,
     city,
     setCity,
-    profileDid,
+    profileDId,
+    setUpdateProfile,
+    updateProfile,
   } = useContext(MainContext);
   const {postMedia} = useMedia();
   const {deleteMediaById} = userMedia();
@@ -107,14 +109,17 @@ const RegisterUserDataForm = () => {
         const pocTag = await postTag(token, profilePicTag);
         console.log(pocTag);
       }
-      const delData = await deleteMediaById(token, profileDid);
-
+      const delData = await deleteMediaById(token, profileDId);
+      console.log(delData);
       const pData = await postMedia(token, profileData);
+      console.log(pData);
       const profileDataTag = {
         file_id: pData.file_id,
-        tag: applicationTag + 'profile_Data' + user.user_id,
+        tag: applicationTag + 'profile_data' + user.user_id,
       };
       const dataTag = await postTag(token, profileDataTag);
+      console.log(dataTag);
+      setUpdateProfile(!updateProfile);
       setIsLoggedIn(true);
       setShowRegisterUserDataForm(false);
       // navigation.navigate('Tabs');  // TODO navi to loginstate
