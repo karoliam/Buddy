@@ -17,15 +17,15 @@ import {
   ImageBackground,
   View,
   TouchableOpacity,
-  Dimensions
-} from "react-native";
+  Dimensions,
+} from 'react-native';
 import {MainContext} from '../context/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Image} from '@rneui/themed';
 import {userMedia, useTag} from '../hooks/ApiHooks';
-import {mediaUrl, applicationTag } from '../utils/variables';
+import {mediaUrl, applicationTag} from '../utils/variables';
 import {setStatusBarNetworkActivityIndicatorVisible} from 'expo-status-bar';
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import PropTypes from 'prop-types';
 import {ScrollView} from 'react-native-gesture-handler';
 let {height, width} = Dimensions.get('window');
@@ -50,6 +50,7 @@ const ProfileForms = ({navigation}) => {
     updateProfile,
     userIdForProfilePage,
     update,
+    setCity,
   } = useContext(MainContext);
   const {userProfilePostData} = userMedia();
   const {getFilesByTag} = useTag();
@@ -57,6 +58,13 @@ const ProfileForms = ({navigation}) => {
     try {
       //const profileDescrData = await userProfilePostData(profileID);
       //setProfileData(profileDescrData);
+      const profileDataTag = await getFilesByTag(
+        applicationTag + 'profile_data' + profileID
+      );
+      console.log('moi', profileDataTag[0].description);
+
+      setProfileDescriptionData(JSON.parse(profileDataTag[0].description));
+      setProfileDId(profileDataTag[0].file_id);
       const profilePicTag = await getFilesByTag(
         applicationTag + 'profile_pic' + profileID
       );
@@ -66,18 +74,6 @@ const ProfileForms = ({navigation}) => {
         setProfilePId(profilePicTag[0].file_id);
       } else {
         setAvatar(null);
-      }
-      const profileDataTag = await getFilesByTag(
-        applicationTag + 'profile_data' + profileID
-      );
-      console.log('moi', profileDataTag[0].description);
-
-      setProfileDescriptionData(JSON.parse(profileDataTag[0].description));
-      setProfileDId(profileDataTag[0].file_id);
-
-      if (profileDataTag[0].description !== undefined) {
-        setProfileDescriptionData(JSON.parse(profileDataTag[0].description));
-        setProfileDId(profileDataTag[0].file_id);
       }
 
       const profileBackTag = await getFilesByTag(
@@ -100,12 +96,14 @@ const ProfileForms = ({navigation}) => {
 
   //getProfileData(user.user_id);
   const logout = async () => {
+    setProfileDescriptionData({});
     await AsyncStorage.clear();
     setProfileData({});
-    setAvatar(null),
-      setUser({}),
-      setProfileBackgorund(null),
-      setIsLoggedIn(false);
+    setCity('');
+    setAvatar(null);
+    setUser({});
+    setProfileBackgorund(null);
+    setIsLoggedIn(false);
   };
 
   const editProfile = () => {
@@ -141,7 +139,9 @@ const ProfileForms = ({navigation}) => {
         <View style={{marginBottom: 50}}>
       <View style={styles.fullNameRow}>
         {profileDescriptionData.full_name ? (
-          <Text style={styles.fullName}>{profileDescriptionData.full_name}</Text>
+          <Text style={styles.fullName}>
+            {profileDescriptionData.full_name}
+          </Text>
         ) : (
           <Text style={styles.fullName}>Add your full name</Text>
         )}
@@ -171,12 +171,18 @@ const ProfileForms = ({navigation}) => {
       <View style={styles.bioBorder}></View>
       <View style={styles.locationIconRow}>
         <View style={styles.locationIcon}>
-          <FontAwesomeIcon icon="fa-solid fa-location-dot" size={32} color={'#B0B0B0'}/>
+          <FontAwesomeIcon
+            icon="fa-solid fa-location-dot"
+            size={32}
+            color={'#B0B0B0'}
+          />
         </View>
         <View style={styles.locationTextColumn}>
           <Text style={styles.locationText}>Location</Text>
           {profileDescriptionData.location ? (
-            <Text style={styles.userLocation}>{profileDescriptionData.location}</Text>
+            <Text style={styles.userLocation}>
+              {profileDescriptionData.location}
+            </Text>
           ) : (
             <Text style={styles.userLocation}>no</Text>
           )}
@@ -185,7 +191,11 @@ const ProfileForms = ({navigation}) => {
       <View style={styles.locationBorder}></View>
       <View style={styles.ageIconRow}>
         <View style={styles.ageIcon}>
-          <FontAwesomeIcon icon="fa-solid fa-clock" size={32} color={'#B0B0B0'}/>
+          <FontAwesomeIcon
+            icon="fa-solid fa-clock"
+            size={32}
+            color={'#B0B0B0'}
+          />
         </View>
         <View style={styles.ageTextColumn}>
           <Text style={styles.ageText}>Age</Text>
@@ -199,11 +209,19 @@ const ProfileForms = ({navigation}) => {
       <View style={styles.ageBorder}></View>
       <View style={styles.pastEventsIconRow}>
         <View style={styles.pastEventsIcon}>
-          <FontAwesomeIcon icon="fa-solid fa-calendar" size={32} color={'#B0B0B0'}/>
+          <FontAwesomeIcon
+            icon="fa-solid fa-calendar"
+            size={32}
+            color={'#B0B0B0'}
+          />
         </View>
         <View style={styles.pastEventsButtonStack}>
-          <TouchableOpacity style={styles.pastEventsButton} onPress={() => {
-          navigation.navigate('MyFiles')}}>
+          <TouchableOpacity
+            style={styles.pastEventsButton}
+            onPress={() => {
+              navigation.navigate('MyFiles');
+            }}
+          >
             <Text style={styles.pastEventsText}>Own posts</Text>
           </TouchableOpacity>
         </View>
@@ -211,13 +229,14 @@ const ProfileForms = ({navigation}) => {
       <View style={styles.pastEventsBorder}></View>
       <View style={styles.logoutIconRow}>
         <TouchableOpacity style={styles.logoutIcon}>
-          <FontAwesomeIcon icon="fa-solid fa-lock" size={32} color={'#B0B0B0'}/>
+          <FontAwesomeIcon
+            icon="fa-solid fa-lock"
+            size={32}
+            color={'#B0B0B0'}
+          />
         </TouchableOpacity>
         <View style={styles.logoutButtonStack}>
-          <TouchableOpacity
-            style={styles.logoutButton}
-            onPress={logout}
-          >
+          <TouchableOpacity style={styles.logoutButton} onPress={logout}>
             <Text style={styles.logoutText}>Logout</Text>
           </TouchableOpacity>
         </View>
@@ -231,7 +250,7 @@ const ProfileForms = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'rgba(255,255,255,1)'
+    backgroundColor: 'rgba(255,255,255,1)',
   },
   backgroundImage: {
     top: 0,
@@ -244,23 +263,23 @@ const styles = StyleSheet.create({
     left: 32,
     width: 100,
     height: 100,
-    position: "absolute",
-    borderRadius: 100
+    position: 'absolute',
+    borderRadius: 100,
   },
   profilePicture: {
     width: 100,
     height: 100,
-    borderRadius: 100
+    borderRadius: 100,
   },
   backgroundImageStack: {
     width: width,
-    height: 0.31 * height
+    height: 0.31 * height,
   },
   fullName: {
     flex: 1,
     textAlign: 'left',
     backgroundColor: 'rgba(0,255,255,0)',
-    color: "#121212",
+    color: '#121212',
     fontSize: 20,
     marginTop: 2,
     marginLeft: 8,
@@ -270,7 +289,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 56,
     width: 32,
-    height: 32
+    height: 32,
   },
   editProfile: {
     backgroundColor: 'rgba(246,203,100,1)',
@@ -281,15 +300,15 @@ const styles = StyleSheet.create({
   fullNameRow: {
     backgroundColor: 'rgba(0,255,255,0)',
     height: 32,
-    flexDirection: "row",
+    flexDirection: 'row',
     marginTop: 6,
     marginLeft: 16,
     marginRight: 16,
   },
   fullNameBorder: {
-    width: (width) - 32,
+    width: width - 32,
     height: 2,
-    backgroundColor: "rgba(165,171,232,0.5)",
+    backgroundColor: 'rgba(165,171,232,0.5)',
     marginTop: 16,
     marginLeft: 16,
   },
@@ -313,94 +332,94 @@ const styles = StyleSheet.create({
     height: 140
   },
   bioBorder: {
-    width: (width) - 32,
+    width: width - 32,
     height: 2,
-    backgroundColor: "rgba(165,171,232,0.5)",
+    backgroundColor: 'rgba(165,171,232,0.5)',
     marginTop: 17,
-    marginLeft: 16
+    marginLeft: 16,
   },
   locationIcon: {
     backgroundColor: 'rgba(0,255,255,0)',
     width: 32,
     height: 32,
-    marginTop: 4
+    marginTop: 4,
   },
   locationText: {
     flex: 1,
     textAlign: 'left',
     backgroundColor: 'rgba(0,255,255,0)',
-    color: "rgba(155,151,151,1)",
-    fontSize: 12
+    color: 'rgba(155,151,151,1)',
+    fontSize: 12,
   },
   userLocation: {
     flex: 1,
     textAlign: 'left',
     backgroundColor: 'rgba(0,255,255,0)',
-    color: "rgba(97,97,97,1)",
-    fontSize: 16
+    color: 'rgba(97,97,97,1)',
+    fontSize: 16,
   },
   locationTextColumn: {
     backgroundColor: 'rgba(0,255,255,0)',
-    marginLeft: 8
+    marginLeft: 8,
   },
   locationIconRow: {
     backgroundColor: 'rgba(0,255,255,0)',
     height: 40,
-    flexDirection: "row",
+    flexDirection: 'row',
     marginTop: 16,
     marginLeft: 16,
-    marginRight: 16
+    marginRight: 16,
   },
   locationBorder: {
-    width: (width) - 32,
+    width: width - 32,
     height: 2,
-    backgroundColor: "rgba(165,171,232,0.5)",
+    backgroundColor: 'rgba(165,171,232,0.5)',
     marginTop: 15,
-    marginLeft: 16
+    marginLeft: 16,
   },
   ageIcon: {
     backgroundColor: 'rgba(0,255,255,0)',
     width: 32,
     height: 32,
-    marginTop: 4
+    marginTop: 4,
   },
   ageText: {
     flex: 1,
     textAlign: 'left',
     backgroundColor: 'rgba(0,255,255,0)',
-    color: "rgba(155,151,151,1)",
-    fontSize: 12
+    color: 'rgba(155,151,151,1)',
+    fontSize: 12,
   },
   userAge: {
     flex: 1,
     textAlign: 'left',
     backgroundColor: 'rgba(0,255,255,0)',
-    color: "rgba(97,97,97,1)",
-    fontSize: 16
+    color: 'rgba(97,97,97,1)',
+    fontSize: 16,
   },
   ageTextColumn: {
     backgroundColor: 'rgba(0,255,255,0)',
-    marginLeft: 8
+    marginLeft: 8,
   },
   ageIconRow: {
     backgroundColor: 'rgba(0,255,255,0)',
     height: 40,
-    flexDirection: "row",
+    flexDirection: 'row',
     marginTop: 16,
     marginLeft: 16,
-    marginRight: 16
+    marginRight: 16,
   },
   ageBorder: {
-    width: (width) - 32,
+    width: width - 32,
     height: 2,
-    backgroundColor: "rgba(165,171,232,0.5)",
+    backgroundColor: 'rgba(165,171,232,0.5)',
     marginTop: 15,
-    marginLeft: 16
+    marginLeft: 16,
   },
   pastEventsIcon: {
     backgroundColor: 'rgba(0,255,255,0)',
     width: 32,
-    height: 32
+    height: 32,
   },
   pastEventsButton: {
     top: 4,
@@ -415,7 +434,7 @@ const styles = StyleSheet.create({
   pastEventsText: {
     flex: 1,
     backgroundColor: 'rgba(0,255,255,0)',
-    color: "rgba(0,0,0,1)",
+    color: 'rgba(0,0,0,1)',
     fontSize: 16,
     marginTop: 8
   },
@@ -432,29 +451,29 @@ const styles = StyleSheet.create({
     textAlignVertical: 'center',
     right: 16,
     backgroundColor: 'rgba(0,255,255,0)',
-    color: "rgba(97,97,97,1)",
+    color: 'rgba(97,97,97,1)',
     fontSize: 16,
   },
   pastEventsIconRow: {
     backgroundColor: 'rgba(0,255,255,0)',
     height: 32,
-    flexDirection: "row",
+    flexDirection: 'row',
     marginTop: 17,
     marginLeft: 16,
-    marginRight: 16
+    marginRight: 16,
   },
   pastEventsBorder: {
-    width: (width) - 32,
+    width: width - 32,
     height: 2,
-    backgroundColor: "rgba(165,171,232,0.5)",
+    backgroundColor: 'rgba(165,171,232,0.5)',
     marginTop: 15,
-    marginLeft: 16
+    marginLeft: 16,
   },
   logoutIcon: {
     backgroundColor: 'rgba(0,255,255,0)',
     marginTop: 3,
     width: 32,
-    height: 32
+    height: 32,
   },
   logoutButton: {
     top: 0,
@@ -470,23 +489,23 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     margin: 8,
     backgroundColor: 'rgba(0,255,255,0)',
-    color: "rgba(255,255,255,1)",
+    color: 'rgba(255,255,255,1)',
     fontSize: 16,
   },
   logoutButtonStack: {
     backgroundColor: 'rgba(0,255,255,0)',
     width: 103,
     height: 38,
-    marginLeft: 18
+    marginLeft: 18,
   },
   logoutIconRow: {
     backgroundColor: 'rgba(0,255,255,0)',
     height: 38,
-    flexDirection: "row",
+    flexDirection: 'row',
     marginTop: 16,
     marginLeft: 16,
-    marginRight: 206
-  }
+    marginRight: 206,
+  },
 });
 
 ProfileForms.propTypes = {
