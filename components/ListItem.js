@@ -50,7 +50,7 @@ const ListItem = ({singleMedia, navigation}) => {
   //console.log('here is data', JSON.parse(singleMedia));
   return (
     <TouchableOpacity
-      style={styles.touchable}
+      style={[styles.touchable]}
       onPress={() => {
         navigation.navigate('Single', singleMedia);
       }}

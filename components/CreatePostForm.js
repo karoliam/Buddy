@@ -15,8 +15,10 @@ import {
   TouchableOpacity,
   Dimensions,
   ScrollView,
-} from "react-native";
+  ImageBackground,
+} from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {MainContext} from '../context/MainContext';
 import {useMedia, useTag} from '../hooks/ApiHooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -35,7 +37,6 @@ const CreatePostForm = ({navigation}) => {
   const {user, update, setUpdate} = useContext(MainContext);
   const {postTag} = useTag();
   const data = cityNames;
-
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -144,11 +145,27 @@ const CreatePostForm = ({navigation}) => {
   return (
     <View style={styles.container}>
       <ScrollView>
+        <Text style={styles.createPostTxt}>Create post</Text>
         <TouchableOpacity style={styles.addPictureButton} onPress={pickImage}>
-          <Image
-            source={{uri: mediafile || 'https://placekitten.com/300'}}
+          <ImageBackground
+            imageStyle={{borderTopLeftRadius: 10, borderTopRightRadius: 10}}
+            source={
+              mediafile
+                ? {uri: mediafile}
+                : require('../assets/images/buddyplaceholder.png')
+            }
             style={styles.addPictureImage}
-          ></Image>
+          >
+            {mediafile ? (
+              <></>
+            ) : (
+              <FontAwesomeIcon
+                icon="fa-solid fa-camera"
+                size={128}
+                color={'#f6ca64a4'}
+              />
+            )}
+          </ImageBackground>
         </TouchableOpacity>
         <Controller
           control={control}
@@ -242,6 +259,8 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 0,
     borderTopLeftRadius: 14,
     borderTopRightRadius: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   postTextBox: {
     width: width - 64,
@@ -276,6 +295,7 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     marginTop: 16,
     marginLeft: 32,
+    alignItems: 'baseline'
   },
   locationBoxDropDown: {
     width: width - 64,
@@ -312,7 +332,7 @@ const styles = StyleSheet.create({
     color: '#121212',
     height: 30,
     width: 260,
-    lineHeight: 14,
+    lineHeight: 16,
     fontSize: 16,
     marginTop: 15,
     marginLeft: 12,
@@ -324,6 +344,7 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     marginTop: 32,
     marginLeft: 32,
+    marginBottom: 8,
   },
   publishText: {
     color: 'rgba(255,255,255,1)',
@@ -335,6 +356,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     paddingTop: 8,
     marginTop: 19,
+  },
+  createPostTxt: {
+    fontSize: 26,
+    marginTop: 60,
+    alignSelf: 'center',
   },
 });
 CreatePostForm.propTypes = {

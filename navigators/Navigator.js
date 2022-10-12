@@ -38,7 +38,7 @@ const TabScreen = () => {
           // You can return any component that you like here!
           return <FontAwesomeIcon icon={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: 'tomato',
+        tabBarActiveTintColor: 'rgba(246,203,100,1)',
         tabBarInactiveTintColor: 'gray',
         headerShown: false})}
     >
