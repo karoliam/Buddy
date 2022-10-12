@@ -16,6 +16,7 @@ const {height, width} = Dimensions.get('window');
 
 const FilteredTagListItem = ({singleMedia}) => {
   const [isActive, setIsActive] = useState(false);
+  const [localLock, setlocalLock] = useState(false)
   const {
     update,
     setUpdate,
@@ -24,16 +25,18 @@ const FilteredTagListItem = ({singleMedia}) => {
     filterLock,
     setFilterLock,
   } = useContext(MainContext);
-  const handleClick = () => {
 
+  const handleClick = () => {
     if (isActive === false && filterLock === false) {
       setIsActive(true);
       setFilterTags(singleMedia.key);
       setFilterLock(true);
+      setlocalLock(filterLock);
     } else if (isActive === true) {
       setIsActive(false);
       setFilterTags(null);
       setFilterLock(false);
+      setlocalLock(filterLock);
     }
     setUpdate(!update);
   console.log('potaattipataatti', filterTags)
@@ -46,7 +49,7 @@ const FilteredTagListItem = ({singleMedia}) => {
   return (
     <TouchableOpacity
       onPress={handleClick}
-      style={isActive ? styles.tagBoxOn : styles.tagBox }>
+      style={isActive ? styles.tagBoxOn : localLock ? styles.tagBoxLocked : styles.tagBox }>
       <Text style={styles.tagText}>{tagText}</Text>
     </TouchableOpacity>
   );
@@ -77,6 +80,18 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(165,0,232,0.5)",
     borderRadius: 16
 },
+  tagBoxLocked: {
+    marginTop: 2,
+    marginBottom: 2,
+    marginLeft: 4,
+    marginRight: 8,
+    top: 4,
+    left: 7,
+    alignSelf: 'flex-start',
+    padding: 3,
+    backgroundColor: "rgba(255,0,0,0.1)",
+    borderRadius: 16
+  },
   tagText: {
     backgroundColor: 'rgba(0,255,255,0)',
     color: "rgba(0,0,0,1)",
