@@ -22,7 +22,15 @@ const SinglePost = ({navigation, route}) => {
   const descriptionObject = JSON.parse(description);
   const {getFilesByTag} = useTag();
   const {getUserById} = useUser();
-  const {user, showEditPost, setShowEditPost, update, setUpdate} = useContext(MainContext);
+  const {user,
+    showEditPost,
+    setShowEditPost,
+    update,
+    setUpdate,
+    setUserIdForProfilePage,
+    setShowAnotherUserProfile,
+    showAnotherUserProfile,
+  } = useContext(MainContext);
 
   const paramsObject = {
     filename: filename,
@@ -50,6 +58,11 @@ const SinglePost = ({navigation, route}) => {
     }
   };
   getFullName(descriptionObject.token);
+
+  const checkUser = () => {
+    setUserIdForProfilePage(user_id);
+    setShowAnotherUserProfile(!showAnotherUserProfile);
+  };
 
   console.log('current user', user.user_id, 'post user', user_id);
   const showEditPostFunction = () => {
@@ -109,13 +122,16 @@ const SinglePost = ({navigation, route}) => {
         </View>
       </View>
       <View style={styles.postTextRow}>
-        <View style={styles.userAvatarContainer}>
+        <TouchableOpacity
+          style={styles.userAvatarContainer}
+          onPress={checkUser}
+        >
           <Image
             style={styles.userAvatarImage}
             source={{
               uri: posterAvatar,
             }}/>
-        </View>
+        </TouchableOpacity>
         <Text style={styles.postText}>{descriptionObject.writePost}</Text>
       </View>
       <View style={styles.postLocationTimeRow}>

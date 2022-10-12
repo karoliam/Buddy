@@ -46,6 +46,8 @@ const ProfileForms = ({navigation}) => {
     profileDescriptionData,
     setProfileDescriptionData,
     setProfileDId,
+    updateProfile,
+    userIdForProfilePage,
   } = useContext(MainContext);
   const {userProfilePostData} = userMedia();
   const {getFilesByTag} = useTag();
@@ -61,6 +63,9 @@ const ProfileForms = ({navigation}) => {
       const profileDataTag = await getFilesByTag(
         applicationTag + 'profile_data' + profileID
       );
+
+      setProfileDescriptionData(JSON.parse(profileDataTag[0].description));
+      setProfileDId(profileDataTag[0].file_id);
 
       if (profileDataTag[0].description !== undefined) {
         setProfileDescriptionData(JSON.parse(profileDataTag[0].description));
@@ -81,7 +86,7 @@ const ProfileForms = ({navigation}) => {
 
   useEffect(() => {
     getProfileData(user.user_id);
-  }, []);
+  }, [updateProfile]);
 
   //getProfileData(user.user_id);
   const logout = async () => {
