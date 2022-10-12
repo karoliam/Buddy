@@ -103,17 +103,13 @@ const SinglePost = ({navigation, route}) => {
             <View style={styles.postEditIconContainer}>
               {showEditPost ? (
                 <TouchableOpacity
-                  style={{flex: 1}}
+                  style={styles.editPostButton}
                   onPress={() => {
                     navigation.navigate('EditPost', paramsObject);
                   }}
                 >
-                  <Text>
-                    <FontAwesomeIcon
-                      icon="fa-solid fa-pen"
-                      size={24}
-                      color={'rgba(246,203,100,1)'}
-                    />
+                  <Text style={styles.editPostText}>
+                  Edit post
                   </Text>
                 </TouchableOpacity>
               ) : (
@@ -165,18 +161,12 @@ const SinglePost = ({navigation, route}) => {
             <View style={styles.postEditIconContainer}>
               {showEditPost ? (
                 <TouchableOpacity
-                  style={{flex: 1}}
+                  style={styles.editPostButton}
                   onPress={() => {
                     navigation.navigate('EditPost', paramsObject);
                   }}
                 >
-                  <Text>
-                    <FontAwesomeIcon
-                      icon="fa-solid fa-pen"
-                      size={24}
-                      color={'rgba(246,203,100,1)'}
-                    />
-                  </Text>
+                  <Text style={styles.editPostText}>Edit post</Text>
                 </TouchableOpacity>
               ) : (
                 <Text></Text>
@@ -231,6 +221,8 @@ const styles = StyleSheet.create({
   },
   inner: {
     flex: 1,
+    height: height,
+    backgroundColor: 'white'
   },
   postImageContainer: {
     width: width - 64,
@@ -379,6 +371,18 @@ const styles = StyleSheet.create({
   postWhenText: {
     fontSize: 16,
   },
+  editPostButton: {
+    height: 30,
+    backgroundColor: 'rgba(246,203,100,1)',
+    borderRadius: 10,
+    width: 80,
+    marginTop: 12,
+  },
+  editPostText: {
+    textAlign: 'center',
+    top: 5
+  },
+
 });
 
 SinglePost.propTypes = {

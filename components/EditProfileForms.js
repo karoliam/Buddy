@@ -258,7 +258,7 @@ const EditProfileForms = () => {
                     //placeholderuri
                     uri: tempProfBack
                       ? tempProfBack
-                      : 'https://i.pinimg.com/originals/d8/81/d3/d881d3e05c90688581cdeaae1be7edae.jpg',
+                      : '../assets/images/buddyplaceholder.png',
                   }
               }
               style={styles.backgroundImage}
@@ -276,7 +276,7 @@ const EditProfileForms = () => {
                     //placeholderuri
                     uri: tempProfAvatar
                       ? tempProfAvatar
-                      : 'https://i.pinimg.com/originals/d8/81/d3/d881d3e05c90688581cdeaae1be7edae.jpg',
+                      : '../assets/images/buddyplaceholder.png',
                   }
               }
               style={styles.profilePicture}
@@ -368,6 +368,14 @@ const EditProfileForms = () => {
           />
         </View>
         <View style={styles.updateButtonStackRow}>
+        <View style={styles.returnButtonStack}>
+            <TouchableOpacity
+              style={styles.returnButton}
+              onPress={returnToProfile}
+            >
+              <Text style={styles.returnText}>Return</Text>
+            </TouchableOpacity>
+          </View>
           <View style={styles.updateButtonStack}>
             <TouchableOpacity
               style={styles.updateButton}
@@ -376,20 +384,16 @@ const EditProfileForms = () => {
               <Text style={styles.updateText}>Update Profile</Text>
             </TouchableOpacity>
           </View>
-          <View style={styles.returnButtonStack}>
+
+        </View>
+          <View style={styles.deleteButton}>
             <TouchableOpacity
-              style={styles.returnButton}
-              onPress={returnToProfile}
+              style={styles.deleteButton}
+              onPress={deleteProfile}
             >
-              <Text style={styles.returnText}>Return</Text>
+              <Text style={styles.deleteText}>Delete profile</Text>
             </TouchableOpacity>
           </View>
-        </View>
-        <Button
-          title="Delete Profile"
-          color={'red'}
-          onPress={deleteProfile}
-        ></Button>
       </ScrollView>
     </>
   );
@@ -533,7 +537,8 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     borderStyle: 'solid',
     marginTop: 2,
-    marginLeft: 64
+    marginLeft: 64,
+    alignItems: 'center'
   },
   locationBoxDropDown: {
     width: width - 128,
@@ -590,30 +595,30 @@ const styles = StyleSheet.create({
     width: width - 238,
     height: 36,
     backgroundColor: 'rgba(255,255,255,1)',
-    borderWidth: 2,
-    borderColor: 'rgba(165,171,232,0.5)',
-    borderRadius: 14,
-    borderStyle: 'solid',
+    borderRadius: 10,
+    backgroundColor: 'rgba(165,171,232,0.5)',
+    marginLeft: 20
   },
   updateText: {
     flex: 1,
     textAlign: 'center',
     textAlignVertical: 'center',
-    color: 'rgba(83,134,234,1)',
     backgroundColor: 'rgba(255,0,0,0)',
     fontSize: 16,
     marginLeft: 12,
-    marginRight: 12
+    marginRight: 12,
+    marginTop: 6
   },
   updateButtonStack: {
     width: width - 238,
     height: 40,
+
   },
   returnButton: {
     width: width - 311,
     height: 36,
-    backgroundColor: 'rgba(165,171,232,0.5)',
-    borderRadius: 14,
+    backgroundColor: 'rgba(246,203,100,1)',
+    borderRadius: 10,
   },
   returnText: {
     flex: 1,
@@ -623,7 +628,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,0,0,0)',
     fontSize: 16,
     marginLeft: 12,
-    marginRight: 12
+    marginRight: 12,
+    marginTop: 6
   },
   returnButtonStack: {
     width: width - 311,
@@ -639,6 +645,21 @@ const styles = StyleSheet.create({
     marginLeft: 64,
     marginBottom: 32
   },
+  deleteButton: {
+    backgroundColor: '#f66464ff',
+    height: 40,
+    alignItems: 'center',
+    marginLeft: 64,
+    marginRight: 64,
+    borderRadius: 10,
+    marginBottom: 50
+  },
+  deleteText: {
+    textAlign: 'center',
+    marginTop: 10,
+    fontSize: 16,
+    color: 'white'
+  }
 });
 
 export default EditProfileForms;
