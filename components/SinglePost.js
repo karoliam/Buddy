@@ -120,11 +120,11 @@ const SinglePost = ({navigation, route}) => {
 
     formData.append('title', usersIdChatTitle);
     const searchData = {
-      title: 'usersIdChatTitle',
+      title: usersIdChatTitle,
     };
     try {
       const checkChatMedia = await searchMedia(token, searchData);
-      if (!checkChatMedia) {
+      if (checkChatMedia.length == 0) {
         const chatMediaResponse = await postMedia(token, formData);
         const appTag = {file_id: chatMediaResponse.file_id, tag: appChatTag};
         const appTagResponse = await postTag(token, appTag);
@@ -135,6 +135,8 @@ const SinglePost = ({navigation, route}) => {
           chatMediaResponse: chatMediaResponse,
         };
         navigation.navigate('ChatView', chatParamsObject);
+      } else {
+        console.log('chätti on jo luotu');
       }
     } catch (error) {
       console.log('creating chat file error', error);
