@@ -9,6 +9,7 @@ const MainProvider = (props) => {
   const [user, setUser] = useState({});
   const [update, setUpdate] = useState(true);
   const [updateChatProfiles, setUpdateChatProfiles] = useState(true);
+  const [updateProfile, setUpdateProfile] = useState(true);
   const [fullName, setFullName] = useState('');
   const [image, setImage] = useState(null);
   const [profileData, setProfileData] = useState({});
@@ -16,16 +17,17 @@ const MainProvider = (props) => {
     useState(false);
   const [showEditPost, setShowEditPost] = useState(false);
   const [showEditProfile, setShowEditProfile] = useState(false);
+  const [showAnotherUserProfile, setShowAnotherUserProfile] = useState(false);
   const [avatar, setAvatar] = useState(null);
   const [profileBackground, setProfileBackgorund] = useState('');
+  const [profileBackgroundAnother, setProfileBackgorundAnother] = useState('');
   const [profileDescriptionData, setProfileDescriptionData] = useState({});
   const [profilePId, setProfilePId] = useState(0);
   const [profileBId, setProfileBId] = useState(0);
   const [profileDId, setProfileDId] = useState(0);
   const [city, setCity] = useState('');
-  //2544 a
-  //2545 b
-  //2546 c
+  const [userIdForProfilePage, setUserIdForProfilePage] = useState(0);
+
   return (
     <MainContext.Provider
       value={{
@@ -37,6 +39,8 @@ const MainProvider = (props) => {
         setUser,
         update,
         setUpdate,
+        updateProfile,
+        setUpdateProfile,
         fullName,
         setFullName,
         image,
@@ -63,6 +67,12 @@ const MainProvider = (props) => {
         setProfileDId,
         city,
         setCity,
+        userIdForProfilePage,
+        setUserIdForProfilePage,
+        showAnotherUserProfile,
+        setShowAnotherUserProfile,
+        profileBackgroundAnother,
+        setProfileBackgorundAnother,
       }}
     >
       {props.children}

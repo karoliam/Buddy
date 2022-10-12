@@ -15,8 +15,10 @@ import {
   TouchableOpacity,
   Dimensions,
   ScrollView,
+  ImageBackground,
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {MainContext} from '../context/MainContext';
 import {useMedia, useTag} from '../hooks/ApiHooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -24,7 +26,7 @@ import {applicationTag} from '../utils/variables';
 import PropTypes from 'prop-types';
 import SelectList from 'react-native-dropdown-select-list';
 import cityNames from '../utils/cityNames';
-let {width} = Dimensions.get('window');
+let {width, height} = Dimensions.get('window');
 
 const CreatePostForm = ({navigation}) => {
   const [mediafile, setMediafile] = useState(null);
@@ -35,7 +37,6 @@ const CreatePostForm = ({navigation}) => {
   const {user, update, setUpdate} = useContext(MainContext);
   const {postTag} = useTag();
   const data = cityNames;
-
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -62,16 +63,13 @@ const CreatePostForm = ({navigation}) => {
       when: '',
       writePost: '',
       title: 'feedPost',
-      tag_1: '',
-      tag_2: '',
-      tag_3: '',
     },
   });
 
   const onSubmit = async (data) => {
     const formData = new FormData();
     const token = await AsyncStorage.getItem('userToken');
-    console.log(data);
+
     const formObject = {
       location: city,
       when: data.when,
@@ -104,21 +102,9 @@ const CreatePostForm = ({navigation}) => {
     try {
       const mediaResponse = await postMedia(token, formData);
       console.log('result', mediaResponse);
-      //apptag
       const tag = {file_id: mediaResponse.file_id, tag: applicationTag};
       const tagResponse = await postTag(token, tag);
-      //media user set tags
-      const fTag1 = {file_id: mediaResponse.file_id, tag: data.tag_1};
-      const fTagResponse1 = await postTag(token, fTag1);
-
-      const fTag2 = {file_id: mediaResponse.file_id, tag: data.tag_2};
-      const fTagResponse2 = await postTag(token, fTag2);
-
-      const fTag3 = {file_id: mediaResponse.file_id, tag: data.tag_3};
-      const fTagResponse3 = await postTag(token, fTag3);
-
       console.log(tagResponse);
-
       Alert.alert(mediaResponse.message, '', [
         {
           text: 'OK',
@@ -159,17 +145,35 @@ const CreatePostForm = ({navigation}) => {
   return (
     <View style={styles.container}>
       <ScrollView>
+        <Text style={styles.createPostTxt}>Create post</Text>
         <TouchableOpacity style={styles.addPictureButton} onPress={pickImage}>
-          <Image
-            source={{uri: mediafile || 'https://placekitten.com/300'}}
+          <ImageBackground
+            imageStyle={{borderTopLeftRadius: 10, borderTopRightRadius: 10}}
+            source={
+              mediafile
+                ? {uri: mediafile}
+                : require('../assets/images/buddyplaceholder.png')
+            }
             style={styles.addPictureImage}
-          ></Image>
+          >
+            {mediafile ? (
+              <></>
+            ) : (
+              <FontAwesomeIcon
+                icon="fa-solid fa-camera"
+                size={128}
+                color={'#f6ca64a4'}
+              />
+            )}
+          </ImageBackground>
         </TouchableOpacity>
         <Controller
           control={control}
           render={({field: {onChange, onBlur, value}}) => (
             <View style={styles.postTextBox}>
               <TextInput
+                multiline={true}
+                numberOfLines={7}
                 style={styles.postTextInput}
                 onBlur={onBlur}
                 onChangeText={onChange}
@@ -183,17 +187,19 @@ const CreatePostForm = ({navigation}) => {
         <Controller
           control={control}
           render={({field: {onChange, onBlur, value}}) => (
-            <View style={styles.locationBox}>
-              <SelectList
-                setSelected={handleSelect}
-                data={data}
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                search={false}
-                placeholder="Location"
-              />
-            </View>
+            // <View style={styles.locationBox}>
+            <SelectList
+              setSelected={handleSelect}
+              data={data}
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+              search={false}
+              placeholder="Location"
+              boxStyles={styles.locationBox}
+              dropdownStyles={styles.locationBoxDropDown}
+            />
+            // </View>
           )}
           name="location"
         />
@@ -217,66 +223,6 @@ const CreatePostForm = ({navigation}) => {
           )}
           name="when"
         />
-        <Controller
-          control={control}
-          rules={{
-            minLength: 3,
-            required: true,
-          }}
-          render={({field: {onChange, onBlur, value}}) => (
-            <View style={styles.whenBox}>
-              <TextInput
-                style={styles.whenBoxTextInput}
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                placeholder="tag 1"
-                required
-              />
-            </View>
-          )}
-          name="tag_1"
-        />
-        <Controller
-          control={control}
-          rules={{
-            minLength: 3,
-            required: true,
-          }}
-          render={({field: {onChange, onBlur, value}}) => (
-            <View style={styles.whenBox}>
-              <TextInput
-                style={styles.whenBoxTextInput}
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                placeholder="tag 2"
-                required
-              />
-            </View>
-          )}
-          name="tag_2"
-        />
-        <Controller
-          control={control}
-          rules={{
-            minLength: 3,
-            required: true,
-          }}
-          render={({field: {onChange, onBlur, value}}) => (
-            <View style={styles.whenBox}>
-              <TextInput
-                style={styles.whenBoxTextInput}
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                placeholder="tag 3"
-                required
-              />
-            </View>
-          )}
-          name="tag_3"
-        />
         {errors.location?.type === 'required' && <Text>This is required.</Text>}
         {errors.location?.type === 'minLength' && <Text>Min 3 chars!</Text>}
         <TouchableOpacity
@@ -296,26 +242,28 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   addPictureButton: {
-    width: 285,
-    height: 180,
+    width: width - 64,
+    height: 0.75 * (width - 64),
     backgroundColor: '#E6E6E6',
     borderBottomRightRadius: 0,
     borderBottomLeftRadius: 0,
     borderTopLeftRadius: 14,
     borderTopRightRadius: 14,
     marginTop: 32,
-    marginLeft: width / 2 - 142.5,
+    marginLeft: 32,
   },
   addPictureImage: {
-    width: 285,
-    height: 180,
+    width: width - 64,
+    height: 0.75 * (width - 64),
     borderBottomRightRadius: 0,
     borderBottomLeftRadius: 0,
     borderTopLeftRadius: 14,
     borderTopRightRadius: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   postTextBox: {
-    width: 285,
+    width: width - 64,
     height: 160,
     backgroundColor: 'rgba(255,255,255,1)',
     borderWidth: 2,
@@ -324,20 +272,21 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     borderTopLeftRadius: 0,
     borderTopRightRadius: 0,
-    marginLeft: width / 2 - 142.5,
+    marginLeft: 32,
   },
   postTextInput: {
+    paddingTop: 0,
+    backgroundColor: 'rgba(255,0,0,0)',
     color: '#121212',
-    height: 31,
-    width: 260,
-    lineHeight: 16,
+    width: width - 96,
     fontSize: 16,
+    textAlignVertical: 'top',
     textAlign: 'left',
     marginTop: 12,
-    marginLeft: 12,
+    marginLeft: 16,
   },
   locationBox: {
-    width: 285,
+    width: width - 64,
     height: 61,
     backgroundColor: 'rgba(255,255,255,1)',
     borderWidth: 2,
@@ -345,7 +294,19 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     borderStyle: 'solid',
     marginTop: 16,
-    marginLeft: width / 2 - 142.5,
+    marginLeft: 32,
+    alignItems: 'baseline'
+  },
+  locationBoxDropDown: {
+    width: width - 64,
+    height: 244,
+    backgroundColor: 'rgba(255,255,255,1)',
+    borderWidth: 2,
+    borderColor: 'rgba(165,171,232,1)',
+    borderRadius: 14,
+    borderStyle: 'solid',
+    marginTop: 16,
+    marginLeft: 32,
   },
   locationTextInput: {
     color: '#121212',
@@ -357,7 +318,7 @@ const styles = StyleSheet.create({
     marginLeft: 12,
   },
   whenBox: {
-    width: 285,
+    width: width - 64,
     height: 61,
     backgroundColor: 'rgba(255,255,255,1)',
     borderWidth: 2,
@@ -365,35 +326,41 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     borderStyle: 'solid',
     marginTop: 16,
-    marginLeft: width / 2 - 142.5,
+    marginLeft: 32,
   },
   whenBoxTextInput: {
     color: '#121212',
     height: 30,
     width: 260,
-    lineHeight: 14,
+    lineHeight: 16,
     fontSize: 16,
     marginTop: 15,
     marginLeft: 12,
   },
   publishButton: {
-    width: 285,
+    width: width - 64,
     height: 61,
     backgroundColor: 'rgba(246,203,100,1)',
     borderRadius: 14,
     marginTop: 32,
-    marginLeft: width / 2 - 142.5,
+    marginLeft: 32,
+    marginBottom: 8,
   },
   publishText: {
     color: 'rgba(255,255,255,1)',
+    backgroundColor: 'rgba(255,0,0,0)',
     height: 30,
-    width: 260,
+    width: width - 64,
     lineHeight: 16,
     fontSize: 24,
     textAlign: 'center',
     paddingTop: 8,
     marginTop: 19,
-    marginLeft: 12,
+  },
+  createPostTxt: {
+    fontSize: 26,
+    marginTop: 60,
+    alignSelf: 'center',
   },
 });
 CreatePostForm.propTypes = {

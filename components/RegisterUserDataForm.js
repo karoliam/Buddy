@@ -2,8 +2,7 @@
  * Täällä otetaan profiilikuva, title on profile_pic jolla se etitään myöhemmin
  * myös postataan user data postaus jonka title on profile_data ja description sisältää jsonin (fullName, age, location, bio)
  */
-// TODO find a neat SVG icon for the add user Profile picture button (the red square)
-// TODO go button is broken
+// TODO data testing (age should be a !NaN etc.)
 import React, {useContext, useState} from 'react';
 import {
   View,
@@ -12,27 +11,39 @@ import {
   StyleSheet,
   TextInput,
   Dimensions,
+  ScrollView,
 } from 'react-native';
 import {Image} from '@rneui/base';
 import {Controller, useForm} from 'react-hook-form';
 import * as ImagePicker from 'expo-image-picker';
-import {useMedia, useTag} from '../hooks/ApiHooks';
+import {useMedia, userMedia, useTag} from '../hooks/ApiHooks';
 import {MainContext} from '../context/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {single_pixel} from '../images';
 let {width} = Dimensions.get('window');
 import SelectList from 'react-native-dropdown-select-list';
 import cityNames from '../utils/cityNames';
+import {applicationTag, kissalinkki} from '../utils/variables';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 
 const RegisterUserDataForm = () => {
   const {
     setShowRegisterUserDataForm,
+    fullName,
+    image,
+    setImage,
+    setIsLoggedIn,
+    user,
+    city,
+    setCity,
+    profileDId,
+    setUpdateProfile,
+    updateProfile,
     updateChatProfiles,
     setUpdateChatProfiles,
   } = useContext(MainContext);
-  const {fullName, image, setImage, setIsLoggedIn, user, city, setCity} =
-    useContext(MainContext);
   const {postMedia} = useMedia();
+  const {deleteMediaById} = userMedia();
   const {postTag} = useTag();
   const [mediatype, setMediatype] = useState(null);
 
@@ -75,13 +86,11 @@ const RegisterUserDataForm = () => {
     }
 
     //user data upload media
-    const pixelUri = Image.resolveAssetSource(single_pixel).uri;
-    console.log('pixel uri', pixelUri);
     const profileData = new FormData();
     profileData.append('title', 'profile_data');
     profileData.append('file', {
-      uri: 'https://placekitten.com/100',
-      name: 'placekitten',
+      uri: kissalinkki,
+      name: 'single_pixel.jpeg',
       type: 'image/jpeg',
     });
     const profileDataDescription = {
@@ -98,18 +107,24 @@ const RegisterUserDataForm = () => {
         const pPic = await postMedia(token, profilePic);
         const profilePicTag = {
           file_id: pPic.file_id,
-          tag: 'buddyprofile_pic' + user.user_id,
+          tag: applicationTag + 'profile_pic' + user.user_id,
         };
         const pocTag = await postTag(token, profilePicTag);
         console.log(pocTag);
       }
+      const delData = await deleteMediaById(token, profileDId);
+      console.log(delData);
       const pData = await postMedia(token, profileData);
+      console.log(pData);
       const profileDataTag = {
         file_id: pData.file_id,
-        tag: 'buddyprofile_Data' + user.user_id,
+        tag: applicationTag + 'profile_data' + user.user_id,
       };
       const dataTag = await postTag(token, profileDataTag);
+      console.log(dataTag);
       setUpdateChatProfiles(updateChatProfiles);
+      setCity('');
+      setUpdateProfile(!updateProfile);
       setIsLoggedIn(true);
       setShowRegisterUserDataForm(false);
       // navigation.navigate('Tabs');  // TODO navi to loginstate
@@ -123,20 +138,27 @@ const RegisterUserDataForm = () => {
     setCity(cityNames[e].value);
   };
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <Text style={styles.makeMoreInterestingText}>
         Make your profile more interesting
       </Text>
-      <TouchableOpacity style={styles.addPictureButton} onPress={selectImage}>
-        <Image
-          source={
-            image ? {uri: image.uri} : require('../assets/adaptive-icon.png')
-          }
-          style={styles.addPicturePreview}
-        >
-          <View style={styles.addPictureIcon}></View>
-        </Image>
-      </TouchableOpacity>
+      <View style={styles.addPictureButtonStack}>
+        <TouchableOpacity style={styles.addPictureButton} onPress={selectImage}>
+          <Image
+            source={
+              image ? {uri: image.uri} : require('../assets/adaptive-icon.png')
+            }
+            style={styles.addPicturePreview}
+          ></Image>
+          <View style={styles.addPictureIcon}>
+            <FontAwesomeIcon
+              icon="fa-solid fa-camera"
+              size={32}
+              color={'#5E5E5E'}
+            />
+          </View>
+        </TouchableOpacity>
+      </View>
       <Text style={styles.addProfilePicText}>Add a profile picture</Text>
       <Controller
         control={control}
@@ -159,17 +181,19 @@ const RegisterUserDataForm = () => {
       <Controller
         control={control}
         render={({field: {onChange, onBlur, value}}) => (
-          <View>
-            <SelectList
-              setSelected={handleSelect}
-              data={cityNames}
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-              search={false}
-              placeholder="Location"
-            />
-          </View>
+          <SelectList
+            setSelected={handleSelect}
+            data={cityNames}
+            onBlur={onBlur}
+            onChangeText={onChange}
+            value={value}
+            search={false}
+            placeholder="Location"
+            boxStyles={styles.locationBox}
+            dropdownStyles={styles.locationBoxDropDown}
+            inputStyles={styles.locationBoxTextInput}
+            dropdownTextStyles={styles.locationBoxTextInput}
+          />
         )}
         name="location"
       />
@@ -180,6 +204,7 @@ const RegisterUserDataForm = () => {
           <View style={styles.bioBox}>
             <TextInput
               onBlur={onBlur}
+              multiline={true}
               onChangeText={onChange}
               value={value}
               placeholder="A bit about yourself..."
@@ -209,7 +234,7 @@ const RegisterUserDataForm = () => {
           </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -220,13 +245,11 @@ const styles = StyleSheet.create({
   },
   makeMoreInterestingText: {
     color: 'rgba(0,0,0,1)',
-    height: 31,
-    width: 285,
+    backgroundColor: 'rgba(0,255,0,0)',
     lineHeight: 20,
-    fontSize: 16,
+    fontSize: 20,
     textAlign: 'center',
     marginTop: 88,
-    marginLeft: width / 2 - 142.5,
   },
   addPictureButton: {
     width: 100,
@@ -242,138 +265,149 @@ const styles = StyleSheet.create({
     borderRadius: 400 / 2,
   },
   addPictureIcon: {
-    width: 31,
-    height: 31,
-    backgroundColor: 'rgba(247,3,3,1)',
-    marginTop: 69,
-    marginLeft: 69,
+    width: 32,
+    height: 32,
+    backgroundColor: 'rgba(247,3,3,0)',
+    marginTop: -25,
+    marginLeft: 80,
+  },
+  addPictureButtonStack: {
+    alignContent: 'center',
+    height: 120,
+    backgroundColor: 'rgba(247,3,3,0)',
   },
   addProfilePicText: {
     color: 'rgba(0,0,0,1)',
-    height: 21,
-    width: 260,
-    lineHeight: 20,
+    backgroundColor: 'rgba(247,3,3,0)',
     fontSize: 16,
     textAlign: 'center',
-    marginTop: 14,
-    marginLeft: width / 2 - 130,
+    marginTop: 4,
   },
   yourAgeBox: {
-    width: 285,
+    width: width - 128,
     height: 61,
     backgroundColor: 'rgba(255,255,255,1)',
     borderWidth: 2,
-    borderColor: 'rgba(165,171,232,1)',
+    borderColor: 'rgba(165,171,232,0.5)',
     borderRadius: 14,
     borderStyle: 'solid',
     marginTop: 14,
-    marginLeft: width / 2 - 142.5,
+    marginLeft: 64,
   },
   yourAgeTextInput: {
+    flex: 1,
+    textAlignVertical: 'center',
     color: '#121212',
-    height: 21,
-    width: 260,
+    backgroundColor: 'rgba(255,0,0,0)',
     fontSize: 16,
-    lineHeight: 16,
-    marginTop: 19,
     marginLeft: 12,
+    marginRight: 12,
   },
   locationBox: {
-    width: 285,
+    width: width - 128,
     height: 61,
     backgroundColor: 'rgba(255,255,255,1)',
     borderWidth: 2,
-    borderColor: 'rgba(165,171,232,1)',
+    borderColor: 'rgba(165,171,232,0.5)',
     borderRadius: 14,
     borderStyle: 'solid',
     marginTop: 16,
-    marginLeft: width / 2 - 142.5,
+    marginLeft: 64,
+  },
+  locationBoxDropDown: {
+    width: width - 128,
+    height: 244,
+    backgroundColor: 'rgba(255,255,255,1)',
+    borderWidth: 2,
+    borderColor: 'rgba(165,171,232,0.5)',
+    borderRadius: 14,
+    borderStyle: 'solid',
+    marginTop: 16,
+    marginLeft: 64,
   },
   locationBoxTextInput: {
+    flex: 1,
+    marginLeft: -8,
+    textAlign: 'left',
+    textAlignVertical: 'center',
     color: '#121212',
-    height: 21,
-    width: 260,
-    lineHeight: 14,
+    backgroundColor: 'rgba(255,0,0,0)',
     fontSize: 16,
-    marginTop: 20,
-    marginLeft: 13,
+    marginRight: 12,
   },
   bioBox: {
-    width: 285,
+    width: width - 128,
     height: 183,
     backgroundColor: 'rgba(255,255,255,1)',
     borderWidth: 2,
-    borderColor: 'rgba(165,171,232,1)',
+    borderColor: 'rgba(165,171,232,0.5)',
     borderRadius: 14,
     borderStyle: 'solid',
     marginTop: 16,
-    marginLeft: width / 2 - 142.5,
+    marginLeft: 64,
   },
   bioText: {
+    flex: 1,
+    textAlignVertical: 'top',
     color: '#121212',
-    height: 21,
-    width: 260,
-    lineHeight: 16,
+    backgroundColor: 'rgba(255,0,0,0)',
     fontSize: 16,
-    marginTop: 20,
-    marginLeft: 13,
+    marginTop: 8,
+    marginBottom: 8,
+    marginLeft: 12,
+    marginRight: 12,
   },
   doLaterButton: {
-    top: 0,
-    left: 0,
-    width: 175,
+    width: width - 238,
     height: 36,
-    position: 'absolute',
     backgroundColor: 'rgba(255,255,255,1)',
     borderWidth: 2,
-    borderColor: 'rgba(165,171,232,1)',
+    borderColor: 'rgba(165,171,232,0.5)',
     borderRadius: 14,
     borderStyle: 'solid',
   },
   doLaterText: {
-    top: 6,
-    left: 14,
-    position: 'absolute',
-    color: 'rgba(83,134,234,1)',
-    height: 30,
-    width: 147,
-    fontSize: 16,
+    flex: 1,
     textAlign: 'center',
+    textAlignVertical: 'center',
+    color: 'rgba(83,134,234,1)',
+    backgroundColor: 'rgba(255,0,0,0)',
+    fontSize: 16,
+    marginLeft: 12,
+    marginRight: 12,
   },
   doLaterButtonStack: {
-    width: 175,
+    width: width - 238,
     height: 40,
   },
   goButton: {
-    top: 0,
-    left: 0,
-    width: 103,
+    width: width - 311,
     height: 36,
-    position: 'absolute',
-    backgroundColor: 'rgba(165,171,232,1)',
+    backgroundColor: 'rgba(165,171,232,0.5)',
     borderRadius: 14,
   },
   goText: {
-    top: 8,
-    left: 11,
-    position: 'absolute',
-    color: 'rgba(0,0,0,1)',
-    height: 30,
-    width: 82,
-    fontSize: 16,
+    flex: 1,
     textAlign: 'center',
+    textAlignVertical: 'center',
+    color: 'rgba(0,0,0,1)',
+    backgroundColor: 'rgba(255,0,0,0)',
+    fontSize: 16,
+    marginLeft: 12,
+    marginRight: 12,
   },
   goButtonStack: {
-    width: 103,
+    width: width - 311,
     height: 40,
-    marginLeft: 7,
+    marginLeft: 10,
   },
   doLaterButtonStackRow: {
-    height: 40,
+    width: width - 128,
+    backgroundColor: 'rgba(255,0,0,0)',
+    height: 36,
     flexDirection: 'row',
     marginTop: 16,
-    marginLeft: width / 2 - 142.5,
-    marginRight: 44,
+    marginLeft: 64,
   },
 });
 

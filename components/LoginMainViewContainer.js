@@ -1,7 +1,6 @@
 /**
  * Tähän Containeriin nestataan LoginForm.js ja RegisterForm.js
-*/
-// TODO background image resizes when keyboard isw pulled up
+ */
 import React, {useState} from 'react';
 import {
   Dimensions,
@@ -30,121 +29,124 @@ const LoginMainViewContainer = () => {
   const loginText22 = 'Login';
 
   return (
-      <ImageBackground
-        source={require("../assets/buddyAlt.png")}
-        resizeMode="cover"
-        style={styles.backGroundImage}
-        imageStyle={styles.backGroundImage_imageStyle}
+    <ImageBackground
+      source={require("../assets/buddyAlt.png")}
+      resizeMode="cover"
+      style={styles.backGroundImage}
+      imageStyle={styles.backGroundImage_imageStyle}
+    >
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={{flex: 1}}
       >
-        <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        <TouchableOpacity
+          onPress={Keyboard.dismiss}
+          activeOpacity={1}
           style={{flex: 1}}
         >
-          <TouchableOpacity
-            onPress={Keyboard.dismiss}
-            activeOpacity={1}
-            style={{flex: 1}}
-          >
-            <View style={styles.logoBackgroundStack}>
-              <View
-                source={require("../assets/blackBox.jpg")}
-                style={styles.logoBackground}>
-                <Image
-                  source={require("../assets/buddyLogoNoBack.png")}
-                  resizeMode="contain"
-                  style={styles.imageLogoBuddy}
-                />
+          <View style={styles.logoBackgroundStack}>
+            <View
+              source={require("../assets/blackBox.jpg")}
+              style={styles.logoBackground}>
+              <Image
+                source={require("../assets/buddyLogoNoBack.png")}
+                resizeMode="contain"
+                style={styles.imageLogoBuddy}
+              />
+            </View>
+          </View>
+          <View style={styles.loginFormContainer}>
+            {showRegForm ? <RegisterForm /> : <LoginForm />}
+          </View>
+          <View style={styles.bottomLineAndSwitchContainer}>
+            <View style={styles.lineOrContainer}>
+              <View style={styles.lineOrLeft}></View>
+              <Text style={styles.lineOrText}>OR</Text>
+              <View style={styles.lineOrRight}></View>
+            </View>
+            <TouchableOpacity
+              style={styles.buttonSignUp}
+              onPress={() => {
+                setShowRegForm(!showRegForm);
+                setShowLoginText(!showLoginText);
+                setShowLoginText2(!showLoginText2);
+              }}
+            >
+              <View style={styles.signUpTextContainer}>
+                <Text style={styles.dontHaveText}>
+                  {showLoginText ? loginText12 : loginText11}
+                </Text>
+                <Text style={styles.signUpText}>{showLoginText ? loginText22 : loginText21}</Text>
               </View>
-            </View>
-            <View style={styles.loginFormContainer}>
-              {showRegForm ? <RegisterForm /> : <LoginForm />}
-            </View>
-            <View style={styles.bottomLineAndSwitchContainer}>
-              <View style={styles.lineOrContainer}>
-                <View style={styles.lineOrLeft}></View>
-                <Text style={styles.lineOrText}>OR</Text>
-                <View style={styles.lineOrRight}></View>
-              </View>
-              <TouchableOpacity
-                style={styles.buttonSignUp}
-                onPress={() => {
-                  setShowRegForm(!showRegForm);
-                  setShowLoginText(!showLoginText);
-                  setShowLoginText2(!showLoginText2);
-                }}
-              >
-                <View style={styles.signUpTextContainer}>
-                  <Text style={styles.dontHaveText}>
-                    {showLoginText ? loginText12 : loginText11}
-                  </Text>
-                  <Text style={styles.signUpText}>{showLoginText ? loginText22 : loginText21}</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-          </TouchableOpacity>
-        </KeyboardAvoidingView>
-      </ImageBackground>
+            </TouchableOpacity>
+          </View>
+        </TouchableOpacity>
+      </KeyboardAvoidingView>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
   backGroundImage: {
+    width: width,
+    height: 1.1 * height,
     flex: 1,
     justifyContent: 'center',
   },
   backGroundImage_imageStyle: {},
   logoBackground: {
     bottom: 0,
-    width: 286,
+    width: width - 126,
     height: 85,
     position: "absolute",
     backgroundColor: "rgba(0,0,0,0.65)",
     marginBottom: 32,
-    marginLeft: (width/2) - 143
+    marginLeft: 63,
+    justifyContent: 'center'
   },
   imageLogoBuddy: {
-    top: -57,
-    left: -9,
-    width: 304,
-    height: 200,
+    width: width - 107,
+    height: width - 211,
     position: "absolute",
+    alignSelf: 'center'
   },
   logoBackgroundStack: {
-    height: (height/100) * 30
+    height: 0.3 * height
   },
   loginFormContainer: {
-    height: (height/100) * 55
+    height: 0.5 * height
   },
   bottomLineAndSwitchContainer: {
-    height: (height/100) * 15
+    height: 0.2 * height
   },
   lineOrLeft: {
-    width: 112,
+    width: width - 301,
     height: 2,
     backgroundColor: "rgba(255,255,255,1)",
     marginTop: 9
   },
   lineOrText: {
     color: "rgba(255,255,255,1)",
-    height: 17,
     width: 34,
     textAlign: "center",
     fontSize: 16,
-    marginLeft: 13
+    marginLeft: 14
   },
+  // 112
   lineOrRight: {
-    width: 112,
+    width: width - 301,
     height: 2,
     backgroundColor: "rgba(255,255,255,1)",
     marginLeft: 14,
     marginTop: 9
   },
   lineOrContainer: {
+    backgroundColor: "rgba(255,0,0,0)",
+    width: width - 128,
     height: 17,
     flexDirection: "row",
     marginTop: 8,
-    marginLeft: (width/2) - 142.5,
-    marginRight: (width/2) - 142.5
+    marginLeft: 64,
   },
   buttonSignUp: {
     width: 280,
