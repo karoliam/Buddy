@@ -41,7 +41,7 @@ const FiltersTagList = ({}) => {
   // <View style={{flex: 1, backgroundColor: "rgba(0, 255, 255,0.2)", }}></View>
   return (
     <FlatList
-      style={{flexDirection: 'row', flex:1, backgroundColor: "rgba(0,0,232,0.5)" }}
+      style={{flexDirection: 'row', flex:1, backgroundColor: "rgba(0,0,232,0)" }}
       horizontal={true}
       data={listOfTags}
       keyExtractor={(item, index) => index.toString()}

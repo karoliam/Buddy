@@ -8,7 +8,7 @@ import {
   Image,
   Dimensions, ScrollView
 } from "react-native";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { MainContext } from "../context/MainContext";
 
 
@@ -16,7 +16,7 @@ const {height, width} = Dimensions.get('window');
 
 const FilteredTagListItem = ({singleMedia}) => {
   const [isActive, setIsActive] = useState(false);
-  const [localLock, setlocalLock] = useState(false)
+  const [localLock, setlocalLock] = useState(false);
   const {
     update,
     setUpdate,
@@ -30,12 +30,12 @@ const FilteredTagListItem = ({singleMedia}) => {
     if (isActive === false && filterLock === false) {
       setIsActive(true);
       setFilterTags(singleMedia.key);
-      setFilterLock(true);
+        setFilterLock(true);
       setlocalLock(filterLock);
     } else if (isActive === true) {
       setIsActive(false);
       setFilterTags(null);
-      setFilterLock(false);
+        setFilterLock(false);
       setlocalLock(filterLock);
     }
     setUpdate(!update);
@@ -49,8 +49,8 @@ const FilteredTagListItem = ({singleMedia}) => {
   return (
     <TouchableOpacity
       onPress={handleClick}
-      style={isActive ? styles.tagBoxOn : localLock ? styles.tagBoxLocked : styles.tagBox }>
-      <Text style={styles.tagText}>{tagText}</Text>
+      style={isActive ? styles.tagBoxOn : filterLock ? styles.tagBoxLocked : styles.tagBox }>
+      <Text style={filterLock ? styles.tagTextLock : styles.tagText }>{tagText}</Text>
     </TouchableOpacity>
   );
 };
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     left: 7,
     alignSelf: 'flex-start',
     padding: 3,
-    backgroundColor: "rgba(165,0,232,0.5)",
+    backgroundColor: "rgba(165,171,232,1)",
     borderRadius: 16
 },
   tagBoxLocked: {
@@ -89,14 +89,18 @@ const styles = StyleSheet.create({
     left: 7,
     alignSelf: 'flex-start',
     padding: 3,
-    backgroundColor: "rgba(255,0,0,0.1)",
+    backgroundColor: "rgba(165,171,232,0.01)",
     borderRadius: 16
   },
   tagText: {
     backgroundColor: 'rgba(0,255,255,0)',
     color: "rgba(0,0,0,1)",
     fontSize: 14,
-
+  },
+  tagTextLock: {
+    backgroundColor: 'rgba(0,255,255,0)',
+    color: "rgba(0,0,0,0.1)",
+    fontSize: 14,
   },
 });
 

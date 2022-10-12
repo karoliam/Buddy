@@ -65,15 +65,15 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: "rgba(255, 255, 255,0.3)",
+    backgroundColor: "rgba(255, 255, 255,1)",
   },
   buddyLogo: {
-    backgroundColor: "rgba(255, 0, 255,0.2)",
+    backgroundColor: "rgba(255, 0, 255,0)",
     width: 90,
     height: 59
   },
   searchIcon: {
-    backgroundColor: "rgba(255, 0, 255,0.2)",
+    backgroundColor: "rgba(255, 0, 255,0)",
     position: 'absolute',
     right: 128,
     width: 32,
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     marginTop: 13
   },
   messagesIcon: {
-    backgroundColor: "rgba(255, 0, 255,0.2)",
+    backgroundColor: "rgba(255, 0, 255,0)",
     position: 'absolute',
     right: 64,
     width: 31,
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
     marginTop: 10
   },
   topRow: {
-    backgroundColor: "rgba(255, 0, 255,0.2)",
+    backgroundColor: "rgba(255, 0, 255,0)",
     height: 59,
     flexDirection: "row",
     marginTop: 8,
@@ -116,14 +116,14 @@ const styles = StyleSheet.create({
     alignSelf: "center"
   },
   filtersText: {
-    backgroundColor: "rgba(255, 0, 255,0.2)",
+    backgroundColor: "rgba(255, 0, 255,0)",
     color: "#121212",
     height: 28,
     width: 90,
     fontSize: 20
   },
   locationText: {
-    backgroundColor: "rgba(255, 0, 255,0.2)",
+    backgroundColor: "rgba(255, 0, 255,0)",
     top: 0,
     left: 0,
     position: "absolute",
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
     fontSize: 20
   },
   locationChevron: {
-    backgroundColor: "rgba(255, 0, 255,0.2)",
+    backgroundColor: "rgba(255, 0, 255,0)",
     top: 0,
     left: 65,
     width: 31,
@@ -141,13 +141,13 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   locationTextStack: {
-    backgroundColor: "rgba(255, 0, 255,0.2)",
+    backgroundColor: "rgba(255, 0, 255,0)",
     width: 96,
     height: 31,
     marginLeft: 155
   },
   filtersTextRow: {
-    backgroundColor: "rgba(255, 0, 255,0.2)",
+    backgroundColor: "rgba(255, 0, 255,0)",
     height: 31,
     flexDirection: "row",
     marginTop: 7,
@@ -156,13 +156,13 @@ const styles = StyleSheet.create({
   },
   filtersView: {
     flexDirection: 'row',
-    backgroundColor: "rgba(255, 0, 255,0.2)",
+    backgroundColor: "rgba(255, 0, 255,0)",
     height: 74,
     width: width - 32,
     marginLeft: 16,
   },
   exploreText: {
-    backgroundColor: "rgba(255, 0, 255,0.2)",
+    backgroundColor: "rgba(255, 0, 255,0)",
     color: "#121212",
     height: 28,
     width: 90,
