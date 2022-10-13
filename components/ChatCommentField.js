@@ -2,6 +2,7 @@ import {
   Alert,
   Dimensions,
   FlatList,
+  KeyboardAvoidingView,
   StyleSheet,
   Text,
   TextInput,
@@ -77,9 +78,9 @@ const ChatCommentField = ({route}) => {
     try {
       // fetching comments
       const token = await AsyncStorage.getItem('userToken');
-      const commentArray = await getCommentByFileId(file_id);
+      const commentArrayR = await getCommentByFileId(file_id);
       console.log('commentArray', commentArray);
-
+      const commentArray = commentArrayR.reverse();
       for (const commentArrayKey in commentArray) {
         const userUploads = await userProfilePostData(
           commentArray[commentArrayKey].user_id
@@ -188,6 +189,7 @@ const ChatCommentField = ({route}) => {
           </>
         )}
       />
+
       <View>
         <Controller
           control={control}
