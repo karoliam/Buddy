@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
     height: 28,
     width: 90,
     fontSize: 20,
-    marginTop: 74,
+    // marginTop: 74,
     marginLeft: 20,
     marginBottom: 8,
   },

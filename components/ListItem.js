@@ -12,13 +12,15 @@ import {
 import {useEffect, useState} from 'react';
 import {useTag} from '../hooks/ApiHooks';
 import moment from 'moment';
+import PostTagList from "./PostTagList";
 const {height, width} = Dimensions.get('window');
 LogBox.ignoreLogs(['Warning: ...']);
 LogBox.ignoreAllLogs();
+
 const ListItem = ({singleMedia, navigation}) => {
   // console.log('tässä singlemedia', singleMedia);
   // console.log('tossa ois description', singleMedia.description);
-  const {getFilesByTag} = useTag();
+  const {getFilesByTag, getTagsByFileId} = useTag();
   const [posterAvatar, setPosterAvatar] = useState('');
   const [posterName, setPosterName] = useState('');
   const getProfileData = async (user_id) => {
@@ -41,9 +43,30 @@ const ListItem = ({singleMedia, navigation}) => {
     }
   };
 
-  useEffect(() => {
+  const getPostTagsData = async (file_id) => {
+    try {
+      console.log('sinkku media file_id & context id: ', file_id);
+      const postTagsArray = await getTagsByFileId(file_id);
+      console.log('sinkku media tagArray: ', postTagsArray);
+      const postFilteringTags = [];
+      for (const postTagsArrayKey in postTagsArray) {
+        if (postTagsArray[postTagsArrayKey].tag.includes(applicationTag + 'post_tag')) {
+          console.log('tag content: ', postTagsArray[postTagsArrayKey]);
+          postFilteringTags.push(postTagsArray[postTagsArrayKey]);
+        }
+      }
+      console.log('postFilteringTagsContent: ', postFilteringTags);
+      singleMedia.filter_tags = postFilteringTags;
+      console.log('adding to media: ', singleMedia);
+    } catch (error) {
+      console.log('List.js getProfileData ' + error);
+    }
+  };
+
+  // useEffect(() => {
     getProfileData(singleMedia.user_id);
-  }, []);
+    getPostTagsData(singleMedia.file_id);
+  // }, []);
 
   const data = JSON.parse(singleMedia.description);
   const {location, when, writePost} = data;
@@ -98,6 +121,9 @@ const ListItem = ({singleMedia, navigation}) => {
           {writePost}
         </Text>
       </View>
+      <View style={styles.tagsScroll}>
+        <PostTagList singleMedia={singleMedia}></PostTagList>
+      </View>
     </TouchableOpacity>
   );
 };
@@ -138,6 +164,12 @@ const styles = StyleSheet.create({
     marginTop: 14,
     fontSize: 16,
     color: "rgba(0, 0, 0,0.5)"
+  },
+  tagsScroll: {
+    flex: 1,
+    marginLeft: 16,
+    flexDirection: 'row',
+    backgroundColor: "rgba(255, 0, 255,0.1)",
   },
   postTopRow: {
     flexDirection: "row",
