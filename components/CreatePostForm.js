@@ -26,6 +26,7 @@ import {applicationTag} from '../utils/variables';
 import PropTypes from 'prop-types';
 import SelectList from 'react-native-dropdown-select-list';
 import cityNames from '../utils/cityNames';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 let {width, height} = Dimensions.get('window');
 
 const CreatePostForm = ({navigation}) => {
@@ -144,7 +145,7 @@ const CreatePostForm = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <ScrollView>
+      <KeyboardAwareScrollView>
         <Text style={styles.createPostTxt}>Create post</Text>
         <TouchableOpacity style={styles.addPictureButton} onPress={pickImage}>
           <ImageBackground
@@ -232,7 +233,7 @@ const CreatePostForm = ({navigation}) => {
         >
           <Text style={styles.publishText}>Publish</Text>
         </TouchableOpacity>
-      </ScrollView>
+      </KeyboardAwareScrollView>
     </View>
   );
 };

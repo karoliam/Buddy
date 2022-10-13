@@ -26,6 +26,7 @@ import { appId, applicationTag, kissalinkki } from "../utils/variables";
 import {MainContext} from '../context/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import PropTypes from 'prop-types';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 let {width} = Dimensions.get('window');
 
 const RegisterForm = () => {
@@ -142,6 +143,7 @@ const RegisterForm = () => {
   };
 
   return (
+    <KeyboardAwareScrollView>
     <View style={{flex: 1}}>
       <Controller
         control={control}
@@ -249,6 +251,7 @@ const RegisterForm = () => {
         <Text style={styles.signUpButtonText}>Submit</Text>
       </TouchableOpacity>
     </View>
+    </KeyboardAwareScrollView>
   );
 };
 
@@ -352,7 +355,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,0,0,0)',
     fontSize: 20,
     marginLeft: 12,
-    marginRight: 12
+    marginRight: 12,
+    marginTop: 14
   },
 });
 

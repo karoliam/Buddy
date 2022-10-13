@@ -205,7 +205,7 @@ const ChatCommentField = ({route}) => {
               />
               <TouchableOpacity
                 style={styles.sendButton}
-                onPress={() => handleSubmit(commenting)}
+                onPress={handleSubmit(commenting)}
               >
                 <Text>Send</Text>
               </TouchableOpacity>

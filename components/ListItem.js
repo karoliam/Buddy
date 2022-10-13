@@ -194,6 +194,7 @@ const styles = StyleSheet.create({
   },
   timeText: {
     marginRight: 16,
+    color: 'rgba(0, 0, 0,0.5)',
   },
 });
 
