@@ -268,7 +268,7 @@ const CreatePostForm = ({navigation}) => {
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
-                placeholder="tag 2"
+                placeholder=" e.g animals, student, sports"
                 required
               />
             </View>
@@ -288,7 +288,7 @@ const CreatePostForm = ({navigation}) => {
                   onBlur={onBlur}
                   onChangeText={onChange}
                   value={value}
-                  placeholder="tag 3"
+                  placeholder="or other keywords"
                   required
                 />
               </View>
