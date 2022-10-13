@@ -1,6 +1,6 @@
 import {Alert, FlatList, Text, TextInput, View} from 'react-native';
 import PropTypes from 'prop-types';
-import {useComments, userMedia, useUser} from '../hooks/ApiHooks';
+import {useComments, useMedia, userMedia, useUser} from '../hooks/ApiHooks';
 import {useContext, useEffect, useState} from 'react';
 import {MainContext} from '../context/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -10,13 +10,12 @@ import {mediaUrl} from '../utils/variables';
 
 const ChatCommentField = ({route}) => {
   const {postComment, getCommentByFileId} = useComments();
-  const {update,setUpdate} = useContext(MainContext);
+  const {update, setUpdate} = useContext(MainContext);
   const {paramsObject, file_id} = route.params;
   const [userComments, setUserComments] = useState();
   const {getUserById} = useUser();
   const {userProfilePostData} = userMedia();
-  console.log('chatmedia', paramsObject);
-
+  const WAIT_TIME = 10000;
   const {
     control,
     handleSubmit,
@@ -60,7 +59,7 @@ const ChatCommentField = ({route}) => {
   };
 
   const resetCommentInput = () => {
-    setValue('comment', '')
+    setValue('comment', '');
   };
 
   const fetchComments = async () => {
@@ -143,6 +142,13 @@ const ChatCommentField = ({route}) => {
     fetchComments();
   }, [update]);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      console.log('moi');
+      fetchComments();
+    }, WAIT_TIME);
+    return () => clearInterval(interval);
+  }, []);
   return (
     <View style={{flex: 4, marginBottom: 100}}>
       <FlatList

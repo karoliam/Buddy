@@ -8,6 +8,7 @@ const MainProvider = (props) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState({});
   const [update, setUpdate] = useState(true);
+  const [updateCommentFieldList, setUpdateCommentFieldList] = useState(true);
   const [updateChatProfiles, setUpdateChatProfiles] = useState(true);
   const [updateProfile, setUpdateProfile] = useState(true);
   const [fullName, setFullName] = useState('');
@@ -31,6 +32,8 @@ const MainProvider = (props) => {
   return (
     <MainContext.Provider
       value={{
+        updateCommentFieldList,
+        setUpdateCommentFieldList,
         updateChatProfiles,
         setUpdateChatProfiles,
         isLoggedIn,

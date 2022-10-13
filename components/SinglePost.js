@@ -57,7 +57,6 @@ const SinglePost = ({navigation, route}) => {
     user_id: user_id,
     file_id: file_id,
   };
-  console.log('params', paramsObject);
   const getFullName = async () => {
     try {
       const token = await AsyncStorage.getItem('userToken');
@@ -65,8 +64,7 @@ const SinglePost = ({navigation, route}) => {
       const profilePicTag = await getFilesByTag(
         applicationTag + 'profile_pic' + user_id
       );
-      console.log('profilePicTag ', profilePicTag);
-      console.log('profilePicTag0 ', mediaUrl + profilePicTag[0].filename);
+
       if (profilePicTag[0].filename != undefined) {
         setPosterAvatar(mediaUrl + profilePicTag[0].filename);
       }
@@ -86,7 +84,6 @@ const SinglePost = ({navigation, route}) => {
     setShowAnotherUserProfile(!showAnotherUserProfile);
   };
 
-  console.log('current user', user.user_id, 'post user', user_id);
   const showEditPostFunction = () => {
     if (user_id !== user.user_id) {
       setShowEditPost(false);
@@ -113,29 +110,37 @@ const SinglePost = ({navigation, route}) => {
     const formJSON = JSON.stringify(formObject);
     formData.append('description', formJSON);
     */
-    console.log(user);
     const currentIdString = user.user_id.toString();
     const otherIdString = user_id.toString();
     const usersIdChatTitle = currentIdString + '#' + otherIdString;
-
+    const usersIdChatTitleReverse = otherIdString + '#' + currentIdString;
     formData.append('title', usersIdChatTitle);
     const searchData = {
       title: usersIdChatTitle,
     };
+    const searchDataReverse = {
+      title: usersIdChatTitleReverse,
+    };
     try {
       const checkChatMedia = await searchMedia(token, searchData);
-      if (checkChatMedia.length == 0) {
+      const checkChatMediaReverse = await searchMedia(token, searchDataReverse);
+      if (checkChatMedia.length == 0 && checkChatMediaReverse.length == 0) {
         const chatMediaResponse = await postMedia(token, formData);
         const appTag = {file_id: chatMediaResponse.file_id, tag: appChatTag};
         const appTagResponse = await postTag(token, appTag);
-        console.log('mediaresponese chat', chatMediaResponse);
         setUpdateChatProfiles(!updateChatProfiles);
-        const chatParamsObject = {
-          usersIdChatTitle: usersIdChatTitle,
-          chatMediaResponse: chatMediaResponse,
-        };
-        navigation.navigate('ChatView', chatParamsObject);
+
+        navigation.navigate('ChatView', chatMediaResponse);
+
+        //navigation.navigate('ChatView', chatParamsObject);
       } else {
+        if (checkChatMedia.length == 0) {
+          const fil = checkChatMediaReverse.pop();
+          navigation.navigate('ChatView', fil);
+        } else {
+          const fil = checkChatMedia.pop();
+          navigation.navigate('ChatView', fil);
+        }
         console.log('chätti on jo luotu');
       }
     } catch (error) {
