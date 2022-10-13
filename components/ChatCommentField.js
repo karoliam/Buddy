@@ -18,6 +18,7 @@ import {Controller, useForm} from 'react-hook-form';
 import {Button, Image} from '@rneui/themed';
 import {mediaUrl} from '../utils/variables';
 import moment from 'moment';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 const {height, width} = Dimensions.get('window');
 
 const ChatCommentField = ({route}) => {
@@ -162,6 +163,7 @@ const ChatCommentField = ({route}) => {
     return () => clearInterval(interval);
   }, []);
   return (
+    <KeyboardAwareScrollView>
     <View style={[styles.container, {height: height - 318}]}>
       <FlatList
         data={userComments}
@@ -217,6 +219,7 @@ const ChatCommentField = ({route}) => {
         />
       </View>
     </View>
+    </KeyboardAwareScrollView>
   );
 };
 
@@ -284,7 +287,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignSelf: 'flex-start',
     alignItems: 'center',
-    top: 150
+
   },
 });
 

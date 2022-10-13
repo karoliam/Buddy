@@ -20,6 +20,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import KeyboardAvoidingComponent from './KeyboardAvoidingComponent';
 import CommentField from './CommentField';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {SafeAreaView} from 'react-native-safe-area-context';
 const {height, width} = Dimensions.get('window');
 
 const SinglePost = ({navigation, route}) => {
@@ -153,7 +154,7 @@ const SinglePost = ({navigation, route}) => {
   }, [update]);
 
   return (
-    <KeyboardAwareScrollView>
+    <KeyboardAwareScrollView style={styles.droidSafeArea}>
               <TouchableOpacity style={{marginTop: 16, marginBottom: 16}}onPress={()=> navigation.navigate('Home')}>
           <FontAwesomeIcon
             icon="fa-solid fa-chevron-left"
@@ -282,10 +283,15 @@ const SinglePost = ({navigation, route}) => {
       )}
       {/* <Button title="Chat" onPress={() => createChatFile()}></Button> */}
     </KeyboardAwareScrollView>
+
   );
 };
 
 const styles = StyleSheet.create({
+  droidSafeArea: {
+    flex: 1,
+    paddingTop: Platform.OS === 'android' ? 30 : 0,
+  },
   container: {
     flex: 1,
   },
