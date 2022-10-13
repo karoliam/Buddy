@@ -1,6 +1,6 @@
 const apiUrl = 'https://media.mw.metropolia.fi/wbma/';
 const mediaUrl = 'https://media.mw.metropolia.fi/wbma/uploads/';
-const applicationTag = 'korvakarvakorva';
+const applicationTag = 'korvakarvakorva1';
 const kissalinkki = 'https://placekitten.com/100/100';
 // TODO ? const applicationTag = 'kissakoirajotain';
 const appId = 'buddy#';
