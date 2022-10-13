@@ -1,6 +1,6 @@
 import ChatPage from '../components/ChatPage';
 import PropTypes from 'prop-types';
-import {FlatList, Text, TouchableOpacity, View} from 'react-native';
+import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useContext, useEffect, useState} from 'react';
 import {MainContext} from '../context/MainContext';
 import {useMedia, useTag, useUser} from '../hooks/ApiHooks';
@@ -110,19 +110,42 @@ const OwnChatsComponent = ({navigation, route}) => {
 
   return (
     <SafeAreaView>
-      <Text>Chats</Text>
+      <Text style={styles.chatText}>Chats</Text>
       <FlatList
         data={getUserInfo}
         style={{marginLeft: 16, marginBottom: 16}}
         renderItem={({item}) => (
           <TouchableOpacity onPress={() => openChat(item.user_id)}>
-            <Text>{JSON.parse(item.description).full_name}</Text>
+            <Text style ={styles.fullName}>{JSON.parse(item.description).full_name}</Text>
+            <View style={styles.divider}></View>
           </TouchableOpacity>
         )}
       />
     </SafeAreaView>
   );
 };
+const styles = StyleSheet.create({
+  fullName: {
+    fontSize: 20,
+    marginBottom: 16,
+    fontWeight: '500'
+  },
+  chatText: {
+    marginBottom: 30,
+    marginTop: 16,
+    fontSize: 30,
+    alignSelf: 'center'
+  },
+  divider: {
+    height: 2,
+    backgroundColor: 'rgba(165,171,232,0.5)',
+    marginTop: 8,
+    marginBottom: 8
+
+  }
+})
+
+
 OwnChatsComponent.propTypes = {
   navigation: PropTypes.object,
   route: PropTypes.object,
