@@ -39,6 +39,8 @@ const RegisterUserDataForm = () => {
     profileDId,
     setUpdateProfile,
     updateProfile,
+    updateChatProfiles,
+    setUpdateChatProfiles,
   } = useContext(MainContext);
   const {postMedia} = useMedia();
   const {deleteMediaById} = userMedia();
@@ -120,6 +122,7 @@ const RegisterUserDataForm = () => {
       };
       const dataTag = await postTag(token, profileDataTag);
       console.log(dataTag);
+      setUpdateChatProfiles(updateChatProfiles);
       setCity('');
       setUpdateProfile(!updateProfile);
       setIsLoggedIn(true);

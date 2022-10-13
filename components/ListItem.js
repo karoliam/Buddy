@@ -64,8 +64,8 @@ const ListItem = ({singleMedia, navigation}) => {
   };
 
   // useEffect(() => {
-    getProfileData(singleMedia.user_id);
-    getPostTagsData(singleMedia.file_id);
+  getProfileData(singleMedia.user_id);
+  getPostTagsData(singleMedia.file_id);
   // }, []);
 
   const data = JSON.parse(singleMedia.description);
@@ -84,11 +84,11 @@ const ListItem = ({singleMedia, navigation}) => {
           source={
             singleMedia
               ? {
-                  uri: mediaUrl + singleMedia.thumbnails.w160,
-                }
+                uri: mediaUrl + singleMedia.thumbnails.w160,
+              }
               : {
-                  uri: kissalinkki,
-                }
+                uri: kissalinkki,
+              }
           }
         />
       ) : (
@@ -101,8 +101,8 @@ const ListItem = ({singleMedia, navigation}) => {
             source={
               posterAvatar
                 ? {
-                    uri: posterAvatar,
-                  }
+                  uri: posterAvatar,
+                }
                 : {uri: kissalinkki}
             }
           />
@@ -124,6 +124,7 @@ const ListItem = ({singleMedia, navigation}) => {
       <View style={styles.tagsScroll}>
         <PostTagList singleMedia={singleMedia}></PostTagList>
       </View>
+      <Text></Text>
     </TouchableOpacity>
   );
 };

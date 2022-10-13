@@ -10,7 +10,9 @@ import {MainContext} from '../context/MainContext';
 import Single from '../views/Single';
 import EditPost from '../views/EditPost';
 import MyFiles from '../views/MyFiles';
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import ChatView from '../views/ChatView';
+import OwnChats from '../views/OwnChats';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -18,33 +20,31 @@ const Stack = createNativeStackNavigator();
 const TabScreen = () => {
   return (
     <Tab.Navigator
-      screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused, color, size }) => {
+      screenOptions={({route}) => ({
+        tabBarIcon: ({focused, color, size}) => {
           let iconName;
 
           if (route.name === 'Home') {
-            iconName = focused
-              ? 'fa-solid fa-house'
-              : 'fa-solid fa-house';
+            iconName = focused ? 'fa-solid fa-house' : 'fa-solid fa-house';
           } else if (route.name === 'Create post') {
-            iconName = focused
-              ? 'fa-solid fa-circle-plus'
-              : 'fa-solid fa-plus';
-          }else if (route.name === 'Profile') {
-            iconName = focused
-              ? 'fa-solid fa-user'
-              : 'fa-solid fa-user';
+            iconName = focused ? 'fa-solid fa-circle-plus' : 'fa-solid fa-plus';
+          } else if (route.name === 'Profile') {
+            iconName = focused ? 'fa-solid fa-user' : 'fa-solid fa-user';
+          } else if (route.name === 'OwnChats') {
+            iconName = focused ? 'fa-solid fa-comment' : 'fa-solid fa-comment';
           }
           // You can return any component that you like here!
           return <FontAwesomeIcon icon={iconName} size={size} color={color} />;
         },
         tabBarActiveTintColor: 'rgba(246,203,100,1)',
         tabBarInactiveTintColor: 'gray',
-        headerShown: false})}
+        headerShown: false,
+      })}
     >
       <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="Create post" component={CreatePost} />
       <Tab.Screen name="Profile" component={Profile} />
+      <Tab.Screen name="OwnChats" component={OwnChats} />
     </Tab.Navigator>
   );
 };
@@ -63,7 +63,7 @@ const StackScreen = () => {
           <Stack.Screen name="Single" component={Single} />
           <Stack.Screen name="EditPost" component={EditPost} />
           <Stack.Screen name="MyFiles" component={MyFiles} />
-
+          <Stack.Screen name="ChatView" component={ChatView} />
         </>
       ) : (
         <Stack.Screen name="Login" component={Login} />

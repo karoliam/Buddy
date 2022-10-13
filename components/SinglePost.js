@@ -8,10 +8,10 @@ import {
   Dimensions,
   KeyboardAvoidingView,
 } from 'react-native';
-import {applicationTag, mediaUrl} from '../utils/variables';
+import {applicationTag, mediaUrl, appChatTag} from '../utils/variables';
 import {Button, Image} from '@rneui/themed';
 import {useRoute} from '@react-navigation/native';
-import {useTag, useUser} from '../hooks/ApiHooks';
+import {useMedia, useTag, useUser} from '../hooks/ApiHooks';
 import React, {useContext, useEffect, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {MainContext} from '../context/MainContext';
@@ -23,19 +23,28 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 const {height, width} = Dimensions.get('window');
 
 const SinglePost = ({navigation, route}) => {
-  // const route = useRoute();
   const {filename, title, description, user_id, file_id} = route.params;
   const [userFullName, setUserFullName] = useState('');
+  const [userEmail, setUserEmail] = useState('');
   const [posterAvatar, setPosterAvatar] = useState('');
   const descriptionObject = JSON.parse(description);
   const {getFilesByTag} = useTag();
   const {getUserById} = useUser();
+  const {postTag} = useTag();
+  const {postMedia, searchMedia} = useMedia();
   const {
     user,
+
     showEditPost,
+
     setShowEditPost,
     update,
     setUpdate,
+
+    updateChatProfiles,
+
+    setUpdateChatProfiles,
+
     setUserIdForProfilePage,
     setShowAnotherUserProfile,
     showAnotherUserProfile,
@@ -48,7 +57,6 @@ const SinglePost = ({navigation, route}) => {
     user_id: user_id,
     file_id: file_id,
   };
-  console.log('params', paramsObject);
   const getFullName = async () => {
     try {
       const token = await AsyncStorage.getItem('userToken');
@@ -56,13 +64,14 @@ const SinglePost = ({navigation, route}) => {
       const profilePicTag = await getFilesByTag(
         applicationTag + 'profile_pic' + user_id
       );
-      console.log('profilePicTag ', profilePicTag);
-      console.log('profilePicTag0 ', mediaUrl + profilePicTag[0].filename);
+
       if (profilePicTag[0].filename != undefined) {
         setPosterAvatar(mediaUrl + profilePicTag[0].filename);
       }
       //console.log('userData', userData);
       const fullName = userData.full_name;
+      const email = userData.email;
+      setUserEmail(email);
       setUserFullName(fullName);
     } catch (error) {
       console.log('getFullName error', error);
@@ -75,12 +84,67 @@ const SinglePost = ({navigation, route}) => {
     setShowAnotherUserProfile(!showAnotherUserProfile);
   };
 
-  console.log('current user', user.user_id, 'post user', user_id);
   const showEditPostFunction = () => {
     if (user_id !== user.user_id) {
       setShowEditPost(false);
     } else {
       setShowEditPost(true);
+    }
+  };
+
+  const createChatFile = async () => {
+    const formData = new FormData();
+    const token = await AsyncStorage.getItem('userToken');
+    formData.append('file', {
+      uri: 'https://placekitten.com/100',
+      name: 'placekitten',
+      type: 'image/jpeg',
+    });
+    /*
+    en tiedä miksi näitä tarvittais kun description on optional
+    const formObject = {
+      location: 'default',
+      when: 'default',
+      writePost: 'default',
+    };
+    const formJSON = JSON.stringify(formObject);
+    formData.append('description', formJSON);
+    */
+    const currentIdString = user.user_id.toString();
+    const otherIdString = user_id.toString();
+    const usersIdChatTitle = currentIdString + '#' + otherIdString;
+    const usersIdChatTitleReverse = otherIdString + '#' + currentIdString;
+    formData.append('title', usersIdChatTitle);
+    const searchData = {
+      title: usersIdChatTitle,
+    };
+    const searchDataReverse = {
+      title: usersIdChatTitleReverse,
+    };
+    try {
+      const checkChatMedia = await searchMedia(token, searchData);
+      const checkChatMediaReverse = await searchMedia(token, searchDataReverse);
+      if (checkChatMedia.length == 0 && checkChatMediaReverse.length == 0) {
+        const chatMediaResponse = await postMedia(token, formData);
+        const appTag = {file_id: chatMediaResponse.file_id, tag: appChatTag};
+        const appTagResponse = await postTag(token, appTag);
+        setUpdateChatProfiles(!updateChatProfiles);
+
+        navigation.navigate('ChatView', chatMediaResponse);
+
+        //navigation.navigate('ChatView', chatParamsObject);
+      } else {
+        if (checkChatMedia.length == 0) {
+          const fil = checkChatMediaReverse.pop();
+          navigation.navigate('ChatView', fil);
+        } else {
+          const fil = checkChatMedia.pop();
+          navigation.navigate('ChatView', fil);
+        }
+        console.log('chätti on jo luotu');
+      }
+    } catch (error) {
+      console.log('creating chat file error', error);
     }
   };
 
@@ -171,7 +235,10 @@ const SinglePost = ({navigation, route}) => {
           <View style={styles.postTopRow}>
             <View style={styles.chatButtonStack}>
               <TouchableOpacity style={styles.chatButton}>
-                <Text style={styles.chatButtonText}>Chat</Text>
+                <Text
+                  onPress={() => createChatFile()}
+                  style={styles.chatButtonText}
+                >Chat</Text>
               </TouchableOpacity>
             </View>
             <View style={styles.attendButtonStack}>
@@ -206,6 +273,7 @@ const SinglePost = ({navigation, route}) => {
           <CommentField navigation={navigation} route={route}></CommentField>
         </View>
       )}
+      {/* <Button title="Chat" onPress={() => createChatFile()}></Button> */}
     </KeyboardAwareScrollView>
   );
 };

@@ -2,34 +2,32 @@ import {
   Alert,
   Dimensions,
   FlatList,
-  KeyboardAvoidingViewComponent,
+  KeyboardAvoidingView,
   StyleSheet,
   Text,
   TextInput,
-  View,
   TouchableOpacity,
+  View,
 } from 'react-native';
 import PropTypes from 'prop-types';
-import {useComments, userMedia, useUser} from '../hooks/ApiHooks';
+import {useComments, useMedia, userMedia, useUser} from '../hooks/ApiHooks';
 import {useContext, useEffect, useState} from 'react';
 import {MainContext} from '../context/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useRoute} from '@react-navigation/native';
 import {Controller, useForm} from 'react-hook-form';
 import {Button, Image} from '@rneui/themed';
 import {mediaUrl} from '../utils/variables';
 import moment from 'moment';
-import KeyboardAvoidingComponent from './KeyboardAvoidingComponent';
 const {height, width} = Dimensions.get('window');
 
-const CommentField = () => {
+const ChatCommentField = ({route}) => {
   const {postComment, getCommentByFileId} = useComments();
-  const route = useRoute();
   const {update, setUpdate} = useContext(MainContext);
-  const {file_id, title} = route.params;
+  const {paramsObject, file_id} = route.params;
   const [userComments, setUserComments] = useState();
   const {getUserById} = useUser();
   const {userProfilePostData} = userMedia();
+  const WAIT_TIME = 10000;
   const {
     control,
     handleSubmit,
@@ -80,9 +78,9 @@ const CommentField = () => {
     try {
       // fetching comments
       const token = await AsyncStorage.getItem('userToken');
-      const commentArray = await getCommentByFileId(file_id);
+      const commentArrayR = await getCommentByFileId(file_id);
       console.log('commentArray', commentArray);
-
+      const commentArray = commentArrayR.reverse();
       for (const commentArrayKey in commentArray) {
         const userUploads = await userProfilePostData(
           commentArray[commentArrayKey].user_id
@@ -107,7 +105,6 @@ const CommentField = () => {
         const userFullname = {user_name: userDescription.full_name};
         commentArray[commentArrayKey].user_name = userFullname.user_name;
         commentArray[commentArrayKey].profile_pic = userProfilePic;
-        console.log(userProfileData);
         console.log('userProfileData', userProfileData);
         console.log('userDescription', userDescription);
         console.log('tyypin kuva', userProfilePic);
@@ -157,130 +154,81 @@ const CommentField = () => {
     fetchComments();
   }, [update]);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      console.log('moi');
+      fetchComments();
+    }, WAIT_TIME);
+    return () => clearInterval(interval);
+  }, []);
   return (
-    <>
-      {title === 'feedPost' ? (
-        <View style={styles.container}>
-          <FlatList
-            data={userComments}
-            style={{marginLeft: 16, marginBottom: 16}}
-            renderItem={({item}) => (
-              <>
-                <View style={styles.commentContainer}>
-                  <View style={styles.userAvatarContainer}>
-                    <Image
-                      source={{uri: mediaUrl + item.profile_pic.filename}}
-                      style={styles.userAvatarImage}
-                    />
-                  </View>
-                  <View>
-                    <Text style={styles.userNameText}>{item.user_name}</Text>
-                    <Text style={styles.commentText}>{item.comment}</Text>
-                    <Text style={styles.timeStampText}>
-                      {moment(item.time_added)
-                        .utcOffset('+0300')
-                        .startOf('minute')
-                        .fromNow()}
-                    </Text>
-                  </View>
-                </View>
-              </>
-            )}
-          />
-          <View>
-            <Controller
-              control={control}
-              rules={{
-                maxLength: 300,
-              }}
-              render={({field: {onChange, onBlur, value}}) => (
-                <View style={styles.inputAndSend}>
-                  <TextInput
-                    onBlur={onBlur}
-                    onChangeText={onChange}
-                    value={value}
-                    placeholder="Write a comment"
-                    style={styles.commentInput}
-                  />
-                  <TouchableOpacity
-                    style={styles.sendButton}
-                    onPress={() => {
-                      handleSubmit(commenting);
-                    }}
-                  >
-                    <Text>Send</Text>
-                  </TouchableOpacity>
-                </View>
-              )}
-              name="comment"
-            />
-          </View>
-        </View>
-      ) : (
-        <View style={[styles.container, {height: height - 318}]}>
-          <FlatList
-            data={userComments}
-            style={{marginLeft: 16, marginBottom: 16}}
-            renderItem={({item}) => (
-              <>
-                <View style={styles.commentContainer}>
-                  <View style={styles.userAvatarContainer}>
-                    <Image
-                      source={{uri: mediaUrl + item.profile_pic.filename}}
-                      style={styles.userAvatarImage}
-                    />
-                  </View>
-                  <View>
-                    <Text style={styles.userNameText}>{item.user_name}</Text>
-                    <Text style={styles.commentText}>{item.comment}</Text>
-                    <Text style={styles.timeStampText}>
-                      {moment(item.time_added)
-                        .utcOffset('+0300')
-                        .startOf('minute')
-                        .fromNow()}
-                    </Text>
-                  </View>
-                </View>
-              </>
-            )}
-          />
-          <View>
-            <Controller
-              control={control}
-              rules={{
-                maxLength: 300,
-              }}
-              render={({field: {onChange, onBlur, value}}) => (
-                <View style={styles.inputAndSend}>
-                  <TextInput
-                    onBlur={onBlur}
-                    onChangeText={onChange}
-                    value={value}
-                    placeholder="Write a comment"
-                    style={styles.commentInput}
-                  />
-                  <TouchableOpacity
-                    style={styles.sendButton}
-                    onPress={handleSubmit(commenting)}
-                  >
-                    <Text>Send</Text>
-                  </TouchableOpacity>
-                </View>
-              )}
-              name="comment"
-            />
-          </View>
-        </View>
-      )}
-    </>
+    <View style={[styles.container, {height: height - 318}]}>
+      <FlatList
+        data={userComments}
+        style={{marginLeft: 16, marginBottom: 16}}
+        renderItem={({item}) => (
+          <>
+            <View style={styles.commentContainer}>
+              <View style={styles.userAvatarContainer}>
+                <Image
+                  source={{uri: mediaUrl + item.profile_pic.filename}}
+                  style={styles.userAvatarImage}
+                />
+              </View>
+              <View>
+                <Text style={styles.userNameText}>{item.user_name}</Text>
+                <Text style={styles.commentText}>{item.comment}</Text>
+                <Text style={styles.timeStampText}>
+                  {moment(item.time_added)
+                    .utcOffset('+0300')
+                    .startOf('minute')
+                    .fromNow()}
+                </Text>
+              </View>
+            </View>
+          </>
+        )}
+      />
+
+      <View>
+        <Controller
+          control={control}
+          rules={{
+            maxLength: 300,
+          }}
+          render={({field: {onChange, onBlur, value}}) => (
+            <View style={styles.inputAndSend}>
+              <TextInput
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                placeholder="Write a comment"
+                style={styles.commentInput}
+              />
+              <TouchableOpacity
+                style={styles.sendButton}
+                onPress={handleSubmit(commenting)}
+              >
+                <Text>Send</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+          name="comment"
+        />
+      </View>
+    </View>
   );
+};
+
+ChatCommentField.propTypes = {
+  route: PropTypes.object,
 };
 
 const styles = StyleSheet.create({
   container: {
     alignContent: 'space-between',
     flexDirection: 'column',
-    height: width - 100,
+    height: height - 100,
   },
   commentContainer: {
     flexDirection: 'row',
@@ -339,8 +287,4 @@ const styles = StyleSheet.create({
   },
 });
 
-CommentField.propTypes = {
-  route: PropTypes.object,
-};
-
-export default CommentField;
+export default ChatCommentField;

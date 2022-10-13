@@ -3,7 +3,7 @@
  * varten.
  */
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useContext, useState } from "react";
+import {useContext, useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {
   Text,
@@ -20,7 +20,8 @@ import PropTypes from 'prop-types';
 let {width} = Dimensions.get('window');
 
 const LoginForm = () => {
-  const {setIsLoggedIn, setUser} = useContext(MainContext);
+  const {setIsLoggedIn, setUser, updateChatProfiles, setUpdateChatProfiles} =
+    useContext(MainContext);
   const {postLogin} = useLogin();
   const {
     control,
@@ -33,9 +34,7 @@ const LoginForm = () => {
     },
   });
 
-  const LoginAlertCheck = (loginCredentials) =>{
-
-  };
+  const LoginAlertCheck = (loginCredentials) => {};
 
   const logIn = async (loginCredentials) => {
     const emailArr = loginCredentials.username.split('#');
@@ -59,8 +58,9 @@ const LoginForm = () => {
       Alert.alert(
         `${alertTitle}`,
         `${alertMessage}`,
-        [{ text: "OK", onPress: () => console.log("OK Pressed") }],
-        { cancelable: true })
+        [{text: 'OK', onPress: () => console.log('OK Pressed')}],
+        {cancelable: true}
+      );
     } else {
       try {
         const userData = await postLogin(loginCredentials);
@@ -76,24 +76,23 @@ const LoginForm = () => {
         }
       } catch (error) {
         console.log('Login - logIn', error);
-        Alert.alert(
-          'Try again',
-          'E-mail or password wrong',
-          [{ text: "OK", onPress: () => console.log("OK Pressed") }],
-        );
+        Alert.alert('Try again', 'E-mail or password wrong', [
+          {text: 'OK', onPress: () => console.log('OK Pressed')},
+        ]);
       }
     }
-
   };
 
   return (
     <View style={{flex: 1}}>
       <Controller
         control={control}
-        rules={{
-          // minLength: 3,
-          // required: true,
-        }}
+        rules={
+          {
+            // minLength: 3,
+            // required: true,
+          }
+        }
         render={({field: {onChange, onBlur, value}}) => (
           <View style={styles.fieldBoxUsername}>
             <TextInput
@@ -156,7 +155,7 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     borderStyle: 'solid',
     marginTop: 32,
-    marginLeft: 64
+    marginLeft: 64,
   },
   usernameInput: {
     flex: 1,
@@ -165,7 +164,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,0,0,0)',
     fontSize: 16,
     marginLeft: 12,
-    marginRight: 12
+    marginRight: 12,
   },
   fieldBoxPassword: {
     width: width - 128,
@@ -176,7 +175,7 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     borderStyle: 'solid',
     marginTop: 16,
-    marginLeft: 64
+    marginLeft: 64,
   },
   passwordInput: {
     flex: 1,
@@ -185,10 +184,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,0,0,0)',
     fontSize: 16,
     marginLeft: 12,
-    marginRight: 12
+    marginRight: 12,
   },
   buttonSignIn: {
-    position: "absolute",
+    position: 'absolute',
     bottom: 0,
     width: width - 128,
     height: 61,
@@ -207,8 +206,7 @@ const styles = StyleSheet.create({
     color: 'rgba(255,255,255,1)',
     fontSize: 20,
     alignSelf: 'center',
-    marginTop: 15.5
-
+    marginTop: 15.5,
   },
 });
 
