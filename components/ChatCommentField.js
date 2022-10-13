@@ -1,4 +1,12 @@
-import {Alert, FlatList, Text, TextInput, View} from 'react-native';
+import {
+  Alert,
+  Dimensions,
+  FlatList,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 import PropTypes from 'prop-types';
 import {useComments, useMedia, userMedia, useUser} from '../hooks/ApiHooks';
 import {useContext, useEffect, useState} from 'react';
@@ -7,6 +15,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Controller, useForm} from 'react-hook-form';
 import {Button, Image} from '@rneui/themed';
 import {mediaUrl} from '../utils/variables';
+import moment from 'moment';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+const {height, width} = Dimensions.get('window');
 
 const ChatCommentField = ({route}) => {
   const {postComment, getCommentByFileId} = useComments();
@@ -150,50 +161,59 @@ const ChatCommentField = ({route}) => {
     return () => clearInterval(interval);
   }, []);
   return (
-    <View style={{flex: 4, marginBottom: 100}}>
+    <View style={styles.container}>
       <FlatList
         data={userComments}
         style={{marginLeft: 16, marginBottom: 16}}
         renderItem={({item}) => (
           <>
-            <View style={{flexDirection: 'row'}}>
-              <Image
-                source={{uri: mediaUrl + item.profile_pic.filename}}
-                style={{width: 25, height: 25, borderRadius: 100}}
-              />
-              <Text style={{color: 'grey'}}>{item.user_name}</Text>
+            <View style={styles.commentContainer}>
+              <View style={styles.userAvatarContainer}>
+                <Image
+                  source={{uri: mediaUrl + item.profile_pic.filename}}
+                  style={styles.userAvatarImage}
+                />
+              </View>
+              <View>
+                <Text style={styles.userNameText}>{item.user_name}</Text>
+                <Text style={styles.commentText}>{item.comment}</Text>
+                <Text style={styles.timeStampText}>
+                  {moment(item.time_added)
+                    .utcOffset('+0300')
+                    .startOf('minute')
+                    .fromNow()}
+                </Text>
+              </View>
             </View>
-            <Text>{item.time_added}</Text>
-
-            <Text>{item.comment}</Text>
-            {/* <Text>{item.user_name}</Text> */}
           </>
         )}
       />
-      <Controller
-        control={control}
-        rules={{
-          maxLength: 300,
-        }}
-        render={({field: {onChange, onBlur, value}}) => (
-          <View>
-            <TextInput
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-              placeholder="Write a comment"
-              style={{marginLeft: 16}}
-            />
-          </View>
-        )}
-        name="comment"
-      />
-
-      <Button
-        style={{width: 100, marginTop: 16, marginLeft: 16}}
-        onPress={handleSubmit(commenting)}
-        title="Send"
-      ></Button>
+      <View>
+        <Controller
+          control={control}
+          rules={{
+            maxLength: 300,
+          }}
+          render={({field: {onChange, onBlur, value}}) => (
+            <View style={styles.inputAndSend}>
+              <TextInput
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                placeholder="Write a message"
+                style={styles.commentInput}
+              />
+              <TouchableOpacity
+                style={styles.sendButton}
+                onPress={() => handleSubmit(commenting)}
+              >
+                <Text>Send</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+          name="comment"
+        />
+      </View>
     </View>
   );
 };
@@ -201,5 +221,68 @@ const ChatCommentField = ({route}) => {
 ChatCommentField.propTypes = {
   route: PropTypes.object,
 };
+
+const styles = StyleSheet.create({
+  container: {
+    alignContent: 'space-between',
+    flexDirection: 'column',
+    height: height - 100,
+  },
+  commentContainer: {
+    flexDirection: 'row',
+    marginBottom: 8,
+    backgroundColor: '#00ff0000',
+    marginTop: 16,
+    alignSelf: 'flex-start',
+  },
+  commentInput: {
+    marginLeft: 32,
+    backgroundColor: 'white',
+    padding: 8,
+    width: '70%',
+    borderRadius: 8,
+    borderWidth: 2,
+    borderStyle: 'solid',
+    borderColor: 'rgba(165,171,232,0.5)',
+  },
+  userAvatarContainer: {
+    marginRight: 8,
+    width: 40,
+    height: 40,
+    backgroundColor: 'rgba(0, 255, 0,0.3)',
+    borderRadius: 100,
+    marginLeft: 16,
+  },
+  userAvatarImage: {
+    width: 40,
+    height: 40,
+    borderRadius: 100,
+  },
+  userNameText: {
+    fontSize: 14,
+    color: 'rgba(124,124,124,1)',
+  },
+  commentText: {
+    backgroundColor: 'rgba(0, 0, 255,0)',
+    width: width - 92,
+    fontSize: 16,
+  },
+  timeStampText: {
+    backgroundColor: 'rgba(0, 0, 255,0)',
+    color: 'rgba(124,124,124,1)',
+    fontSize: 12,
+  },
+  sendButton: {
+    marginLeft: 8,
+    backgroundColor: 'rgba(165,171,232,0.5)',
+    padding: 8,
+    borderRadius: 8,
+  },
+  inputAndSend: {
+    flexDirection: 'row',
+    alignSelf: 'flex-start',
+    alignItems: 'center',
+  },
+});
 
 export default ChatCommentField;
