@@ -5,7 +5,8 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  View
+  View,
+  TouchableOpacity,
 } from "react-native";
 import PropTypes from 'prop-types';
 import {useComments, userMedia, useUser} from '../hooks/ApiHooks';
@@ -17,7 +18,6 @@ import {Controller, useForm} from 'react-hook-form';
 import {Button, Image} from '@rneui/themed';
 import {mediaUrl} from '../utils/variables';
 import moment from "moment";
-import {TouchableOpacity} from "react-native-gesture-handler";
 import KeyboardAvoidingComponent from "./KeyboardAvoidingComponent";
 const {height, width} = Dimensions.get('window');
 
