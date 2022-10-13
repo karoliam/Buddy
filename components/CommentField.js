@@ -1,12 +1,14 @@
 import {
-  Alert, Dimensions,
+  Alert,
+  Dimensions,
   FlatList,
   KeyboardAvoidingViewComponent,
   StyleSheet,
   Text,
   TextInput,
-  View
-} from "react-native";
+  View,
+  TouchableOpacity,
+} from 'react-native';
 import PropTypes from 'prop-types';
 import {useComments, userMedia, useUser} from '../hooks/ApiHooks';
 import {useContext, useEffect, useState} from 'react';
@@ -16,9 +18,8 @@ import {useRoute} from '@react-navigation/native';
 import {Controller, useForm} from 'react-hook-form';
 import {Button, Image} from '@rneui/themed';
 import {mediaUrl} from '../utils/variables';
-import moment from "moment";
-import {TouchableOpacity} from "react-native-gesture-handler";
-import KeyboardAvoidingComponent from "./KeyboardAvoidingComponent";
+import moment from 'moment';
+import KeyboardAvoidingComponent from './KeyboardAvoidingComponent';
 const {height, width} = Dimensions.get('window');
 
 const CommentField = () => {
@@ -157,107 +158,121 @@ const CommentField = () => {
   }, [update]);
 
   return (
-<>
-{title === 'feedPost' ? (
-  <View style={styles.container}>
-  <FlatList
-    data={userComments}
-    style={{marginLeft: 16, marginBottom: 16}}
-    renderItem={({item}) => (
-      <>
-        <View style={styles.commentContainer}>
-          <View style={styles.userAvatarContainer}>
-            <Image
-              source={{uri: mediaUrl + item.profile_pic.filename}}
-              style={styles.userAvatarImage}
+    <>
+      {title === 'feedPost' ? (
+        <View style={styles.container}>
+          <FlatList
+            data={userComments}
+            style={{marginLeft: 16, marginBottom: 16}}
+            renderItem={({item}) => (
+              <>
+                <View style={styles.commentContainer}>
+                  <View style={styles.userAvatarContainer}>
+                    <Image
+                      source={{uri: mediaUrl + item.profile_pic.filename}}
+                      style={styles.userAvatarImage}
+                    />
+                  </View>
+                  <View>
+                    <Text style={styles.userNameText}>{item.user_name}</Text>
+                    <Text style={styles.commentText}>{item.comment}</Text>
+                    <Text style={styles.timeStampText}>
+                      {moment(item.time_added)
+                        .utcOffset('+0300')
+                        .startOf('minute')
+                        .fromNow()}
+                    </Text>
+                  </View>
+                </View>
+              </>
+            )}
+          />
+          <View>
+            <Controller
+              control={control}
+              rules={{
+                maxLength: 300,
+              }}
+              render={({field: {onChange, onBlur, value}}) => (
+                <View style={styles.inputAndSend}>
+                  <TextInput
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    value={value}
+                    placeholder="Write a comment"
+                    style={styles.commentInput}
+                  />
+                  <TouchableOpacity
+                    style={styles.sendButton}
+                    onPress={() => {
+                      handleSubmit(commenting);
+                    }}
+                  >
+                    <Text>Send</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+              name="comment"
             />
           </View>
-          <View>
-            <Text style={styles.userNameText}>{item.user_name}</Text>
-            <Text style={styles.commentText}>{item.comment}</Text>
-            <Text style={styles.timeStampText}>{moment(item.time_added).utcOffset('+0300').startOf('minute').fromNow()}</Text>
-          </View>
         </View>
-      </>
-    )}
-  />
-  <View>
-  <Controller
-    control={control}
-    rules={{
-      maxLength: 300,
-    }}
-    render={({field: {onChange, onBlur, value}}) => (
-      <View style={styles.inputAndSend}>
-        <TextInput
-          onBlur={onBlur}
-          onChangeText={onChange}
-          value={value}
-          placeholder="Write a comment"
-          style={styles.commentInput}
-        />
-  <TouchableOpacity
-    style={styles.sendButton}
-    onPress={handleSubmit(commenting)}
-  ><Text>Send</Text></TouchableOpacity>
-      </View>
-    )}
-    name="comment"
-  />
-
-  </View>
-</View>
-) : (
-  <View style={[styles.container, {height: height - 318 }]}>
-  <FlatList
-    data={userComments}
-    style={{marginLeft: 16, marginBottom: 16}}
-    renderItem={({item}) => (
-      <>
-        <View style={styles.commentContainer}>
-          <View style={styles.userAvatarContainer}>
-            <Image
-              source={{uri: mediaUrl + item.profile_pic.filename}}
-              style={styles.userAvatarImage}
+      ) : (
+        <View style={[styles.container, {height: height - 318}]}>
+          <FlatList
+            data={userComments}
+            style={{marginLeft: 16, marginBottom: 16}}
+            renderItem={({item}) => (
+              <>
+                <View style={styles.commentContainer}>
+                  <View style={styles.userAvatarContainer}>
+                    <Image
+                      source={{uri: mediaUrl + item.profile_pic.filename}}
+                      style={styles.userAvatarImage}
+                    />
+                  </View>
+                  <View>
+                    <Text style={styles.userNameText}>{item.user_name}</Text>
+                    <Text style={styles.commentText}>{item.comment}</Text>
+                    <Text style={styles.timeStampText}>
+                      {moment(item.time_added)
+                        .utcOffset('+0300')
+                        .startOf('minute')
+                        .fromNow()}
+                    </Text>
+                  </View>
+                </View>
+              </>
+            )}
+          />
+          <View>
+            <Controller
+              control={control}
+              rules={{
+                maxLength: 300,
+              }}
+              render={({field: {onChange, onBlur, value}}) => (
+                <View style={styles.inputAndSend}>
+                  <TextInput
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    value={value}
+                    placeholder="Write a comment"
+                    style={styles.commentInput}
+                  />
+                  <TouchableOpacity
+                    style={styles.sendButton}
+                    onPress={handleSubmit(commenting)}
+                  >
+                    <Text>Send</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+              name="comment"
             />
           </View>
-          <View>
-            <Text style={styles.userNameText}>{item.user_name}</Text>
-            <Text style={styles.commentText}>{item.comment}</Text>
-            <Text style={styles.timeStampText}>{moment(item.time_added).utcOffset('+0300').startOf('minute').fromNow()}</Text>
-          </View>
         </View>
-      </>
-    )}
-  />
-  <View>
-  <Controller
-    control={control}
-    rules={{
-      maxLength: 300,
-    }}
-    render={({field: {onChange, onBlur, value}}) => (
-      <View style={styles.inputAndSend}>
-        <TextInput
-          onBlur={onBlur}
-          onChangeText={onChange}
-          value={value}
-          placeholder="Write a comment"
-          style={styles.commentInput}
-        />
-  <TouchableOpacity
-    style={styles.sendButton}
-    onPress={handleSubmit(commenting)}
-  ><Text>Send</Text></TouchableOpacity>
-      </View>
-    )}
-    name="comment"
-  />
-
-  </View>
-</View>
-)}
-</>
+      )}
+    </>
   );
 };
 
@@ -265,12 +280,12 @@ const styles = StyleSheet.create({
   container: {
     alignContent: 'space-between',
     flexDirection: 'column',
-    height: width-100,
+    height: width - 100,
   },
   commentContainer: {
     flexDirection: 'row',
     marginBottom: 8,
-    backgroundColor: "#00ff0000",
+    backgroundColor: '#00ff0000',
     marginTop: 16,
     alignSelf: 'flex-start',
   },
@@ -282,50 +297,47 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 2,
     borderStyle: 'solid',
-    borderColor: 'rgba(165,171,232,0.5)'
+    borderColor: 'rgba(165,171,232,0.5)',
   },
   userAvatarContainer: {
     marginRight: 8,
     width: 40,
     height: 40,
-    backgroundColor: "rgba(0, 255, 0,0.3)",
+    backgroundColor: 'rgba(0, 255, 0,0.3)',
     borderRadius: 100,
-    marginLeft: 16
+    marginLeft: 16,
   },
   userAvatarImage: {
     width: 40,
     height: 40,
-    borderRadius: 100
+    borderRadius: 100,
   },
   userNameText: {
     fontSize: 14,
     color: 'rgba(124,124,124,1)',
-
   },
   commentText: {
-    backgroundColor: "rgba(0, 0, 255,0)",
+    backgroundColor: 'rgba(0, 0, 255,0)',
     width: width - 92,
     fontSize: 16,
   },
   timeStampText: {
-    backgroundColor: "rgba(0, 0, 255,0)",
+    backgroundColor: 'rgba(0, 0, 255,0)',
     color: 'rgba(124,124,124,1)',
-    fontSize: 12
+    fontSize: 12,
   },
   sendButton: {
     marginLeft: 8,
     backgroundColor: 'rgba(165,171,232,0.5)',
     padding: 8,
-    borderRadius: 8
+    borderRadius: 8,
   },
   inputAndSend: {
     flexDirection: 'row',
     alignSelf: 'flex-start',
     alignItems: 'center',
-  }
-
+  },
 });
-
 
 CommentField.propTypes = {
   route: PropTypes.object,

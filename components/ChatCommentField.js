@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import PropTypes from 'prop-types';
@@ -16,7 +17,6 @@ import {Controller, useForm} from 'react-hook-form';
 import {Button, Image} from '@rneui/themed';
 import {mediaUrl} from '../utils/variables';
 import moment from 'moment';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 const {height, width} = Dimensions.get('window');
 
 const ChatCommentField = ({route}) => {
@@ -161,7 +161,7 @@ const ChatCommentField = ({route}) => {
     return () => clearInterval(interval);
   }, []);
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, {height: height - 318}]}>
       <FlatList
         data={userComments}
         style={{marginLeft: 16, marginBottom: 16}}
@@ -200,7 +200,7 @@ const ChatCommentField = ({route}) => {
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
-                placeholder="Write a message"
+                placeholder="Write a comment"
                 style={styles.commentInput}
               />
               <TouchableOpacity
