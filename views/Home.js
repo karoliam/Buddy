@@ -33,7 +33,10 @@ const Home = (props) => {
               style={styles.buddyLogo}
             ></Image>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.messagesIcon}>
+          <TouchableOpacity
+            style={styles.messagesIcon}
+            onPress={() => navigation.navigate('OwnChats')}
+          >
             <FontAwesomeIcon icon="fa-solid fa-comment" size={32} />
           </TouchableOpacity>
         </View>
