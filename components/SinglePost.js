@@ -24,6 +24,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 const {height, width} = Dimensions.get('window');
 
 const SinglePost = ({navigation, route}) => {
+  // const route = useRoute();
   const {filename, title, description, user_id, file_id} = route.params;
   const [userFullName, setUserFullName] = useState('');
   const [userEmail, setUserEmail] = useState('');
@@ -35,9 +36,7 @@ const SinglePost = ({navigation, route}) => {
   const {postMedia, searchMedia} = useMedia();
   const {
     user,
-
     showEditPost,
-
     setShowEditPost,
     update,
     setUpdate,
@@ -58,6 +57,7 @@ const SinglePost = ({navigation, route}) => {
     user_id: user_id,
     file_id: file_id,
   };
+  console.log('params', paramsObject);
   const getFullName = async () => {
     try {
       const token = await AsyncStorage.getItem('userToken');
@@ -65,7 +65,8 @@ const SinglePost = ({navigation, route}) => {
       const profilePicTag = await getFilesByTag(
         applicationTag + 'profile_pic' + user_id
       );
-
+      console.log('profilePicTag ', profilePicTag);
+      console.log('profilePicTag0 ', mediaUrl + profilePicTag[0].filename);
       if (profilePicTag[0].filename != undefined) {
         setPosterAvatar(mediaUrl + profilePicTag[0].filename);
       }
@@ -85,6 +86,7 @@ const SinglePost = ({navigation, route}) => {
     setShowAnotherUserProfile(!showAnotherUserProfile);
   };
 
+  console.log('current user', user.user_id, 'post user', user_id);
   const showEditPostFunction = () => {
     if (user_id !== user.user_id) {
       setShowEditPost(false);
@@ -249,11 +251,7 @@ const SinglePost = ({navigation, route}) => {
                 >Chat</Text>
               </TouchableOpacity>
             </View>
-            <View style={styles.attendButtonStack}>
-              <TouchableOpacity style={styles.attendButton}>
-                <Text style={styles.attendButtonText}>Attend</Text>
-              </TouchableOpacity>
-            </View>
+
           </View>
           <View style={styles.postTextRow}>
             <TouchableOpacity
@@ -281,9 +279,7 @@ const SinglePost = ({navigation, route}) => {
           <CommentField navigation={navigation} route={route}></CommentField>
         </View>
       )}
-      {/* <Button title="Chat" onPress={() => createChatFile()}></Button> */}
     </KeyboardAwareScrollView>
-
   );
 };
 
@@ -349,6 +345,7 @@ const styles = StyleSheet.create({
   },
   chatButtonStack: {
     position: 'absolute',
+    right: 88,
     backgroundColor: 'rgba(255,0,0,0)',
     width: 60,
     height: 32,
