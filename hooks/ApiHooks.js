@@ -5,20 +5,30 @@ import {apiUrl, applicationTag} from '../utils/variables';
 
 const useMedia = (update, myFilesOnly = false) => {
   const [mediaArray, setMediaArray] = useState([]);
-  const {user} = useContext(MainContext);
+  const {user, filterTags} = useContext(MainContext);
 
   const loadMedia = async () => {
     try {
-      let json = await useTag().getFilesByTag(applicationTag);
-      console.log(json);
-      if (myFilesOnly) {
-        json = json.filter((file) => file.user_id === user.user_id);
+      if (filterTags !== null) {
+        const json = await useTag().getFilesByTag(filterTags);
+        console.log(json);
+        json.reverse();
+        const allMediaData = json.map(async (mediaItem) => {
+          return await doFetch(apiUrl + 'media/' + mediaItem.file_id);
+        });
+        setMediaArray(await Promise.all(allMediaData));
+      } else {
+        let json = await useTag().getFilesByTag(applicationTag);
+        console.log(json);
+        if (myFilesOnly) {
+          json = json.filter((file) => file.user_id === user.user_id);
+        }
+        json.reverse();
+        const allMediaData = json.map(async (mediaItem) => {
+          return await doFetch(apiUrl + 'media/' + mediaItem.file_id);
+        });
+        setMediaArray(await Promise.all(allMediaData));
       }
-      json.reverse();
-      const allMediaData = json.map(async (mediaItem) => {
-        return await doFetch(apiUrl + 'media/' + mediaItem.file_id);
-      });
-      setMediaArray(await Promise.all(allMediaData));
     } catch (error) {
       console.log('media fetch failed', error);
     }

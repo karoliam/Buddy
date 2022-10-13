@@ -26,6 +26,8 @@ const MainProvider = (props) => {
   const [profileDId, setProfileDId] = useState(0);
   const [city, setCity] = useState('');
   const [userIdForProfilePage, setUserIdForProfilePage] = useState(0);
+  const [filterTags, setFilterTags] = useState(null);
+  const [filterLock, setFilterLock] = useState(false);
 
   return (
     <MainContext.Provider
@@ -70,6 +72,10 @@ const MainProvider = (props) => {
         setShowAnotherUserProfile,
         profileBackgroundAnother,
         setProfileBackgorundAnother,
+        filterTags,
+        setFilterTags,
+        filterLock,
+        setFilterLock,
       }}
     >
       {props.children}

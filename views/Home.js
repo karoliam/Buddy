@@ -15,6 +15,7 @@ import {MainContext} from '../context/MainContext';
 import {Image} from '@rneui/themed';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {color} from '@rneui/themed/dist/config';
+import FiltersTagList from "../components/FiltersTagList";
 let {height, width} = Dimensions.get('window');
 
 const Home = (props) => {
@@ -45,6 +46,9 @@ const Home = (props) => {
               <FontAwesomeIcon icon="fa-solid fa-chevron-down" size={32} />
             </TouchableOpacity>
           </View>
+        </View>
+        <View style={styles.filtersView}>
+          <FiltersTagList></FiltersTagList>
         </View>
         <Text style={styles.exploreText}>Explore</Text>
         <ScrollView>
@@ -133,6 +137,13 @@ const styles = StyleSheet.create({
     marginTop: 7,
     marginLeft: 20,
     marginRight: 14,
+  },
+  filtersView: {
+    flexDirection: 'row',
+    backgroundColor: "rgba(255, 0, 255,0)",
+    height: 74,
+    width: width - 32,
+    marginLeft: 16,
   },
   exploreText: {
     color: '#121212',
