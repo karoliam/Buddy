@@ -110,7 +110,6 @@ const OwnChatsComponent = ({navigation, route}) => {
 
   return (
     <SafeAreaView>
-      <Text style={styles.chatText}>Chats</Text>
       <FlatList
         data={getUserInfo}
         style={{marginLeft: 16, marginBottom: 16}}
@@ -129,12 +128,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginBottom: 16,
     fontWeight: '500'
-  },
-  chatText: {
-    marginBottom: 30,
-    marginTop: 16,
-    fontSize: 30,
-    alignSelf: 'center'
   },
   divider: {
     height: 2,

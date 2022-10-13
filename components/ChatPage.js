@@ -22,9 +22,9 @@ const ChatPage = ({navigation, route}) => {
   }, []);
   return (
     <>
-      <Text style={{alignSelf: 'center', marginTop: 70}}>
+      {/* <Text style={{alignSelf: 'center', marginTop: 70}}>
         {chatParamsObject.title}
-      </Text>
+      </Text> */}
       <ChatCommentField navigation={navigation} route={route} />
     </>
   );

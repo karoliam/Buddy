@@ -157,7 +157,7 @@ const SinglePost = ({navigation, route}) => {
 
   return (
     <KeyboardAwareScrollView style={styles.droidSafeArea}>
-      <TouchableOpacity
+      {/* <TouchableOpacity
         style={{marginTop: 16, marginBottom: 16}}
         onPress={() => navigation.navigate('Home')}
       >
@@ -166,7 +166,7 @@ const SinglePost = ({navigation, route}) => {
           size={32}
           color={'#343434'}
         />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
       {title === 'feedPost' ? (
         <View style={styles.inner}>
           <View style={styles.postImageContainer}>
@@ -182,7 +182,7 @@ const SinglePost = ({navigation, route}) => {
                 <TouchableOpacity
                   style={styles.editPostButton}
                   onPress={() => {
-                    navigation.navigate('EditPost', paramsObject);
+                    navigation.navigate('editPost', paramsObject);
                   }}
                 >
                   <Text style={styles.editPostText}>Edit post</Text>
@@ -230,13 +230,11 @@ const SinglePost = ({navigation, route}) => {
         </View>
       ) : (
         <View style={styles.inner}>
-          <View style={styles.postEditDeleteRow}>
-            <View style={styles.postEditIconContainer}>
-              {showEditPost ? (
+                  {showEditPost ? (
                 <TouchableOpacity
                   style={styles.editPostButton}
                   onPress={() => {
-                    navigation.navigate('EditPost', paramsObject);
+                    navigation.navigate('editPost', paramsObject);
                   }}
                 >
                   <Text style={styles.editPostText}>Edit post</Text>
@@ -244,6 +242,10 @@ const SinglePost = ({navigation, route}) => {
               ) : (
                 <Text></Text>
               )}
+          <View style={styles.postEditDeleteRow}>
+
+            <View style={styles.postEditIconContainer}>
+
             </View>
           </View>
           <View style={styles.postTopRow}>
@@ -300,7 +302,9 @@ const styles = StyleSheet.create({
   inner: {
     flex: 1,
     height: height,
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    marginBottom: -120,
+    marginTop: 20
   },
   postImageContainer: {
     width: width - 64,
@@ -449,15 +453,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   editPostButton: {
-    height: 30,
+    height: 40,
     backgroundColor: 'rgba(246,203,100,1)',
     borderRadius: 10,
     width: 80,
-    marginTop: 12,
   },
   editPostText: {
     textAlign: 'center',
-    top: 5
+    marginTop: 12
   },
 
 });

@@ -176,10 +176,10 @@ const CreatePostForm = ({navigation}) => {
   return (
     <View style={styles.container}>
       <KeyboardAwareScrollView>
-      <TouchableOpacity style={{top:50}} onPress={()=> returnBackHome()}>
+      <TouchableOpacity style={{top:60, marginLeft: 16}} onPress={()=> returnBackHome()}>
           <FontAwesomeIcon
             icon="fa-solid fa-chevron-left"
-            size={32}
+            size={24}
             color={'#343434'}
           />
         </TouchableOpacity>

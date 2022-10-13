@@ -29,6 +29,7 @@ const LoginMainViewContainer = () => {
   const loginText22 = 'Login';
 
   return (
+    <View style={styles.container}>
     <ImageBackground
       source={require("../assets/images/buddybackgroundNew.png")}
       resizeMode="cover"
@@ -85,6 +86,7 @@ const LoginMainViewContainer = () => {
         </TouchableOpacity>
       </KeyboardAvoidingView>
     </ImageBackground>
+    </View>
   );
 };
 

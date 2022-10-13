@@ -132,7 +132,6 @@ const EditPostForm = ({navigation, route}) => {
   return (
     <View style={styles.container}>
       <ScrollView>
-        <Text style={styles.editPostText}>Edit Post</Text>
         <TouchableOpacity style={styles.addPictureButton} onPress={pickImage}>
           <Image
             source={{uri: mediaUrl + filename}}

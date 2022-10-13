@@ -163,8 +163,8 @@ const ChatCommentField = ({route}) => {
     return () => clearInterval(interval);
   }, []);
   return (
-    <KeyboardAwareScrollView>
-    <View style={[styles.container, {height: height - 318}]}>
+    <KeyboardAwareScrollView styles={styles.keyboardView}>
+    <View style={[styles.container]}>
       <FlatList
         data={userComments}
         style={{marginLeft: 16, marginBottom: 16}}
@@ -228,6 +228,9 @@ ChatCommentField.propTypes = {
 };
 
 const styles = StyleSheet.create({
+  keyboardView:{
+    backgroundColor: 'blue'
+  },
   container: {
     alignContent: 'space-between',
     flexDirection: 'column',
@@ -287,7 +290,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignSelf: 'flex-start',
     alignItems: 'center',
-
+    marginBottom: 50
   },
 });
 

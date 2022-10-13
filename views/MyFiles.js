@@ -8,14 +8,6 @@ const MyFiles = ({navigation, myFilesOnly}) => {
   return (
     <>
       <SafeAreaView style={styles.droidSafeArea}>
-      <TouchableOpacity onPress={()=> navigation.navigate('Profile')}>
-          <FontAwesomeIcon
-            icon="fa-solid fa-chevron-left"
-            size={32}
-            color={'#343434'}
-          />
-        </TouchableOpacity>
-      <Text style={styles.title}>Own posts</Text>
       <List navigation={navigation} myFilesOnly={true} />
     </SafeAreaView>
     </>
