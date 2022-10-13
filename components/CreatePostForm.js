@@ -470,8 +470,8 @@ const styles = StyleSheet.create({
     marginTop: 19,
   },
   createPostTxt: {
-    fontSize: 26,
-    marginTop: 60,
+    fontSize: 18,
+    marginTop: 40,
     alignSelf: 'center',
   },
 });
