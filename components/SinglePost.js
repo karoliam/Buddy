@@ -351,7 +351,6 @@ const styles = StyleSheet.create({
   },
   chatButtonStack: {
     position: 'absolute',
-    right: 88,
     backgroundColor: 'rgba(255,0,0,0)',
     width: 60,
     height: 32,
