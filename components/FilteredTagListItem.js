@@ -64,9 +64,9 @@ const styles = StyleSheet.create({
     top: 4,
     left: 7,
     alignSelf: 'flex-start',
-    padding: 5,
+    padding: 8,
     backgroundColor: "rgba(165,171,232,0.5)",
-    borderRadius: 16
+    borderRadius: 10
   },
   tagBoxOn: {
     marginTop: 2,
@@ -76,9 +76,9 @@ const styles = StyleSheet.create({
     top: 4,
     left: 7,
     alignSelf: 'flex-start',
-    padding: 5,
+    padding: 8,
     backgroundColor: "rgba(165,171,232,1)",
-    borderRadius: 16
+    borderRadius: 10
   },
   tagBoxLocked: {
     marginTop: 2,

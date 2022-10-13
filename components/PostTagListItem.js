@@ -27,9 +27,9 @@ const styles = StyleSheet.create({
     top: 4,
     left: 7,
     alignSelf: 'flex-start',
-    padding: 3,
+    padding: 8,
     backgroundColor: "rgba(165,171,232,0.5)",
-    borderRadius: 16
+    borderRadius: 8
   },
   tagText: {
     backgroundColor: 'rgba(0,255,255,0)',

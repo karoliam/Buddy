@@ -3,7 +3,16 @@
  */
 
 import React, {useContext, useEffect, useState} from 'react';
-import {StyleSheet, SafeAreaView, Text, Button, Dimensions, View, ScrollView} from 'react-native';
+import {
+  StyleSheet,
+  SafeAreaView,
+  Text,
+  Button,
+  Dimensions,
+  View,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
 import {MainContext} from '../context/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Image} from '@rneui/themed';
@@ -13,7 +22,6 @@ import {setStatusBarNetworkActivityIndicatorVisible} from 'expo-status-bar';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 
 const AnotherUserProfileForms = () => {
-
   const {
     avatar,
     setAvatar,
@@ -80,21 +88,25 @@ const AnotherUserProfileForms = () => {
   };
 
   return (
-
     <SafeAreaView style={styles.container}>
       <View style={styles.backgroundImageStack}>
+        <TouchableOpacity onPress={()=> returnToSingle()}>
+          <FontAwesomeIcon
+            icon="fa-solid fa-chevron-left"
+            size={32}
+            color={'#343434'}
+          />
+        </TouchableOpacity>
         <Image
           source={
             profileBackgroundAnother
               ? {uri: profileBackgroundAnother}
-              :
-                //placeholderuri
+              : //placeholderuri
                 require('../assets/images/buddyplaceholder.png')
           }
           style={styles.backgroundImage}
         />
         <View style={styles.profilePictureHolder}>
-
           <Image
             source={
               avatar
@@ -107,77 +119,81 @@ const AnotherUserProfileForms = () => {
       </View>
       <ScrollView>
         <View style={{marginBottom: 50}}>
-      <View style={styles.fullNameRow}>
-        {profileDescriptionData.full_name ? (
-          <Text style={styles.fullName}>
-            {profileDescriptionData.full_name}
-          </Text>
-        ) : (
-          <Text style={styles.fullName}>Add your full name</Text>
-        )}
-      </View>
-      <View style={styles.bioBorder}></View>
-      <View style={styles.bioContainer}>
-      <View style={styles.locationIconRow}>
-        <View style={styles.locationIcon}>
-          <FontAwesomeIcon icon="fa-solid fa-book" size={32} color={'#B0B0B0'}/>
-        </View>
-        <View style={styles.locationTextColumn}>
-          <Text style={styles.bioSmallText}>Bio</Text>
-          {profileDescriptionData.bio ? (
-            <Text style={styles.bioText}>{profileDescriptionData.bio}</Text>
-          ) : (
-            <Text style={styles.userLocation}>Write something about yourself</Text>
-          )}
-        </View>
-        </View>
-        </View>
-      <View style={styles.bioBorder}></View>
-      <View style={styles.locationIconRow}>
-        <View style={styles.locationIcon}>
-          <FontAwesomeIcon
-            icon="fa-solid fa-location-dot"
-            size={32}
-            color={'#B0B0B0'}
-          />
-        </View>
-        <View style={styles.locationTextColumn}>
-          <Text style={styles.locationText}>Location</Text>
-          {profileDescriptionData.location ? (
-            <Text style={styles.userLocation}>
-              {profileDescriptionData.location}
-            </Text>
-          ) : (
-            <Text style={styles.userLocation}>No location</Text>
-          )}
-        </View>
-      </View>
-      <View style={styles.locationBorder}></View>
-      <View style={styles.ageIconRow}>
-        <View style={styles.ageIcon}>
-          <FontAwesomeIcon
-            icon="fa-solid fa-clock"
-            size={32}
-            color={'#B0B0B0'}
-          />
-        </View>
-        <View style={styles.ageTextColumn}>
-          <Text style={styles.ageText}>Age</Text>
-          {profileDescriptionData.age ? (
-            <Text style={styles.userAge}>{profileDescriptionData.age}</Text>
-          ) : (
-            <Text style={styles.userAge}>No age</Text>
-          )}
-        </View>
-      </View>
-      <View style={styles.ageBorder}></View>
+          <View style={styles.fullNameRow}>
+            {profileDescriptionData.full_name ? (
+              <Text style={styles.fullName}>
+                {profileDescriptionData.full_name}
+              </Text>
+            ) : (
+              <Text style={styles.fullName}>Add your full name</Text>
+            )}
+          </View>
+          <View style={styles.bioBorder}></View>
+          <View style={styles.bioContainer}>
+            <View style={styles.locationIconRow}>
+              <View style={styles.locationIcon}>
+                <FontAwesomeIcon
+                  icon="fa-solid fa-book"
+                  size={32}
+                  color={'#B0B0B0'}
+                />
+              </View>
+              <View style={styles.locationTextColumn}>
+                <Text style={styles.bioSmallText}>Bio</Text>
+                {profileDescriptionData.bio ? (
+                  <Text style={styles.bioText}>
+                    {profileDescriptionData.bio}
+                  </Text>
+                ) : (
+                  <Text style={styles.userLocation}>
+                    Write something about yourself
+                  </Text>
+                )}
+              </View>
+            </View>
+          </View>
+          <View style={styles.bioBorder}></View>
+          <View style={styles.locationIconRow}>
+            <View style={styles.locationIcon}>
+              <FontAwesomeIcon
+                icon="fa-solid fa-location-dot"
+                size={32}
+                color={'#B0B0B0'}
+              />
+            </View>
+            <View style={styles.locationTextColumn}>
+              <Text style={styles.locationText}>Location</Text>
+              {profileDescriptionData.location ? (
+                <Text style={styles.userLocation}>
+                  {profileDescriptionData.location}
+                </Text>
+              ) : (
+                <Text style={styles.userLocation}>No location</Text>
+              )}
+            </View>
+          </View>
+          <View style={styles.locationBorder}></View>
+          <View style={styles.ageIconRow}>
+            <View style={styles.ageIcon}>
+              <FontAwesomeIcon
+                icon="fa-solid fa-clock"
+                size={32}
+                color={'#B0B0B0'}
+              />
+            </View>
+            <View style={styles.ageTextColumn}>
+              <Text style={styles.ageText}>Age</Text>
+              {profileDescriptionData.age ? (
+                <Text style={styles.userAge}>{profileDescriptionData.age}</Text>
+              ) : (
+                <Text style={styles.userAge}>No age</Text>
+              )}
+            </View>
+          </View>
+          <View style={styles.ageBorder}></View>
         </View>
       </ScrollView>
     </SafeAreaView>
-
-
-
-
   );
 };
 let {width, height} = Dimensions.get('window');
@@ -218,7 +234,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginTop: 2,
     marginLeft: 8,
-    fontWeight: '500'
+    fontWeight: '500',
   },
   nightMode: {
     position: 'absolute',
@@ -250,21 +266,21 @@ const styles = StyleSheet.create({
   bioSmallText: {
     textAlign: 'left',
     backgroundColor: 'rgba(0,255,255,0)',
-    color: "rgba(155,151,151,1)",
-    fontSize: 12
+    color: 'rgba(155,151,151,1)',
+    fontSize: 12,
   },
 
   bioText: {
     textAlign: 'left',
     backgroundColor: 'rgba(0,255,255,0)',
-    color: "#121212",
+    color: '#121212',
     height: 90,
     fontSize: 16,
-    marginTop: 8
+    marginTop: 8,
   },
   bioContainer: {
     // flex: 2,
-    height: 140
+    height: 140,
   },
   bioBorder: {
     width: width - 32,
@@ -361,24 +377,24 @@ const styles = StyleSheet.create({
     left: 7,
     width: 103,
     height: 40,
-    backgroundColor: "rgba(165,171,232,0.5)",
+    backgroundColor: 'rgba(165,171,232,0.5)',
     borderRadius: 10,
     margin: 'auto',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   pastEventsText: {
     flex: 1,
     backgroundColor: 'rgba(0,255,255,0)',
     color: 'rgba(0,0,0,1)',
     fontSize: 16,
-    marginTop: 8
+    marginTop: 8,
   },
   pastEventsButtonStack: {
     alignContent: 'center',
     width: 118,
     height: 32,
     marginLeft: 11,
-    bottom: 8
+    bottom: 8,
   },
   pastEventsCount: {
     flex: 1,
@@ -415,8 +431,8 @@ const styles = StyleSheet.create({
     left: 0,
     width: 103,
     height: 40,
-    position: "absolute",
-    backgroundColor: "rgba(255,0,0,1)",
+    position: 'absolute',
+    backgroundColor: 'rgba(255,0,0,1)',
     borderRadius: 10,
   },
   logoutText: {

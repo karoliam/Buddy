@@ -42,7 +42,7 @@ const CreatePostForm = ({navigation}) => {
 
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
@@ -168,10 +168,21 @@ const CreatePostForm = ({navigation}) => {
     console.log(data[e].value);
     setCity(data[e].value);
   };
+  const returnBackHome = () => {
+    resetForm();
+    navigation.navigate('Home');
+  }
 
   return (
     <View style={styles.container}>
       <KeyboardAwareScrollView>
+      <TouchableOpacity style={{top:50}} onPress={()=> returnBackHome()}>
+          <FontAwesomeIcon
+            icon="fa-solid fa-chevron-left"
+            size={32}
+            color={'#343434'}
+          />
+        </TouchableOpacity>
         <Text style={styles.createPostTxt}>Create post</Text>
         <TouchableOpacity style={styles.addPictureButton} onPress={pickImage}>
           <ImageBackground

@@ -154,6 +154,13 @@ const SinglePost = ({navigation, route}) => {
 
   return (
     <KeyboardAwareScrollView>
+              <TouchableOpacity style={{marginTop: 16, marginBottom: 16}}onPress={()=> navigation.navigate('Home')}>
+          <FontAwesomeIcon
+            icon="fa-solid fa-chevron-left"
+            size={32}
+            color={'#343434'}
+          />
+        </TouchableOpacity>
       {title === 'feedPost' ? (
         <View style={styles.inner}>
           <View style={styles.postImageContainer}>

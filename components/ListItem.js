@@ -168,9 +168,8 @@ const styles = StyleSheet.create({
   },
   tagsScroll: {
     flex: 1,
-    marginLeft: 16,
     flexDirection: 'row',
-    backgroundColor: "rgba(255, 0, 255,0.1)",
+    alignSelf: 'flex-start'
   },
   postTopRow: {
     flexDirection: "row",
