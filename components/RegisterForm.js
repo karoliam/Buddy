@@ -17,8 +17,10 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
-  Dimensions, Alert
-} from "react-native";
+  Platform,
+  Dimensions,
+  Alert,
+} from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
 import {useLogin, useMedia, useTag, useUser} from '../hooks/ApiHooks';
 import { appId, applicationTag, kissalinkki } from "../utils/variables";
@@ -265,7 +267,7 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     borderStyle: 'solid',
     marginTop: 8,
-    marginLeft: 64
+    marginLeft: 64,
   },
   fullNameInputField: {
     flex: 1,
@@ -274,7 +276,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,0,0,0)',
     fontSize: 16,
     marginLeft: 12,
-    marginRight: 12
+    marginRight: 12,
   },
   emailInputBox: {
     width: width - 128,
@@ -285,7 +287,7 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     borderStyle: 'solid',
     marginTop: 16,
-    marginLeft: 64
+    marginLeft: 64,
   },
   emailInputField: {
     flex: 1,
@@ -294,7 +296,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,0,0,0)',
     fontSize: 16,
     marginLeft: 12,
-    marginRight: 12
+    marginRight: 12,
   },
   passwordInputBox: {
     width: width - 128,
@@ -305,7 +307,7 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     borderStyle: 'solid',
     marginTop: 16,
-    marginLeft: 64
+    marginLeft: 64,
   },
   passwordInputField: {
     flex: 1,
@@ -314,7 +316,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,0,0,0)',
     fontSize: 16,
     marginLeft: 12,
-    marginRight: 12
+    marginRight: 12,
   },
   passwordCheckInputBox: {
     width: width - 128,
@@ -325,7 +327,7 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     borderStyle: 'solid',
     marginTop: 16,
-    marginLeft: 64
+    marginLeft: 64,
   },
   passwordCheckInputField: {
     flex: 1,
@@ -334,7 +336,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,0,0,0)',
     fontSize: 16,
     marginLeft: 12,
-    marginRight: 12
+    marginRight: 12,
   },
   buttonSignUp: {
     width: width - 128,
@@ -345,7 +347,7 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     borderStyle: 'solid',
     marginTop: 16,
-    marginLeft: 64
+    marginLeft: 64,
   },
   signUpButtonText: {
     flex: 1,
@@ -356,7 +358,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginLeft: 12,
     marginRight: 12,
-    marginTop: 14
+    marginTop: Platform.OS === 'ios' ? 14 : 0,
   },
 });
 

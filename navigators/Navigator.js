@@ -44,7 +44,6 @@ const TabScreen = () => {
       <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="Create post" component={CreatePost} />
       <Tab.Screen name="Profile" component={Profile} />
-      <Tab.Screen name="OwnChats" component={OwnChats} />
     </Tab.Navigator>
   );
 };
@@ -64,6 +63,7 @@ const StackScreen = () => {
           <Stack.Screen name="EditPost" component={EditPost} />
           <Stack.Screen name="MyFiles" component={MyFiles} />
           <Stack.Screen name="ChatView" component={ChatView} />
+          <Stack.Screen name="OwnChats" component={OwnChats} />
         </>
       ) : (
         <Stack.Screen name="Login" component={Login} />
