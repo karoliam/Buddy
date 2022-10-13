@@ -595,7 +595,7 @@ const styles = StyleSheet.create({
   updateButton: {
     width: width - 238,
     height: 36,
-    backgroundColor: 'rgba(255,255,255,1)',
+    // backgroundColor: 'rgba(255,255,255,1)',
     borderRadius: 10,
     backgroundColor: 'rgba(165,171,232,0.5)',
     marginLeft: 20

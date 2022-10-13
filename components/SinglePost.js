@@ -272,7 +272,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,0,0,0)',
     width: 60,
     height: 32,
-    right: 0
+    // right: 0
   },
   attendButton: {
     width: 80,

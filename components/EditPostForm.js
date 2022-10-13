@@ -323,8 +323,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     height: 61,
     backgroundColor: 'rgba(246,203,100,1)',
-    borderRadius: 14,
-    marginTop: 32,
+    // borderRadius: 14,
+    // marginTop: 32,
     marginLeft: 32,
     width: width - 62
   },

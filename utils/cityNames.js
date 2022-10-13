@@ -9,7 +9,7 @@ const cityNames = [
   {key: '7', value: 'Kuopio'},
   {key: '8', value: 'Lahti'},
   {key: '9', value: 'Kouvola'},
-  {key: '1', value: 'Pori'},
+  {key: '10', value: 'Pori'},
   {key: '11', value: 'Joensuu'},
   {key: '12', value: 'Lappeenranta'},
   {key: '13', value: 'Hämeenlinna'},
