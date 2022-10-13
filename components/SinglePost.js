@@ -337,18 +337,19 @@ const styles = StyleSheet.create({
   },
   chatButton: {
     width: 60,
-    height: 32,
+    height: 40,
     position: 'absolute',
     alignContent: 'center',
     backgroundColor: 'rgba(255,255,255,1)',
     borderWidth: 2,
     borderColor: 'rgba(165,171,232,0.5)',
-    borderRadius: 14,
+    borderRadius: 10,
     borderStyle: 'solid',
+    bottom: 2
   },
   chatButtonText: {
     backgroundColor: 'rgba(0,0,255,0)',
-    top: 3,
+    top: 7,
     color: 'rgba(83,134,234,1)',
     fontSize: 16,
     textAlign: 'center',
@@ -358,7 +359,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,0,0,0)',
     width: 60,
     height: 32,
-    right: 0
+    right: 0,
+    bottom: 8
   },
   attendButton: {
     width: 80,
@@ -457,10 +459,12 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(246,203,100,1)',
     borderRadius: 10,
     width: 80,
+    left: 170,
+    bottom: 8
   },
   editPostText: {
     textAlign: 'center',
-    marginTop: 12
+    marginTop: 11
   },
 
 });
