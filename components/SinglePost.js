@@ -157,13 +157,16 @@ const SinglePost = ({navigation, route}) => {
 
   return (
     <KeyboardAwareScrollView style={styles.droidSafeArea}>
-              <TouchableOpacity style={{marginTop: 16, marginBottom: 16}}onPress={()=> navigation.navigate('Home')}>
-          <FontAwesomeIcon
-            icon="fa-solid fa-chevron-left"
-            size={32}
-            color={'#343434'}
-          />
-        </TouchableOpacity>
+      <TouchableOpacity
+        style={{marginTop: 16, marginBottom: 16}}
+        onPress={() => navigation.navigate('Home')}
+      >
+        <FontAwesomeIcon
+          icon="fa-solid fa-chevron-left"
+          size={32}
+          color={'#343434'}
+        />
+      </TouchableOpacity>
       {title === 'feedPost' ? (
         <View style={styles.inner}>
           <View style={styles.postImageContainer}>
@@ -182,9 +185,7 @@ const SinglePost = ({navigation, route}) => {
                     navigation.navigate('EditPost', paramsObject);
                   }}
                 >
-                  <Text style={styles.editPostText}>
-                  Edit post
-                  </Text>
+                  <Text style={styles.editPostText}>Edit post</Text>
                 </TouchableOpacity>
               ) : (
                 <Text></Text>
@@ -193,7 +194,10 @@ const SinglePost = ({navigation, route}) => {
           </View>
           <View style={styles.postTopRow}>
             <View style={styles.chatButtonStack}>
-              <TouchableOpacity style={styles.chatButton}>
+              <TouchableOpacity
+                style={styles.chatButton}
+                onPress={createChatFile}
+              >
                 <Text style={styles.chatButtonText}>Chat</Text>
               </TouchableOpacity>
             </View>
@@ -248,7 +252,9 @@ const SinglePost = ({navigation, route}) => {
                 <Text
                   onPress={() => createChatFile()}
                   style={styles.chatButtonText}
-                >Chat</Text>
+                >
+                  Chat
+                </Text>
               </TouchableOpacity>
             </View>
 
