@@ -284,6 +284,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignSelf: 'flex-start',
     alignItems: 'center',
+    top: 150
   },
 });
 
