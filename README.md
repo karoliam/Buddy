@@ -1,4 +1,8 @@
 # Buddy-app
+<h4>Buddy is a mobile application connecting people who need company for events, activities, or just hanging out.
+It's a multiplatform app developed using React Native for iOS and Android devices. Buddy was a school project and the goal was to make a media sharing application using RESTful API. 
+</h4>
+
 <img width="676" alt="image" src="https://user-images.githubusercontent.com/77148896/195674258-e77daecb-a898-43c1-9d3d-ce66739bdc99.png">
 <img width="650" alt="image" src="https://user-images.githubusercontent.com/77148896/195674714-d1bfde0c-51d7-41cd-b96b-55538a5444d8.png">
 <img width="650" alt="image" src="https://user-images.githubusercontent.com/77148896/195675027-cc4d1957-8005-4b57-a284-363d28cdaba2.png">
